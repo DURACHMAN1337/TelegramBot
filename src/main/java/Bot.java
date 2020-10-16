@@ -4,8 +4,14 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -21,7 +27,6 @@ public class Bot extends TelegramLongPollingBot {
     }
 
 
-
     private void sendMsg(Message message, String text) {
 
         SendMessage s = new SendMessage();
@@ -30,7 +35,9 @@ public class Bot extends TelegramLongPollingBot {
         s.setReplyToMessageId(message.getMessageId());
         s.setText(text);
         try {
+            setButton(s);
             execute(s);
+
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -40,18 +47,40 @@ public class Bot extends TelegramLongPollingBot {
 
     public void onUpdateReceived(Update update) {
         Message message = update.getMessage();
-        if (message != null && message.hasText()){
-            switch (message.getText()){
-                case "/help" :
+        if (message != null && message.hasText()) {
+            switch (message.getText()) {
+                case "/help":
                     sendMsg(message, "Чем могу помочь?");
                     break;
-                case "/settings" :
+                case "/settings":
                     sendMsg(message, "Что будем настраивать?");
                     break;
                 default:
             }
         }
 
+    }
+
+
+    public void setButton(SendMessage sendMessage) {
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        replyKeyboardMarkup.setSelective(true);
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboard(false);
+
+        List<KeyboardRow> keyboardRowList = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+
+        keyboardFirstRow.add(new KeyboardButton("/help"));
+        keyboardFirstRow.add(new KeyboardButton("/settings"));
+        keyboardSecondRow.add(new KeyboardButton("/jopa"));
+        keyboardSecondRow.add(new KeyboardButton("/jopa"));
+
+        keyboardRowList.add(keyboardFirstRow);
+        keyboardRowList.add(keyboardSecondRow);
+        replyKeyboardMarkup.setKeyboard(keyboardRowList);
     }
 
 
