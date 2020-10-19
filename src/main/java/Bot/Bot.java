@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
+    ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     private long chat_id;
 
 
@@ -46,7 +47,7 @@ public class Bot extends TelegramLongPollingBot {
         s.setReplyToMessageId(message.getMessageId());
         s.setText(text);
         try {
-            setKeyboard(s);
+
             execute(s);
 
 
@@ -60,54 +61,98 @@ public class Bot extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
 
         Message message = update.getMessage();
+        SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
         chat_id = message.getChatId();
-        if (message != null && message.hasText()) {
-            sendMsg(message, Input(message.getText()));
 
-        }
-
-    }
-
-    public String Input(String text) {
-        if (text != null) {
-            switch (text) {
-                case "/start":
-                    return "Привет дружище";
-                case "/help":
-                    return "Чем могу помочь?";
-
-                case "/settings":
-                    return "Что будем настраивать?123";
-
-                case "/jopa":
-                    return getInfoHookah();
-
-            }
-        }
-        return null;
-
-    }
-
-
-    public void setKeyboard(SendMessage sendMessage) {
-        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        String text = update.getMessage().getText();
+
+        try{
+            sendMessage.setText(getMessage(text));
+            execute(sendMessage);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public String getMessage(String text) {
+
+
+        List<KeyboardRow> keyboard = new ArrayList<>();
+        KeyboardRow keyboardFirstRow = new KeyboardRow();
+        KeyboardRow keyboardSecondRow = new KeyboardRow();
+
+
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
-        List<KeyboardRow> keyboardRowList = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        KeyboardRow keyboardSecondRow = new KeyboardRow();
-
-        keyboardFirstRow.add(new KeyboardButton("/help"));
-        keyboardFirstRow.add(new KeyboardButton("/settings"));
-        keyboardSecondRow.add(new KeyboardButton("/jopa"));
+        if (text.equals("/start") || text.equals("Назад")) {
+            keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
+            keyboardFirstRow.add(new KeyboardButton("Наличие"));
+            keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
+            keyboardSecondRow.add(new KeyboardButton("Помощь"));
 
 
-        keyboardRowList.add(keyboardFirstRow);
-        keyboardRowList.add(keyboardSecondRow);
-        replyKeyboardMarkup.setKeyboard(keyboardRowList);
+            keyboard.add(keyboardFirstRow);
+            keyboard.add(keyboardSecondRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            return "Открыто Главное Меню Бота.";
+        }
+
+        if (text.equals("Наличие")){
+            keyboard.clear();
+            keyboardFirstRow.clear();
+            keyboardSecondRow.clear();
+            keyboardFirstRow.add(new KeyboardButton("Ул. Радонежска 1"));
+            keyboardFirstRow.add(new KeyboardButton("Ул. Проспект Карла Маркса 196"));
+            keyboardSecondRow.add(new KeyboardButton("Назад"));
+
+            keyboard.add(keyboardFirstRow);
+            keyboard.add(keyboardSecondRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            return "Выберите Магазин...";
+        }
+
+        if (text.equals("Наши Контакты")){
+            keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
+            keyboardFirstRow.add(new KeyboardButton("Наличие"));
+            keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
+            keyboardSecondRow.add(new KeyboardButton("Помощь"));
+
+
+            keyboard.add(keyboardFirstRow);
+            keyboard.add(keyboardSecondRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            return "г. Самара, ул. Радонежская, 1\n" +
+                    "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+                    "\n" +
+                    "Телефон: 8 (927) 002-75-57" +
+                    "\n" +
+                    "\nг. Самара, пр. Карла Маркса, 196 (ЖК Центральный)\n" +
+                    "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+                    "\n" +
+                    "Телефон: 8 (927) 760-11-17";
+        }
+
+        if (text.equals("Помощь")){
+            keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
+            keyboardFirstRow.add(new KeyboardButton("Наличие"));
+            keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
+            keyboardSecondRow.add(new KeyboardButton("Помощь"));
+
+
+            keyboard.add(keyboardFirstRow);
+            keyboard.add(keyboardSecondRow);
+            replyKeyboardMarkup.setKeyboard(keyboard);
+            return "C Помощью данного Бота, вы можете сделать заказ, посмотреть наличие в магазинах и узнать наши контакты." +
+                    " Чтобы начать напишите : \"/start\" ";
+
+        }
+        return "Не понял";
+
+
     }
 
 
@@ -122,7 +167,7 @@ public class Bot extends TelegramLongPollingBot {
     public String getInfoHookah() {
         Hookah hookah = new Hookah();
         SendPhoto sendPhoto = new SendPhoto();
-        try  {
+        try {
 
             sendPhoto.setChatId(chat_id);
 
@@ -134,7 +179,7 @@ public class Bot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
         String info = "Цена : " + hookah.getPrice()
-                +"\n Описание : " + hookah.getDescription();
-     return info;
+                + "\n Описание : " + hookah.getDescription();
+        return info;
     }
 }
