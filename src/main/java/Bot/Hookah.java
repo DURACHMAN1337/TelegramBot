@@ -6,12 +6,16 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Hookah {
 
     public static void main(String[] args) {
         Hookah hookah = new Hookah();
-        System.out.println(hookah.getImg());
+        System.out.println(hookah.getBrandList().toString());
+
 
     }
 
@@ -22,7 +26,7 @@ public class Hookah {
     }
     public void connect(){
        try {
-           document = Jsoup.connect("https://hookahinrussia.ru/shop/%d0%ba%d0%b0%d0%bb%d1%8c%d1%8f%d0%bd%d1%8b/euphoria/%d0%ba%d0%b0%d0%bb%d1%8c%d1%8f%d0%bd-euphoria-6/").get();
+           document = Jsoup.connect("https://hookahinrussia.ru/product-category/%d0%b1%d1%80%d0%b5%d0%bd%d0%b4%d1%8b/").get();
        } catch (IOException e) {
            e.printStackTrace();
        }
@@ -43,6 +47,13 @@ public class Hookah {
         String url = elements.attr("src");
         return url;
 
+    }
+    public List<String> getBrandList(){
+        Elements elements = document.getElementsByClass("woocommerce-loop-product__title");
+        String s = elements.text();
+        List<String> list = new ArrayList<String>(Arrays.asList(s.split(" ")));
+
+        return list;
     }
 
 }

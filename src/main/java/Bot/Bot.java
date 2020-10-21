@@ -5,9 +5,13 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -24,6 +28,7 @@ import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
     ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     private long chat_id;
 
 
@@ -65,10 +70,12 @@ public class Bot extends TelegramLongPollingBot {
         chat_id = message.getChatId();
 
         sendMessage.setReplyMarkup(replyKeyboardMarkup);
+        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+
         String text = update.getMessage().getText();
 
-        try{
-            sendMessage.setText(getMessage(text));
+        try {
+            sendMessage.setText(getMessage(text, sendMessage));
             execute(sendMessage);
         } catch (TelegramApiException e) {
             e.printStackTrace();
@@ -76,13 +83,15 @@ public class Bot extends TelegramLongPollingBot {
 
     }
 
-    public String getMessage(String text) {
+    public String getMessage(String text, SendMessage sendMessage) {
 
+        List<List<InlineKeyboardButton>> inlineKeyboard = new ArrayList<>();
+        List<InlineKeyboardButton> inlineKeyboardButtonsRow1 = new ArrayList<>();
+        List<InlineKeyboardButton> inlineKeyboardButtonsRow2 = new ArrayList<>();
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
         KeyboardRow keyboardSecondRow = new KeyboardRow();
-
 
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
@@ -98,10 +107,12 @@ public class Bot extends TelegramLongPollingBot {
             keyboard.add(keyboardFirstRow);
             keyboard.add(keyboardSecondRow);
             replyKeyboardMarkup.setKeyboard(keyboard);
+            sendMessage.setReplyMarkup(replyKeyboardMarkup);
             return "Открыто Главное Меню Бота.";
         }
 
-        if (text.equals("Наличие")){
+        if (text.equals("Наличие")) {
+
             keyboard.clear();
             keyboardFirstRow.clear();
             keyboardSecondRow.clear();
@@ -112,10 +123,11 @@ public class Bot extends TelegramLongPollingBot {
             keyboard.add(keyboardFirstRow);
             keyboard.add(keyboardSecondRow);
             replyKeyboardMarkup.setKeyboard(keyboard);
+            sendMessage.setReplyMarkup(replyKeyboardMarkup);
             return "Выберите Магазин...";
         }
 
-        if (text.equals("Наши Контакты")){
+        if (text.equals("Наши Контакты")) {
             keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
             keyboardFirstRow.add(new KeyboardButton("Наличие"));
             keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
@@ -125,6 +137,7 @@ public class Bot extends TelegramLongPollingBot {
             keyboard.add(keyboardFirstRow);
             keyboard.add(keyboardSecondRow);
             replyKeyboardMarkup.setKeyboard(keyboard);
+            sendMessage.setReplyMarkup(replyKeyboardMarkup);
             return "г. Самара, ул. Радонежская, 1\n" +
                     "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
                     "\n" +
@@ -136,7 +149,7 @@ public class Bot extends TelegramLongPollingBot {
                     "Телефон: 8 (927) 760-11-17";
         }
 
-        if (text.equals("Помощь")){
+        if (text.equals("Помощь")) {
             keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
             keyboardFirstRow.add(new KeyboardButton("Наличие"));
             keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
@@ -146,8 +159,98 @@ public class Bot extends TelegramLongPollingBot {
             keyboard.add(keyboardFirstRow);
             keyboard.add(keyboardSecondRow);
             replyKeyboardMarkup.setKeyboard(keyboard);
+            sendMessage.setReplyMarkup(replyKeyboardMarkup);
+
+
             return "C Помощью данного Бота, вы можете сделать заказ, посмотреть наличие в магазинах и узнать наши контакты." +
                     " Чтобы начать напишите : \"/start\" ";
+
+        }
+        if (text.equals("Сделать заказ")) {
+
+
+
+            InlineKeyboardButton button1 = new InlineKeyboardButton("Табаки");
+            InlineKeyboardButton button2 = new InlineKeyboardButton("Кальяны");
+            InlineKeyboardButton button3 = new InlineKeyboardButton("Акссесуары");
+            InlineKeyboardButton button4 = new InlineKeyboardButton("Уголь");
+
+            button1.setCallbackData("Табаки");
+            button2.setCallbackData("Кальяны");
+            button3.setCallbackData("Акссесуары");
+            button4.setCallbackData("Уголь");
+
+            inlineKeyboardButtonsRow1.add(button1);
+            inlineKeyboardButtonsRow1.add(button2);
+            inlineKeyboardButtonsRow2.add(button3);
+            inlineKeyboardButtonsRow2.add(button4);
+            inlineKeyboard.add(inlineKeyboardButtonsRow1);
+            inlineKeyboard.add(inlineKeyboardButtonsRow2);
+
+            inlineKeyboardMarkup.setKeyboard(inlineKeyboard);
+            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+
+            return "Выберите Категорию Товара";
+        }
+
+        if (text.equals("Ул. Радонежска 1")){
+
+            inlineKeyboard.clear();
+            inlineKeyboardButtonsRow1.clear();
+            inlineKeyboardButtonsRow2.clear();
+
+            InlineKeyboardButton button1 = new InlineKeyboardButton("Табаки");
+            InlineKeyboardButton button2 = new InlineKeyboardButton("Кальяны");
+            InlineKeyboardButton button3 = new InlineKeyboardButton("Акссесуары");
+            InlineKeyboardButton button4 = new InlineKeyboardButton("Уголь");
+
+            button1.setCallbackData("Табаки");
+            button2.setCallbackData("Кальяны");
+            button3.setCallbackData("Акссесуары");
+            button4.setCallbackData("Уголь");
+
+            inlineKeyboardButtonsRow1.add(button1);
+            inlineKeyboardButtonsRow1.add(button2);
+            inlineKeyboardButtonsRow2.add(button3);
+            inlineKeyboardButtonsRow2.add(button4);
+            inlineKeyboard.add(inlineKeyboardButtonsRow1);
+            inlineKeyboard.add(inlineKeyboardButtonsRow2);
+
+            inlineKeyboardMarkup.setKeyboard(inlineKeyboard);
+            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+
+            return "Выберите Категорию Товара";
+
+        }
+
+        if (text.equals("Ул. Проспект Карла Маркса 196")){
+
+
+            inlineKeyboard.clear();
+            inlineKeyboardButtonsRow1.clear();
+            inlineKeyboardButtonsRow2.clear();
+
+            InlineKeyboardButton button1 = new InlineKeyboardButton("Табаки");
+            InlineKeyboardButton button2 = new InlineKeyboardButton("Кальяны");
+            InlineKeyboardButton button3 = new InlineKeyboardButton("Акссесуары");
+            InlineKeyboardButton button4 = new InlineKeyboardButton("Уголь");
+
+            button1.setCallbackData("Табаки");
+            button2.setCallbackData("Кальяны");
+            button3.setCallbackData("Акссесуары");
+            button4.setCallbackData("Уголь");
+
+            inlineKeyboardButtonsRow1.add(button1);
+            inlineKeyboardButtonsRow1.add(button2);
+            inlineKeyboardButtonsRow2.add(button3);
+            inlineKeyboardButtonsRow2.add(button4);
+            inlineKeyboard.add(inlineKeyboardButtonsRow1);
+            inlineKeyboard.add(inlineKeyboardButtonsRow2);
+
+            inlineKeyboardMarkup.setKeyboard(inlineKeyboard);
+            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+
+            return "Выберите Категорию Товара";
 
         }
         return "Не понял";
