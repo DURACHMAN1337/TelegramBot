@@ -1,5 +1,7 @@
 package Bot;
 
+import Bot.Keyboard.InlineKeyboardMarkupBuilder;
+import Bot.Keyboard.ReplyKeyboardMarkupBuilder;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -69,192 +71,299 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
         chat_id = message.getChatId();
 
-//        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-//        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-
         String text = update.getMessage().getText();
 
         try {
-            sendMessage.setText(getMessage(text, sendMessage));
-            execute(sendMessage);
+
+//            sendMessage.setText(getMessage(text, sendMessage));
+            execute(getMessage(text, sendMessage));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
 
     }
 
-    public String getMessage(String text, SendMessage sendMessage) {
-
-        List<List<InlineKeyboardButton>> inlineKeyboard = new ArrayList<>();
-        List<InlineKeyboardButton> inlineKeyboardButtonsRow1 = new ArrayList<>();
-        List<InlineKeyboardButton> inlineKeyboardButtonsRow2 = new ArrayList<>();
-
-
-        List<KeyboardRow> keyboard = new ArrayList<>();
-        KeyboardRow keyboardFirstRow = new KeyboardRow();
-        KeyboardRow keyboardSecondRow = new KeyboardRow();
+    public SendMessage getMessage(String text, SendMessage sendMessage) {
 
         replyKeyboardMarkup.setSelective(true);
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboard(false);
 
-        if (text.equals("/start") || text.equals("Назад")) {
-            keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
-            keyboardFirstRow.add(new KeyboardButton("Наличие"));
-            keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
-            keyboardSecondRow.add(new KeyboardButton("Помощь"));
+        switch (text) {
+            case "/start":
+                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                        .setText("Открыто Главное Меню")
+                        .row()
+                        .button("Сделать заказ")
+                        .button("Наличие")
+                        .endRow()
+                        .row()
+                        .button("Наши Контакты")
+                        .button("Помощь")
+                        .endRow()
+                        .build();
+
+                return sendMessage;
+
+            case "Назад":
+                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                        .setText("Вы Вернулись Назад в Главное Меню")
+                        .row()
+                        .button("Сделать заказ")
+                        .button("Наличие")
+                        .endRow()
+                        .row()
+                        .button("Наши Контакты")
+                        .button("Помощь")
+                        .endRow()
+                        .build();
+
+                return sendMessage;
+
+            case "Наличие":
+                sendMessage = ReplyKeyboardMarkupBuilder
+                        .create(chat_id)
+                        .setText("Выберите Магазин")
+                        .row()
+                        .button("Ул. Радонежская 1")
+                        .button("Ул. Проспект Карла Маркса 196")
+                        .endRow()
+                        .row()
+                        .button("Назад")
+                        .endRow()
+                        .build();
 
 
-            keyboard.add(keyboardFirstRow);
-            keyboard.add(keyboardSecondRow);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
-            return "Открыто Главное Меню Бота.";
-        }
+                return sendMessage;
 
-        if (text.equals("Наличие")) {
+            case "Наши Контакты":
 
-            keyboard.clear();
-            keyboardFirstRow.clear();
-            keyboardSecondRow.clear();
-            keyboardFirstRow.add(new KeyboardButton("Ул. Радонежска 1"));
-            keyboardFirstRow.add(new KeyboardButton("Ул. Проспект Карла Маркса 196"));
-            keyboardSecondRow.add(new KeyboardButton("Назад"));
+                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                        .setText("г. Самара, ул. Радонежская, 1\n" +
+                                "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+                                "\n" +
+                                "Телефон: 8 (927) 002-75-57" +
+                                "\n" +
+                                "\nг. Самара, пр. Карла Маркса, 196 (ЖК Центральный)\n" +
+                                "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+                                "\n" +
+                                "Телефон: 8 (927) 760-11-17")
+                        .row()
+                        .button("Сделать заказ")
+                        .button("Наличие")
+                        .endRow()
+                        .row()
+                        .button("Наши Контакты")
+                        .button("Помощь")
+                        .endRow()
+                        .build();
 
-            keyboard.add(keyboardFirstRow);
-            keyboard.add(keyboardSecondRow);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
-            return "Выберите Магазин...";
-        }
+                return sendMessage;
 
-        if (text.equals("Наши Контакты")) {
-            keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
-            keyboardFirstRow.add(new KeyboardButton("Наличие"));
-            keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
-            keyboardSecondRow.add(new KeyboardButton("Помощь"));
+            case "Помощь":
 
+                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                        .setText("C Помощью данного Бота, вы можете сделать заказ, посмотреть наличие в магазинах и узнать наши контакты." +
+                                " Чтобы начать напишите : \"/start\" ")
+                        .row()
+                        .button("Сделать заказ")
+                        .button("Наличие")
+                        .endRow()
+                        .row()
+                        .button("Наши Контакты")
+                        .button("Помощь")
+                        .endRow()
+                        .build();
 
-            keyboard.add(keyboardFirstRow);
-            keyboard.add(keyboardSecondRow);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
-            return "г. Самара, ул. Радонежская, 1\n" +
-                    "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
-                    "\n" +
-                    "Телефон: 8 (927) 002-75-57" +
-                    "\n" +
-                    "\nг. Самара, пр. Карла Маркса, 196 (ЖК Центральный)\n" +
-                    "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
-                    "\n" +
-                    "Телефон: 8 (927) 760-11-17";
-        }
+                return sendMessage;
 
-        if (text.equals("Помощь")) {
-            keyboardFirstRow.add(new KeyboardButton("Сделать заказ"));
-            keyboardFirstRow.add(new KeyboardButton("Наличие"));
-            keyboardSecondRow.add(new KeyboardButton("Наши Контакты"));
-            keyboardSecondRow.add(new KeyboardButton("Помощь"));
+            case "Сделать заказ":
 
-
-            keyboard.add(keyboardFirstRow);
-            keyboard.add(keyboardSecondRow);
-            replyKeyboardMarkup.setKeyboard(keyboard);
-            sendMessage.setReplyMarkup(replyKeyboardMarkup);
-
-
-            return "C Помощью данного Бота, вы можете сделать заказ, посмотреть наличие в магазинах и узнать наши контакты." +
-                    " Чтобы начать напишите : \"/start\" ";
-
-        }
-        if (text.equals("Сделать заказ")) {
+                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .setText("Выберите категорию товара")
+                        .row()
+                        .button("Табаки", "Табаки")
+                        .button("Кальяны", "Кальяны")
+                        .endRow()
+                        .row()
+                        .button("Акссесуары", "Акссесуары")
+                        .button("Уголь", "Уголь")
+                        .endRow()
+                        .build();
 
 
+                return sendMessage;
 
-            InlineKeyboardButton button1 = new InlineKeyboardButton("Табаки");
-            InlineKeyboardButton button2 = new InlineKeyboardButton("Кальяны");
-            InlineKeyboardButton button3 = new InlineKeyboardButton("Акссесуары");
-            InlineKeyboardButton button4 = new InlineKeyboardButton("Уголь");
+            case "Ул. Радонежская 1":
 
-            button1.setCallbackData("Табаки");
-            button2.setCallbackData("Кальяны");
-            button3.setCallbackData("Акссесуары");
-            button4.setCallbackData("Уголь");
-
-            inlineKeyboardButtonsRow1.add(button1);
-            inlineKeyboardButtonsRow1.add(button2);
-            inlineKeyboardButtonsRow2.add(button3);
-            inlineKeyboardButtonsRow2.add(button4);
-            inlineKeyboard.add(inlineKeyboardButtonsRow1);
-            inlineKeyboard.add(inlineKeyboardButtonsRow2);
-
-            inlineKeyboardMarkup.setKeyboard(inlineKeyboard);
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-
-            return "Выберите Категорию Товара";
-        }
-
-        if (text.equals("Ул. Радонежска 1")){
-
-            inlineKeyboard.clear();
-            inlineKeyboardButtonsRow1.clear();
-            inlineKeyboardButtonsRow2.clear();
-
-            InlineKeyboardButton button1 = new InlineKeyboardButton("Табаки");
-            InlineKeyboardButton button2 = new InlineKeyboardButton("Кальяны");
-            InlineKeyboardButton button3 = new InlineKeyboardButton("Акссесуары");
-            InlineKeyboardButton button4 = new InlineKeyboardButton("Уголь");
-
-            button1.setCallbackData("Табаки");
-            button2.setCallbackData("Кальяны");
-            button3.setCallbackData("Акссесуары");
-            button4.setCallbackData("Уголь");
-
-            inlineKeyboardButtonsRow1.add(button1);
-            inlineKeyboardButtonsRow1.add(button2);
-            inlineKeyboardButtonsRow2.add(button3);
-            inlineKeyboardButtonsRow2.add(button4);
-            inlineKeyboard.add(inlineKeyboardButtonsRow1);
-            inlineKeyboard.add(inlineKeyboardButtonsRow2);
-
-            inlineKeyboardMarkup.setKeyboard(inlineKeyboard);
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-
-            return "Выберите Категорию Товара";
-
-        }
-
-        if (text.equals("Ул. Проспект Карла Маркса 196")){
+                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .setText("\"Ул. Радонежска 1\"")
+                        .row()
+                        .button("Табаки", "Табаки")
+                        .button("Кальяны", "Кальяны")
+                        .endRow()
+                        .row()
+                        .button("Акссесуары", "Акссесуары")
+                        .button("Уголь", "Уголь")
+                        .endRow()
+                        .build();
 
 
-            inlineKeyboard.clear();
-            inlineKeyboardButtonsRow1.clear();
-            inlineKeyboardButtonsRow2.clear();
+                return sendMessage;
 
-            InlineKeyboardButton button1 = new InlineKeyboardButton("Табаки");
-            InlineKeyboardButton button2 = new InlineKeyboardButton("Кальяны");
-            InlineKeyboardButton button3 = new InlineKeyboardButton("Акссесуары");
-            InlineKeyboardButton button4 = new InlineKeyboardButton("Уголь");
+            case "Ул. Проспект Карла Маркса 196":
 
-            button1.setCallbackData("Табаки");
-            button2.setCallbackData("Кальяны");
-            button3.setCallbackData("Акссесуары");
-            button4.setCallbackData("Уголь");
+                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .setText("\"Ул. Проспект Карла Маркса 196\"")
+                        .row()
+                        .button("Табаки", "Табаки")
+                        .button("Кальяны", "Кальяны")
+                        .endRow()
+                        .row()
+                        .button("Акссесуары", "Акссесуары")
+                        .button("Уголь", "Уголь")
+                        .endRow()
+                        .build();
 
-            inlineKeyboardButtonsRow1.add(button1);
-            inlineKeyboardButtonsRow1.add(button2);
-            inlineKeyboardButtonsRow2.add(button3);
-            inlineKeyboardButtonsRow2.add(button4);
-            inlineKeyboard.add(inlineKeyboardButtonsRow1);
-            inlineKeyboard.add(inlineKeyboardButtonsRow2);
 
-            inlineKeyboardMarkup.setKeyboard(inlineKeyboard);
-            sendMessage.setReplyMarkup(inlineKeyboardMarkup);
-
-            return "Выберите Категорию Товара";
+                return sendMessage;
 
         }
-        return "Не понял";
+
+//        if (text.equals("/start") || text.equals("Назад")) {
+//            sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+//                    .setText("Открыто Главное Меню")
+//                    .row()
+//                    .button("Сделать заказ")
+//                    .button("Наличие")
+//                    .endRow()
+//                    .row()
+//                    .button("Наши Контакты")
+//                    .button("Помощь")
+//                    .endRow()
+//                    .build();
+//
+//            return sendMessage;
+//        }
+
+//        if (text.equals("Наличие")) {
+//
+//            sendMessage = ReplyKeyboardMarkupBuilder
+//                    .create(chat_id)
+//                    .setText("Выберите Магазин")
+//                    .row()
+//                    .button("Ул. Радонежская 1")
+//                    .button("Ул. Проспект Карла Маркса 196")
+//                    .endRow()
+//                    .row()
+//                    .button("Назад")
+//                    .endRow()
+//                    .build();
+//
+//
+//            return sendMessage;
+//        }
+
+//        if (text.equals("Наши Контакты")) {
+//
+//            sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+//                    .setText("г. Самара, ул. Радонежская, 1\n" +
+//                            "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+//                            "\n" +
+//                            "Телефон: 8 (927) 002-75-57" +
+//                            "\n" +
+//                            "\nг. Самара, пр. Карла Маркса, 196 (ЖК Центральный)\n" +
+//                            "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+//                            "\n" +
+//                            "Телефон: 8 (927) 760-11-17")
+//                    .row()
+//                    .button("Сделать заказ")
+//                    .button("Наличие")
+//                    .endRow()
+//                    .row()
+//                    .button("Наши Контакты")
+//                    .button("Помощь")
+//                    .endRow()
+//                    .build();
+//
+//            return sendMessage;
+//        }
+
+//        if (text.equals("Помощь")) {
+//
+//            sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+//                    .setText("C Помощью данного Бота, вы можете сделать заказ, посмотреть наличие в магазинах и узнать наши контакты." +
+//                            " Чтобы начать напишите : \"/start\" ")
+//                    .row()
+//                    .button("Сделать заказ")
+//                    .button("Наличие")
+//                    .endRow()
+//                    .row()
+//                    .button("Наши Контакты")
+//                    .button("Помощь")
+//                    .endRow()
+//                    .build();
+//
+//            return sendMessage;
+//
+//        }
+//        if (text.equals("Сделать заказ")) {
+//
+//            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+//                    .setText("Выберите категорию товара")
+//                    .row()
+//                    .button("Табаки", "Табаки")
+//                    .button("Кальяны", "Кальяны")
+//                    .endRow()
+//                    .row()
+//                    .button("Акссесуары", "Акссесуары")
+//                    .button("Уголь", "Уголь")
+//                    .endRow()
+//                    .build();
+//
+//
+//
+//            return sendMessage;
+//        }
+
+//        if (text.equals("Ул. Радонежская 1")) {
+//
+//            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+//                    .setText("\"Ул. Радонежска 1\"")
+//                    .row()
+//                    .button("Табаки", "Табаки")
+//                    .button("Кальяны", "Кальяны")
+//                    .endRow()
+//                    .row()
+//                    .button("Акссесуары", "Акссесуары")
+//                    .button("Уголь", "Уголь")
+//                    .endRow()
+//                    .build();
+//
+//
+//
+//            return sendMessage;
+//
+//        }
+
+//        if (text.equals("Ул. Проспект Карла Маркса 196")) {
+//
+//            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+//                    .setText("\"Ул. Проспект Карла Маркса 196\"")
+//                    .row()
+//                    .button("Табаки", "Табаки")
+//                    .button("Кальяны", "Кальяны")
+//                    .endRow()
+//                    .row()
+//                    .button("Акссесуары", "Акссесуары")
+//                    .button("Уголь", "Уголь")
+//                    .endRow()
+//                    .build();
+//
+//
+//            return sendMessage;
+//        }
+        return sendMessage.setText("Не понял");
 
 
     }
