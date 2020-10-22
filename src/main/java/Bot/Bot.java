@@ -69,8 +69,8 @@ public class Bot extends TelegramLongPollingBot {
         SendMessage sendMessage = new SendMessage().setChatId(update.getMessage().getChatId());
         chat_id = message.getChatId();
 
-        sendMessage.setReplyMarkup(replyKeyboardMarkup);
-        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
+//        sendMessage.setReplyMarkup(replyKeyboardMarkup);
+//        sendMessage.setReplyMarkup(inlineKeyboardMarkup);
 
         String text = update.getMessage().getText();
 
@@ -88,6 +88,7 @@ public class Bot extends TelegramLongPollingBot {
         List<List<InlineKeyboardButton>> inlineKeyboard = new ArrayList<>();
         List<InlineKeyboardButton> inlineKeyboardButtonsRow1 = new ArrayList<>();
         List<InlineKeyboardButton> inlineKeyboardButtonsRow2 = new ArrayList<>();
+
 
         List<KeyboardRow> keyboard = new ArrayList<>();
         KeyboardRow keyboardFirstRow = new KeyboardRow();
