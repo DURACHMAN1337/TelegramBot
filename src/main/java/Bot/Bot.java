@@ -17,7 +17,8 @@ import java.util.ArrayList;
 
 public class Bot extends TelegramLongPollingBot {
     private long chat_id;
-    private final AllHookahs allHookahs = new AllHookahs();
+    private static final AllHookahs allHookahs = new AllHookahs();
+
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
@@ -182,11 +183,13 @@ public class Bot extends TelegramLongPollingBot {
                         .build();
                 return sendMessage;
 
-/*            case "Nube":
-                ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand("Nube");
+            case "PANDORA":
+                ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand("PANDORA");
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .sendProducts(hookahs);
-                return sendMessage;*/
+                        .setText("Товары по запросу PANDORA: ")
+                        .productButtons(hookahs)
+                        .build();
+                return sendMessage;
         }
         return sendMessage.setText("Не понял");
     }

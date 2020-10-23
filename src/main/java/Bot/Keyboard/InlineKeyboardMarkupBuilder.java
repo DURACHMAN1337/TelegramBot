@@ -1,7 +1,6 @@
 package Bot.Keyboard;
 
 import Models.Hookah;
-import Models.Product;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -62,12 +61,23 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
     }
 
     public InlineKeyboardMarkupBuilder buttons(ArrayList<String> text) {
-        int count = text.size();
         for (String s : text) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(s)
                     .setCallbackData(s));
+            this.keyboard.add(this.row);
+            this.row = null;
+        }
+        return this;
+    }
+
+    public InlineKeyboardMarkupBuilder productButtons(ArrayList<Hookah> hookahs) {
+        for (Hookah hookah : hookahs) {
+            this.row = new ArrayList<>();
+            row.add(new InlineKeyboardButton()
+                    .setText("Товар:\t" + hookah.getName() + "\nЦЕНА:\t" + hookah.getPrice())
+                    .setCallbackData(hookah.getName()));
             this.keyboard.add(this.row);
             this.row = null;
         }

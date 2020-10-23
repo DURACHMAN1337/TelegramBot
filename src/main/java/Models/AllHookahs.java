@@ -14,6 +14,13 @@ public class AllHookahs {
     private Document document;
     private ArrayList<Hookah> hookahs;
 
+    public static void main(String[] args) {
+        AllHookahs allHookahs = new AllHookahs();
+//        System.out.println(allHookahs.getAllHookahs());
+        System.out.println(allHookahs.getAllBrandsList());
+        System.out.println(allHookahs.getHookahsByBrand("PANDORA"));
+    }
+
     public AllHookahs() {
         Date date = new Date();
         parseAllHookahs();
@@ -30,7 +37,7 @@ public class AllHookahs {
         ArrayList<String> hookahBrands = new ArrayList<>();
         Elements elements = document.getElementsByClass("children");
         for (Element element : elements.select("a")) {
-            hookahBrands.add(element.text());
+            hookahBrands.add(element.text().toUpperCase());
         }
         return hookahBrands;
     }
@@ -46,7 +53,7 @@ public class AllHookahs {
     }
 
     public ArrayList<Hookah> parseAllHookahs() {
-        ArrayList<Hookah> hookahs = new ArrayList<>();
+        hookahs = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             try {
                 document = Jsoup.connect("https://hookahinrussia.ru/product-category/%d0%ba%d0%b0%d0%bb%d1%8c%d1%8f%d0%bd%d1%8b/page/" + i + "/").get();
@@ -65,7 +72,7 @@ public class AllHookahs {
                 tempHookahs.add(hookah);
             }
             for (Element element : namesElem) {
-                tempHookahs.get(namesElem.indexOf(element)).setName(element.text());
+                tempHookahs.get(namesElem.indexOf(element)).setName(element.text().toUpperCase());
             }
             for (Element element : priceElem) {
                 tempHookahs.get(priceElem.indexOf(element)).setPrice(Long.parseLong(element.text().replaceAll(".00 руб.+", "")));
