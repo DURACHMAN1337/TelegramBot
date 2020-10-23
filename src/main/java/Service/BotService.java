@@ -1,4 +1,4 @@
-package services;
+package Service;
 
 public interface BotService {
 

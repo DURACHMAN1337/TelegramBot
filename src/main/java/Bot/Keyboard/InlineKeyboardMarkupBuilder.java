@@ -59,6 +59,19 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
+    public InlineKeyboardMarkupBuilder buttons(ArrayList<String> text, ArrayList<String> callbackData) {
+        int count = text.size();
+        for (int i = 0; i < count; i++) {
+            this.row = new ArrayList<>();
+            row.add(new InlineKeyboardButton()
+                    .setText(text.get(i))
+                    .setCallbackData(callbackData.get(i)));
+            this.keyboard.add(this.row);
+            this.row = null;
+        }
+        return this;
+    }
+
     public InlineKeyboardMarkupBuilder buttonWithURL(String text, String URL) {
         row.add(new InlineKeyboardButton()
                 .setText(text)
