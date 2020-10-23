@@ -30,18 +30,6 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public void sendMsg(Message message, String text) {
-        SendMessage s = new SendMessage();
-        s.enableMarkdown(true);
-        s.setChatId(message.getChatId().toString());
-        s.setReplyToMessageId(message.getMessageId());
-        s.setText(text);
-        try {
-            execute(s);
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
 
     public void onUpdateReceived(Update update) {
         updateHandle(update);
@@ -120,7 +108,7 @@ public class Bot extends TelegramLongPollingBot {
                         .setText("C Помощью данного Бота, вы можете сделать заказ, посмотреть наличие в магазинах и узнать наши контакты." +
                                 " Чтобы начать напишите : \"/start\" ")
                         .row()
-                        .button("Сделать заказ")
+                        .button("\uD83D\uDCE6 Сделать заказ")
                         .button("Наличие")
                         .endRow()
                         .row()
@@ -131,8 +119,24 @@ public class Bot extends TelegramLongPollingBot {
                 return sendMessage;
 
             case "Сделать заказ":
+                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                        .setText("Вы вошли в меню заказа")
+                        .row()
+                        .button("Каталог")
+                        .button("Корзина")
+                        .endRow()
+                        .row()
+                        .button("Оформить заказ")
+                        .endRow()
+                        .row()
+                        .button("Назад")
+                        .endRow()
+                        .build();
+                return sendMessage;
+
+            case "Каталог":
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("Выберите категорию товара")
+                        .setText("Выберите категориютовара")
                         .row()
                         .button("Табаки", "Табаки")
                         .button("Кальяны", "Кальяны")
@@ -183,13 +187,13 @@ public class Bot extends TelegramLongPollingBot {
                         .build();
                 return sendMessage;
 
-            case "PANDORA":
-                ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand("PANDORA");
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("Товары по запросу PANDORA: ")
-                        .productButtons(hookahs)
-                        .build();
-                return sendMessage;
+//            case "PANDORA":
+//                ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand("PANDORA");
+//                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+//                        .setText("Товары по запросу PANDORA: ")
+//                        .sendProducts(hookahs)
+//                        .build();
+//                return sendMessage;
         }
         return sendMessage.setText("Не понял");
     }
@@ -205,8 +209,7 @@ public class Bot extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
-        }
-        else if (update.hasCallbackQuery()) {
+        } else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
             chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
