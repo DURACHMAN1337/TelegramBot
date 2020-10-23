@@ -1,6 +1,6 @@
 package Models;
 
-public class Hookah {
+public class Hookah extends Product {
 
     private String brand;
     private String name;
@@ -48,6 +48,6 @@ public class Hookah {
                 "name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
-                '}';
+                '}' + "\n";
     }
 }

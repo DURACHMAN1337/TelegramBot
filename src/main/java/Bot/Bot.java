@@ -3,6 +3,7 @@ package Bot;
 import Bot.Keyboard.InlineKeyboardMarkupBuilder;
 import Bot.Keyboard.ReplyKeyboardMarkupBuilder;
 import Models.AllHookahs;
+import Models.Hookah;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 public class Bot extends TelegramLongPollingBot {
     private long chat_id;
+    private final AllHookahs allHookahs = new AllHookahs();
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
@@ -170,26 +172,21 @@ public class Bot extends TelegramLongPollingBot {
                 return sendMessage;
 
             case "Кальяны":
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("Выберите ценовую категорию:")
-                        .row()
-                        .button("до 8.000 руб.", "до 8.000 руб.")
-                        .button("после 8.000 руб.", "после 8.000 руб.")
-                        .endRow()
-                        .build();
-                return sendMessage;
-
-            case "до 8.000 руб.":
-                AllHookahs hookahs = new AllHookahs();
-                ArrayList<String> brands = hookahs.getAllBrandsList();
+                ArrayList<String> brands = allHookahs.getAllBrandsList();
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .setText("Выберите бренд кальяна:")
-                        .buttons(brands, brands)
+                        .buttons(brands)
                         .row()
                         .button("Назад", "Кальяны")
                         .endRow()
                         .build();
                 return sendMessage;
+
+/*            case "Nube":
+                ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand("Nube");
+                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .sendProducts(hookahs);
+                return sendMessage;*/
         }
         return sendMessage.setText("Не понял");
     }

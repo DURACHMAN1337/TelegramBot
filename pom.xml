@@ -26,6 +26,11 @@
             <artifactId>telegrambots</artifactId>
             <version>4.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
+        </dependency>
     </dependencies>
 
 
