@@ -1,6 +1,8 @@
 package Bot.Keyboard;
 
 import Models.Hookah;
+import Models.Product;
+import Models.Tobacco;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -79,7 +81,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder productButtons(ArrayList<Hookah> hookahs, String brand) {
+    public InlineKeyboardMarkupBuilder productButtons(ArrayList<Hookah>  hookahs, String brand) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
@@ -90,6 +92,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
+
 
     public InlineKeyboardMarkupBuilder buttonWithURL(String text, String URL) {
         row.add(new InlineKeyboardButton()

@@ -3,7 +3,9 @@ package Bot;
 import Bot.Keyboard.InlineKeyboardMarkupBuilder;
 import Bot.Keyboard.ReplyKeyboardMarkupBuilder;
 import Models.AllHookahs;
+import Models.AllTobacco;
 import Models.Hookah;
+import Models.Tobacco;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -20,7 +22,9 @@ import java.util.ArrayList;
 public class Bot extends TelegramLongPollingBot {
     private long chat_id;
     private static final AllHookahs allHookahs = new AllHookahs();
+    private static final AllTobacco allTobacco = new AllTobacco();
     private static final ArrayList<String> allBrands = allHookahs.getAllBrandsList();
+    private static final ArrayList<String> allTobaccoBrands = allTobacco.getAllNamesList();
     private static String currHandle = "sendMessageHandle";
 
 
@@ -183,6 +187,9 @@ public class Bot extends TelegramLongPollingBot {
 
             case "Кальяны":
                 return hookahHandle(text, sendMessage);
+
+            case "Табаки":
+                return tobaccoHandle(text,sendMessage);
         }
         return sendMessage.setText("Не понял");
     }
@@ -233,6 +240,46 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
         return sendMessage.setText("Кальянное не понял");
+    }
+
+    public SendMessage tobaccoHandle(String text, SendMessage sendMessage){
+
+        currHandle = "tobaccoHandle";
+        ArrayList<String> tobaccoNames = allTobacco.getAllNamesList();
+        SendPhoto sendPhoto = new SendPhoto();
+
+        if (tobaccoNames.contains(text)) {
+            Tobacco tobacco = allTobacco.getTobaccoByName(text);
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Товар: " + text + "\nЦена: " + tobacco.getPrice() + " руб.\nОписание товара бла бла.\n" + tobacco.getImg())
+                    .row()
+                    .button("В корзину", "В корзину")
+                    .endRow()
+                    .row()
+                    .button("Назад", "Кальяны")
+                    .endRow()
+                    .build();
+            return sendMessage;
+        }
+        else {
+            switch (text) {
+                case "Каталог":
+                    return sendMessageHandle(text, sendMessage);
+
+                case "Табаки":
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText("Выберите бренд кальяна:")
+                            .buttons(allTobaccoBrands)
+                            .row()
+                            .button("Назад", "Каталог")
+                            .endRow()
+                            .build();
+                    return sendMessage;
+            }
+        }
+
+
+        return sendMessage.setText("Табачное не понял");
     }
 
     public void updateHandle(Update update) {
