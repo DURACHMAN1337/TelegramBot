@@ -16,9 +16,13 @@ public class AllHookahs {
 
     public static void main(String[] args) {
         AllHookahs allHookahs = new AllHookahs();
-//        System.out.println(allHookahs.getAllHookahs());
+        System.out.println(allHookahs.getAllHookahs());
         System.out.println(allHookahs.getAllBrandsList());
-        System.out.println(allHookahs.getHookahsByBrand("PANDORA"));
+        for (String s : allHookahs.getAllBrandsList()) {
+            System.out.println("КАЛИКИ БРЕНДА " + s);
+            System.out.println(allHookahs.getHookahsByBrand(s));
+        }
+
     }
 
     public AllHookahs() {
@@ -34,25 +38,42 @@ public class AllHookahs {
     }
 
     public ArrayList<String> getAllBrandsList() {
-        ArrayList<String> hookahBrands = new ArrayList<>();
+        ArrayList<String> brands = new ArrayList<>();
         Elements elements = document.getElementsByClass("children");
         for (Element element : elements.select("a")) {
-            hookahBrands.add(element.text().toUpperCase());
+                brands.add(element.text().toUpperCase().replace("КАЛЯЬН ", "").replace("-", " "));
         }
-        return hookahBrands;
+        return brands;
+    }
+
+    public ArrayList<String> getAllNamesList() {
+        ArrayList<String> names = new ArrayList<>();
+        for (Hookah h : getAllHookahs()) {
+            names.add(h.getName());
+        }
+        return names;
     }
 
     public ArrayList<Hookah> getHookahsByBrand(String brandName) {
         ArrayList<Hookah> hookahs = getAllHookahs();
         ArrayList<Hookah> resHookahs = new ArrayList<>();
         for (Hookah h : hookahs) {
-            if (h.getName().contains(brandName))
+            if (h.getName().contains(brandName.replace("HOOKAH", "").trim()))
                 resHookahs.add(h);
         }
         return resHookahs;
     }
 
-    public ArrayList<Hookah> parseAllHookahs() {
+    public Hookah getHookahByName(String name) {
+        ArrayList<Hookah> hookahs = getAllHookahs();
+        for (Hookah h : hookahs) {
+            if (h.getName().equals(name))
+                return h;
+        }
+        return null;
+    }
+
+    public void parseAllHookahs() {
         hookahs = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             try {
@@ -72,13 +93,13 @@ public class AllHookahs {
                 tempHookahs.add(hookah);
             }
             for (Element element : namesElem) {
-                tempHookahs.get(namesElem.indexOf(element)).setName(element.text().toUpperCase());
+                tempHookahs.get(namesElem.indexOf(element)).setName(element.text().toUpperCase().replaceAll("КАЛЬЯН ", ""));
+
             }
             for (Element element : priceElem) {
                 tempHookahs.get(priceElem.indexOf(element)).setPrice(Long.parseLong(element.text().replaceAll(".00 руб.+", "")));
             }
             hookahs.addAll(tempHookahs);
         }
-        return hookahs;
     }
 }

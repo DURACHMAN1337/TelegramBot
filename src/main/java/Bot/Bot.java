@@ -7,7 +7,9 @@ import Models.Hookah;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
 public class Bot extends TelegramLongPollingBot {
     private long chat_id;
     private static final AllHookahs allHookahs = new AllHookahs();
+    private static final ArrayList<String> allBrands = allHookahs.getAllBrandsList();
+    private static String currHandle = "sendMessageHandle";
 
 
     public static void main(String[] args) {
@@ -36,7 +40,8 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public SendMessage sendMessageHandle(String text, SendMessage sendMessage) {
-
+        currHandle = "sendMessageHandle";
+        SendPhoto sendPhoto = new SendPhoto();
         switch (text) {
 
             case "/start":
@@ -136,7 +141,7 @@ public class Bot extends TelegramLongPollingBot {
 
             case "Каталог":
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("Выберите категориютовара")
+                        .setText("Выберите категорию товара")
                         .row()
                         .button("Табаки", "Табаки")
                         .button("Кальяны", "Кальяны")
@@ -177,25 +182,57 @@ public class Bot extends TelegramLongPollingBot {
                 return sendMessage;
 
             case "Кальяны":
-                ArrayList<String> brands = allHookahs.getAllBrandsList();
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("Выберите бренд кальяна:")
-                        .buttons(brands)
-                        .row()
-                        .button("Назад", "Кальяны")
-                        .endRow()
-                        .build();
-                return sendMessage;
-
-//            case "PANDORA":
-//                ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand("PANDORA");
-//                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-//                        .setText("Товары по запросу PANDORA: ")
-//                        .sendProducts(hookahs)
-//                        .build();
-//                return sendMessage;
+                return hookahHandle(text, sendMessage);
         }
         return sendMessage.setText("Не понял");
+    }
+
+    public SendMessage hookahHandle(String text, SendMessage sendMessage) {
+        currHandle = "hookahHandle";
+        ArrayList<String> hookahsNames = allHookahs.getAllNamesList();
+        SendPhoto sendPhoto = new SendPhoto();
+
+        if (allBrands.contains(text)) {
+            ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand(text);
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Товары бренда " + text + ": ")
+                    .productButtons(hookahs, text)
+                    .row()
+                    .button("Назад", "Кальяны")
+                    .endRow()
+                    .build();
+            return sendMessage;
+        }
+        else if (hookahsNames.contains(text)) {
+            Hookah hookah = allHookahs.getHookahByName(text);
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Товар: " + text + "\nЦена: " + hookah.getPrice() + " руб.\nОписание товара бла бла.\n" + hookah.getImg())
+                    .row()
+                    .button("В корзину", "В корзину")
+                    .endRow()
+                    .row()
+                    .button("Назад", "Кальяны")
+                    .endRow()
+                    .build();
+            return sendMessage;
+        }
+        else {
+            switch (text) {
+                case "Каталог":
+                    return sendMessageHandle(text, sendMessage);
+
+                case "Кальяны":
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText("Выберите бренд кальяна:")
+                            .buttons(allBrands)
+                            .row()
+                            .button("Назад", "Каталог")
+                            .endRow()
+                            .build();
+                    return sendMessage;
+            }
+        }
+        return sendMessage.setText("Кальянное не понял");
     }
 
     public void updateHandle(Update update) {
@@ -205,7 +242,7 @@ public class Bot extends TelegramLongPollingBot {
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
             try {
-                execute(sendMessageHandle(text, outMessage));
+                execute(simpleHandlersFactory(text, outMessage));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -215,11 +252,19 @@ public class Bot extends TelegramLongPollingBot {
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getCallbackQuery().getData();
             try {
-                execute(sendMessageHandle(text, outMessage));
+                execute(simpleHandlersFactory(text, outMessage));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private SendMessage simpleHandlersFactory(String text, SendMessage sendMessage) {
+        if (currHandle.equals("sendMessageHandle")) {
+            return sendMessageHandle(text, sendMessage);
+        }
+        else
+            return hookahHandle(text, sendMessage);
     }
 
     public String getBotUsername() {
