@@ -3,6 +3,7 @@ package Bot;
 import Bot.Keyboard.InlineKeyboardMarkupBuilder;
 import Bot.Keyboard.ReplyKeyboardMarkupBuilder;
 import Models.Cart;
+import Service.CartService;
 import Service.HookahService;
 import Service.TobaccoService;
 import Models.Products.Hookah;
@@ -23,6 +24,7 @@ public class Bot extends TelegramLongPollingBot {
 
     private static final HookahService HOOKAH_SERVICE = new HookahService();
     private static final TobaccoService TOBACCO_SERVICE = new TobaccoService();
+    private static final CartService CART_SERVICE = new CartService();
     private static final ArrayList<String> allHookahBrands = HOOKAH_SERVICE.getAllBrandsList();
     private static final ArrayList<String> allTobaccoBrands = TOBACCO_SERVICE.getAllNamesList();
 
@@ -39,15 +41,14 @@ public class Bot extends TelegramLongPollingBot {
 
 
     public void onUpdateReceived(Update update) {
-        Cart cart = new Cart();
         try {
-            updateHandle(update, cart);
+            updateHandle(update);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
     }
 
-    public SendMessage sendMessageHandle(String text, SendMessage sendMessage, Cart cart) {
+    public SendMessage sendMessageHandle(String text, SendMessage sendMessage) {
         long chat_id = Long.parseLong(sendMessage.getChatId());
         switch (text) {
             case "/start":
@@ -187,18 +188,18 @@ public class Bot extends TelegramLongPollingBot {
                 return sendMessage;
 
             case "Кальяны":
-                return hookahHandle(text, sendMessage, cart);
+                return hookahHandle(text, sendMessage);
 
             case "Табаки":
-                return tobaccoHandle(text,sendMessage, cart);
+                return tobaccoHandle(text,sendMessage);
 
             case "Корзина":
-                return cartHandle("c" + text, sendMessage, cart);
+                return cartHandle("c" + text, sendMessage);
         }
         return sendMessage.setText("Не понял");
     }
 
-    public SendMessage hookahHandle(String text, SendMessage sendMessage, Cart cart) {
+    public SendMessage hookahHandle(String text, SendMessage sendMessage) {
         text = text.substring(1);
         long chat_id = Long.parseLong(sendMessage.getChatId());
         ArrayList<String> hookahsNames = HOOKAH_SERVICE.getAllNamesList();
@@ -218,7 +219,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         else if (text.contains("В корзину")) {
             currHookah = HOOKAH_SERVICE.getHookahByName(text.replace(" В корзину", ""));
-            cart.getCart().add(currHookah);
+            CART_SERVICE.getUserCart(chat_id).getCart().add(currHookah);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText("Товар: " + currHookah.getName() + "\nУспешно добавлен в корзину")
                     .row()
@@ -252,7 +253,7 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    public SendMessage tobaccoHandle(String text, SendMessage sendMessage, Cart cart){
+    public SendMessage tobaccoHandle(String text, SendMessage sendMessage){
         text = text.substring(1);
         long chat_id = Long.parseLong(sendMessage.getChatId());
         ArrayList<String> tobaccoNames = TOBACCO_SERVICE.getAllNamesList();
@@ -274,7 +275,7 @@ public class Bot extends TelegramLongPollingBot {
         else {
             switch (text) {
                 case "Каталог":
-                    return sendMessageHandle(text, sendMessage, cart);
+                    return sendMessageHandle(text, sendMessage);
 
                 case "Табаки":
                     sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -290,12 +291,12 @@ public class Bot extends TelegramLongPollingBot {
         return sendMessage.setText("Табачное не понял");
     }
 
-    public SendMessage cartHandle(String text, SendMessage sendMessage, Cart cart) {
+    public SendMessage cartHandle(String text, SendMessage sendMessage) {
         text = text.substring(1);
         long chat_id = Long.parseLong(sendMessage.getChatId());
         if (text.equals("Корзина")) {
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText(cart.toString())
+                    .setText(CART_SERVICE.getUserCart(chat_id).toString())
                     .row()
                     .button("Назад", "Каталог")
                     .endRow()
@@ -311,34 +312,32 @@ public class Bot extends TelegramLongPollingBot {
         return sendMessage;
     }
 
-    public void updateHandle(Update update, Cart cart) throws TelegramApiException {
+    public void updateHandle(Update update) throws TelegramApiException {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message inMessage = update.getMessage();
             long chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
             try {
-                execute(sendMessageHandle(text, outMessage, cart));
+                execute(sendMessageHandle(text, outMessage));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         } else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
             long chat_id = inMessage.getChatId();
-            long user_id = update.getCallbackQuery().getFrom().getId();
-            String userName = update.getCallbackQuery().getFrom().getUserName();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getCallbackQuery().getData();
             System.out.println(text);
             char[] inMes = text.toCharArray();
             if (inMes[0] == 'c')
-                execute(cartHandle(text, outMessage, cart));
+                execute(cartHandle(text, outMessage));
             else if (inMes[0] == 'h')
-                execute(hookahHandle(text, outMessage, cart));
+                execute(hookahHandle(text, outMessage));
             else if (inMes[0] == 't')
-                execute(tobaccoHandle(text, outMessage, cart));
+                execute(tobaccoHandle(text, outMessage));
             else
-                execute(sendMessageHandle(text, outMessage, cart));
+                execute(sendMessageHandle(text, outMessage));
         }
     }
 
