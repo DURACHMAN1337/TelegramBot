@@ -39,8 +39,9 @@ public class Bot extends TelegramLongPollingBot {
 
 
     public void onUpdateReceived(Update update) {
+        Cart cart = new Cart();
         try {
-            updateHandle(update);
+            updateHandle(update, cart);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -192,7 +193,7 @@ public class Bot extends TelegramLongPollingBot {
                 return tobaccoHandle(text,sendMessage, cart);
 
             case "Корзина":
-                return cartHandle("c"+text, sendMessage, cart);
+                return cartHandle("c" + text, sendMessage, cart);
         }
         return sendMessage.setText("Не понял");
     }
@@ -310,8 +311,7 @@ public class Bot extends TelegramLongPollingBot {
         return sendMessage;
     }
 
-    public void updateHandle(Update update) throws TelegramApiException {
-        Cart cart = new Cart();
+    public void updateHandle(Update update, Cart cart) throws TelegramApiException {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message inMessage = update.getMessage();
             long chat_id = inMessage.getChatId();
@@ -325,6 +325,8 @@ public class Bot extends TelegramLongPollingBot {
         } else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
             long chat_id = inMessage.getChatId();
+            long user_id = update.getCallbackQuery().getFrom().getId();
+            String userName = update.getCallbackQuery().getFrom().getUserName();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getCallbackQuery().getData();
             System.out.println(text);

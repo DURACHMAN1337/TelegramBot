@@ -9,8 +9,12 @@ public class Cart {
     private long chat_id;
     private ArrayList<Product> cart;
 
-    public Cart() {
+    public Cart(long chat_id) {
         cart = new ArrayList<>();
+        this.chat_id = chat_id;
+    }
+
+    public Cart() {
     }
 
     public long getChat_id() {
