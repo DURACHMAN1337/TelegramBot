@@ -16,7 +16,10 @@ public class TobaccoService {
 
     public static void main(String[] args) {
         TobaccoService tobaccoService = new TobaccoService();
-        System.out.println(tobaccoService.getTobaccoByBrand("DARK"));
+        ArrayList<Tobacco> list = tobaccoService.tobaccoList;
+        for (Tobacco tobacco : list) {
+            System.out.println(tobacco.getPrice());
+        }
     }
 
     public TobaccoService() {
