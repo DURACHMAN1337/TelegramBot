@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class CartService {
 
-    private HashMap<Long, Cart> carts;
+    private final HashMap<Long, Cart> carts;
 
     public CartService() {
         carts = new HashMap<>();
@@ -22,7 +22,11 @@ public class CartService {
         }
     }
 
-    public HashMap<Long, Cart> getCarts() {
-        return carts;
+    public void clearUserCart(long chat_id) {
+        carts.get(chat_id).getCart().clear();
+    }
+
+    public long cartsSize() {
+        return carts.size();
     }
 }
