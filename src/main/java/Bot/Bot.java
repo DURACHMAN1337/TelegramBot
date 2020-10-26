@@ -292,12 +292,12 @@ public class Bot extends TelegramLongPollingBot {
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText("Выберите крепость табака")
                     .row()
-                    .button("Безтабачная смесь","Безтабачная смесь")
-                    .button("Лёгкий","Лёгкий")
+                    .button("Безтабачная смесь", "Безтабачная смесь")
+                    .button("Лёгкий", "Лёгкий")
                     .endRow()
                     .row()
-                    .button("Средний","Средний")
-                    .button("Крепкий","Крепкий")
+                    .button("Средний", "Средний")
+                    .button("Крепкий", "Крепкий")
                     .endRow()
                     .row()
                     .button("Назад", "Каталог")
@@ -334,10 +334,11 @@ public class Bot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message inMessage = update.getMessage();
             long chat_id = inMessage.getChatId();
-
-
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
+            System.out.println(new Date().getTime() + ": " + update.getCallbackQuery().getFrom().getFirstName() + " " +
+                    update.getCallbackQuery().getFrom().getLastName() + " (" + update.getCallbackQuery().getFrom().getUserName() +
+                    ") совершил действие: " + text.substring(1));
             try {
                 execute(sendMessageHandle(text, outMessage));
             } catch (TelegramApiException e) {
@@ -347,10 +348,10 @@ public class Bot extends TelegramLongPollingBot {
             Message inMessage = update.getCallbackQuery().getMessage();
             long chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
-
-
             String text = update.getCallbackQuery().getData();
-            System.out.println(text);
+            System.out.println(new Date().getTime() + ": " + update.getCallbackQuery().getFrom().getFirstName() + " " +
+                    update.getCallbackQuery().getFrom().getLastName() + " (" + update.getCallbackQuery().getFrom().getUserName() +
+                    ") совершил действие: " + text.substring(1));
             char[] inMes = text.toCharArray();
             if (inMes[0] == 'c')
                 execute(cartHandle(text, outMessage));
@@ -360,7 +361,6 @@ public class Bot extends TelegramLongPollingBot {
                 execute(tobaccoHandle(text, outMessage));
             else
                 execute(sendMessageHandle(text, outMessage));
-
         }
     }
 
