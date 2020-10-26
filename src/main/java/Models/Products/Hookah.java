@@ -1,4 +1,4 @@
-package Models;
+package Models.Products;
 
 public class Hookah extends Product {
 
@@ -6,6 +6,7 @@ public class Hookah extends Product {
     private String name;
     private long price;
     private String img;
+    private boolean sale;
 
     public Hookah() {
     }
@@ -49,5 +50,13 @@ public class Hookah extends Product {
                 ", price=" + price +
                 ", img='" + img + '\'' +
                 '}' + "\n";
+    }
+
+    public boolean isSale() {
+        return sale;
+    }
+
+    public void setSale(boolean sale) {
+        this.sale = sale;
     }
 }

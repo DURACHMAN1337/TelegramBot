@@ -1,10 +1,7 @@
 package Bot.Keyboard;
 
-import Models.Hookah;
-import Models.Product;
-import Models.Tobacco;
+import Models.Products.Hookah;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -63,7 +60,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder buttons(ArrayList<String> text) {
+    public InlineKeyboardMarkupBuilder buttons(ArrayList<String> text, String handle) {
         int counter = 0;
         for (String s : text) {
             counter++;
@@ -72,7 +69,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             }
             row.add(new InlineKeyboardButton()
                     .setText(s)
-                    .setCallbackData(s));
+                    .setCallbackData(handle + s));
             if (counter % 2 == 0) {
                 this.keyboard.add(this.row);
                 this.row = null;
@@ -81,12 +78,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder productButtons(ArrayList<Hookah>  hookahs, String brand) {
+    public InlineKeyboardMarkupBuilder productButtons(ArrayList<Hookah> hookahs, String brand) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(hookah.getName().replace(brand, "").trim().replace("X","").trim() + " | " + hookah.getPrice() + " руб.")
-                    .setCallbackData(hookah.getName()));
+                    .setCallbackData("h" + hookah.getName()));
             this.keyboard.add(this.row);
             this.row = null;
         }

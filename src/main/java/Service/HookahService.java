@@ -1,5 +1,6 @@
-package Models;
+package Service;
 
+import Models.Products.Hookah;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,23 +10,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AllHookahs {
+public class HookahService {
 
     private Document document;
     private ArrayList<Hookah> hookahs;
 
     public static void main(String[] args) {
-        AllHookahs allHookahs = new AllHookahs();
-        System.out.println(allHookahs.getAllHookahs());
-        System.out.println(allHookahs.getAllBrandsList());
-        for (String s : allHookahs.getAllBrandsList()) {
-            System.out.println("КАЛИКИ БРЕНДА " + s);
-            System.out.println(allHookahs.getHookahsByBrand(s));
-        }
-
+        HookahService hookahService = new HookahService();
+        System.out.println(hookahService.getAllBrandsList());
     }
 
-    public AllHookahs() {
+    public HookahService() {
         Date date = new Date();
         parseAllHookahs();
         Date date2 = new Date();
@@ -41,7 +36,7 @@ public class AllHookahs {
         ArrayList<String> brands = new ArrayList<>();
         Elements elements = document.getElementsByClass("children");
         for (Element element : elements.select("a")) {
-                brands.add(element.text().toUpperCase().replace("КАЛЯЬН ", "").replace("-", " "));
+                brands.add(element.text().toUpperCase().replace("КАЛЬЯН ", "").replace("-", " "));
         }
         return brands;
     }
@@ -89,7 +84,7 @@ public class AllHookahs {
             Hookah hookah;
             for (Element element : elements.select("img")) {
                 hookah = new Hookah();
-                hookah.setImg(element.attr("src"));
+                hookah.setImg(element.attr("src").replace("300x300", "1024x1024"));
                 tempHookahs.add(hookah);
             }
             for (Element element : namesElem) {
@@ -97,7 +92,13 @@ public class AllHookahs {
 
             }
             for (Element element : priceElem) {
-                tempHookahs.get(priceElem.indexOf(element)).setPrice(Long.parseLong(element.text().replaceAll(".00 руб.+", "")));
+                String tempPrice = element.text().replaceAll(".00 руб.", "");
+                if (tempPrice.length() > 5) {
+                    String[] price = tempPrice.split(" ");
+                    tempHookahs.get(priceElem.indexOf(element)).setPrice(Long.parseLong(price[1]));
+                }
+                else
+                    tempHookahs.get(priceElem.indexOf(element)).setPrice(Long.parseLong(tempPrice));
             }
             hookahs.addAll(tempHookahs);
         }

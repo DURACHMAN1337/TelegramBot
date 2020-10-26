@@ -1,4 +1,4 @@
-package Models;
+package Models.Products;
 
 public class Product {
     private String name;

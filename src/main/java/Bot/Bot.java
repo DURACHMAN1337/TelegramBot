@@ -2,14 +2,14 @@ package Bot;
 
 import Bot.Keyboard.InlineKeyboardMarkupBuilder;
 import Bot.Keyboard.ReplyKeyboardMarkupBuilder;
-import Models.AllHookahs;
-import Models.AllTobacco;
-import Models.Hookah;
-import Models.Tobacco;
+import Models.Cart;
+import Service.HookahService;
+import Service.TobaccoService;
+import Models.Products.Hookah;
+import Models.Products.Tobacco;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -20,12 +20,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 import java.util.ArrayList;
 
 public class Bot extends TelegramLongPollingBot {
-    private long chat_id;
-    private static final AllHookahs allHookahs = new AllHookahs();
-    private static final AllTobacco allTobacco = new AllTobacco();
-    private static final ArrayList<String> allBrands = allHookahs.getAllBrandsList();
-    private static final ArrayList<String> allTobaccoBrands = allTobacco.getAllNamesList();
-    private static String currHandle = "sendMessageHandle";
+
+    private static final HookahService HOOKAH_SERVICE = new HookahService();
+    private static final TobaccoService TOBACCO_SERVICE = new TobaccoService();
+    private static final ArrayList<String> allHookahBrands = HOOKAH_SERVICE.getAllBrandsList();
+    private static final ArrayList<String> allTobaccoBrands = TOBACCO_SERVICE.getAllNamesList();
 
 
     public static void main(String[] args) {
@@ -40,14 +39,16 @@ public class Bot extends TelegramLongPollingBot {
 
 
     public void onUpdateReceived(Update update) {
-        updateHandle(update);
+        try {
+            updateHandle(update);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
-    public SendMessage sendMessageHandle(String text, SendMessage sendMessage) {
-        currHandle = "sendMessageHandle";
-        SendPhoto sendPhoto = new SendPhoto();
+    public SendMessage sendMessageHandle(String text, SendMessage sendMessage, Cart cart) {
+        long chat_id = Long.parseLong(sendMessage.getChatId());
         switch (text) {
-
             case "/start":
                 sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
                         .setText("Открыто Главное Меню")
@@ -77,8 +78,7 @@ public class Bot extends TelegramLongPollingBot {
                 return sendMessage;
 
             case "Наличие":
-                sendMessage = ReplyKeyboardMarkupBuilder
-                        .create(chat_id)
+                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
                         .setText("Выберите Магазин")
                         .row()
                         .button("Ул. Радонежская 1")
@@ -186,21 +186,26 @@ public class Bot extends TelegramLongPollingBot {
                 return sendMessage;
 
             case "Кальяны":
-                return hookahHandle(text, sendMessage);
+                return hookahHandle(text, sendMessage, cart);
 
             case "Табаки":
-                return tobaccoHandle(text,sendMessage);
+                return tobaccoHandle(text,sendMessage, cart);
+
+            case "Корзина":
+                return cartHandle("c"+text, sendMessage, cart);
         }
         return sendMessage.setText("Не понял");
     }
 
-    public SendMessage hookahHandle(String text, SendMessage sendMessage) {
-        currHandle = "hookahHandle";
-        ArrayList<String> hookahsNames = allHookahs.getAllNamesList();
+    public SendMessage hookahHandle(String text, SendMessage sendMessage, Cart cart) {
+        text = text.substring(1);
+        long chat_id = Long.parseLong(sendMessage.getChatId());
+        ArrayList<String> hookahsNames = HOOKAH_SERVICE.getAllNamesList();
+        Hookah currHookah = null;
         SendPhoto sendPhoto = new SendPhoto();
 
-        if (allBrands.contains(text)) {
-            ArrayList<Hookah> hookahs = allHookahs.getHookahsByBrand(text);
+        if (allHookahBrands.contains(text)) {
+            ArrayList<Hookah> hookahs = HOOKAH_SERVICE.getHookahsByBrand(text);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText("Товары бренда " + text + ": ")
                     .productButtons(hookahs, text)
@@ -210,12 +215,23 @@ public class Bot extends TelegramLongPollingBot {
                     .build();
             return sendMessage;
         }
-        else if (hookahsNames.contains(text)) {
-            Hookah hookah = allHookahs.getHookahByName(text);
+        else if (text.contains("В корзину")) {
+            currHookah = HOOKAH_SERVICE.getHookahByName(text.replace(" В корзину", ""));
+            cart.getCart().add(currHookah);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText("Товар: " + text + "\nЦена: " + hookah.getPrice() + " руб.\nОписание товара бла бла.\n" + hookah.getImg())
+                    .setText("Товар: " + currHookah.getName() + "\nУспешно добавлен в корзину")
                     .row()
-                    .button("В корзину", "В корзину")
+                    .button("Назад", "Кальяны")
+                    .endRow()
+                    .build();
+            return sendMessage;
+        }
+        else if (hookahsNames.contains(text)) {
+            currHookah = HOOKAH_SERVICE.getHookahByName(text);
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Товар: " + text + "\nЦена: " + currHookah.getPrice() + " руб.\nОписание товара бла бла.\n" + currHookah.getImg())
+                    .row()
+                    .button("В корзину", "h" + currHookah.getName() + " В корзину")
                     .endRow()
                     .row()
                     .button("Назад", "Кальяны")
@@ -224,32 +240,25 @@ public class Bot extends TelegramLongPollingBot {
             return sendMessage;
         }
         else {
-            switch (text) {
-                case "Каталог":
-                    return sendMessageHandle(text, sendMessage);
-
-                case "Кальяны":
-                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .setText("Выберите бренд кальяна:")
-                            .buttons(allBrands)
-                            .row()
-                            .button("Назад", "Каталог")
-                            .endRow()
-                            .build();
-                    return sendMessage;
-            }
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Выберите бренд кальяна:")
+                    .buttons(allHookahBrands, "h")
+                    .row()
+                    .button("Назад", "Каталог")
+                    .endRow()
+                    .build();
+            return sendMessage;
         }
-        return sendMessage.setText("Кальянное не понял");
     }
 
-    public SendMessage tobaccoHandle(String text, SendMessage sendMessage){
-
-        currHandle = "tobaccoHandle";
-        ArrayList<String> tobaccoNames = allTobacco.getAllNamesList();
+    public SendMessage tobaccoHandle(String text, SendMessage sendMessage, Cart cart){
+        text = text.substring(1);
+        long chat_id = Long.parseLong(sendMessage.getChatId());
+        ArrayList<String> tobaccoNames = TOBACCO_SERVICE.getAllNamesList();
         SendPhoto sendPhoto = new SendPhoto();
 
         if (tobaccoNames.contains(text)) {
-            Tobacco tobacco = allTobacco.getTobaccoByName(text);
+            Tobacco tobacco = TOBACCO_SERVICE.getTobaccoByName(text);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText("Товар: " + text + "\nЦена: " + tobacco.getPrice() + " руб.\nОписание товара бла бла.\n" + tobacco.getImg())
                     .row()
@@ -264,12 +273,12 @@ public class Bot extends TelegramLongPollingBot {
         else {
             switch (text) {
                 case "Каталог":
-                    return sendMessageHandle(text, sendMessage);
+                    return sendMessageHandle(text, sendMessage, cart);
 
                 case "Табаки":
                     sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .setText("Выберите бренд кальяна:")
-                            .buttons(allTobaccoBrands)
+                            .setText("Выберите бренд табака:")
+                            .buttons(allTobaccoBrands, "t")
                             .row()
                             .button("Назад", "Каталог")
                             .endRow()
@@ -277,41 +286,58 @@ public class Bot extends TelegramLongPollingBot {
                     return sendMessage;
             }
         }
-
-
         return sendMessage.setText("Табачное не понял");
     }
 
-    public void updateHandle(Update update) {
+    public SendMessage cartHandle(String text, SendMessage sendMessage, Cart cart) {
+        text = text.substring(1);
+        long chat_id = Long.parseLong(sendMessage.getChatId());
+        if (text.equals("Корзина")) {
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText(cart.toString())
+                    .row()
+                    .button("Назад", "Каталог")
+                    .endRow()
+                    .build();
+        } else {
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Оформление заказа\nТут что-то должно быть")
+                    .row()
+                    .button("Назад", "cКорзина")
+                    .endRow()
+                    .build();
+        }
+        return sendMessage;
+    }
+
+    public void updateHandle(Update update) throws TelegramApiException {
+        Cart cart = new Cart();
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message inMessage = update.getMessage();
-            chat_id = inMessage.getChatId();
+            long chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
             try {
-                execute(simpleHandlersFactory(text, outMessage));
+                execute(sendMessageHandle(text, outMessage, cart));
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
         } else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
-            chat_id = inMessage.getChatId();
+            long chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getCallbackQuery().getData();
-            try {
-                execute(simpleHandlersFactory(text, outMessage));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+            System.out.println(text);
+            char[] inMes = text.toCharArray();
+            if (inMes[0] == 'c')
+                execute(cartHandle(text, outMessage, cart));
+            else if (inMes[0] == 'h')
+                execute(hookahHandle(text, outMessage, cart));
+            else if (inMes[0] == 't')
+                execute(tobaccoHandle(text, outMessage, cart));
+            else
+                execute(sendMessageHandle(text, outMessage, cart));
         }
-    }
-
-    private SendMessage simpleHandlersFactory(String text, SendMessage sendMessage) {
-        if (currHandle.equals("sendMessageHandle")) {
-            return sendMessageHandle(text, sendMessage);
-        }
-        else
-            return hookahHandle(text, sendMessage);
     }
 
     public String getBotUsername() {

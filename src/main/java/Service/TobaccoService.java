@@ -1,5 +1,6 @@
-package Models;
+package Service;
 
+import Models.Products.Tobacco;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,16 +10,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AllTobacco {
+public class TobaccoService {
     private Document document;
     private ArrayList<Tobacco> tobaccoList;
 
     public static void main(String[] args) {
-        AllTobacco allTobacco = new AllTobacco();
-        System.out.println(allTobacco.getTobaccoByBrand("DARK"));
+        TobaccoService tobaccoService = new TobaccoService();
+        System.out.println(tobaccoService.getTobaccoByBrand("DARK"));
     }
 
-    public AllTobacco() {
+    public TobaccoService() {
         Date date = new Date();
         parseAllTobacco();
         Date date2 = new Date();
