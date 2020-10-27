@@ -1,10 +1,15 @@
 package Models.Products;
 
+import java.util.ArrayList;
+
 public class Tobacco extends Product {
    private String brand;
    private String name;
    private long price;
    private String img;
+   private ArrayList<String> radonejskayaTastes;
+   private ArrayList<String> karlaMarkasaTastes;
+   private Boolean isAvailable;
 
 
     public String getName() {
@@ -39,9 +44,21 @@ public class Tobacco extends Product {
         this.img = img;
     }
 
+    public ArrayList<String> getRadonejskayaTastes() {
+        return radonejskayaTastes;
+    }
 
+    public void setRadonejskayaTastes(ArrayList<String> radonejskayaTastes) {
+        this.radonejskayaTastes = radonejskayaTastes;
+    }
 
+    public ArrayList<String> getKarlaMarkasaTastes() {
+        return karlaMarkasaTastes;
+    }
 
+    public void setKarlaMarkasaTastes(ArrayList<String> karlaMarkasaTastes) {
+        this.karlaMarkasaTastes = karlaMarkasaTastes;
+    }
 
     @Override
     public String toString() {
