@@ -39,11 +39,10 @@ public class AccessoriesService {
             e.printStackTrace();
         }
         ArrayList<Accessory> tempAccessories = new ArrayList<>();
-        Elements elements = document.getElementsByClass("wp-list-table widefat fixed striped posts").select("tbody");
-        Elements elements1 = elements.select("tr");
-        Elements namesElem = elements1.select("a");
+        Elements elements = document.getElementsByClass("wp-list-table widefat fixed striped posts").select("tbody").select("tr");
+        Elements namesElem = elements.select("td").select("post_title");
         Elements priceElem = document.getElementsByClass("woocommerce-Price-amount amount");
-        for (Element element : elements1) {
+        for (Element element : elements) {
             Accessory accessory = new Accessory();
             accessory.setImg(element.attr("src").replace("100x100", "300x300"));
             tempAccessories.add(accessory);
