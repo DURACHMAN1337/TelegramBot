@@ -65,15 +65,20 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         ArrayList<List<InlineKeyboardButton>> rows = new ArrayList<>();
         ArrayList<InlineKeyboardButton> row = new ArrayList<>();
         for (String s : text) {
-            if (row.size() < 3) {
+            if (row.size() < 2) {
                 row.add(new InlineKeyboardButton()
                         .setText(s)
                         .setCallbackData(handle + s));
             } else {
                 rows.add(row);
-                row.clear();
+                row = new ArrayList<>();
+                row.add(new InlineKeyboardButton()
+                        .setText(s)
+                        .setCallbackData(handle + s));
             }
         }
+        if (!row.isEmpty())
+            rows.add(row);
         this.keyboard.addAll(rows);
         return this;
     }
@@ -94,7 +99,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(t.getName() + " | " + t.getPrice() + " руб.")
-                    .setCallbackData("t" + t.getName()));
+                    .setCallbackData("tid" + t.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }

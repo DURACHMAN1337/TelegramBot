@@ -3,16 +3,27 @@ package Models.Products;
 import java.util.ArrayList;
 
 public class Tobacco extends Product {
-   private String brand;
-   private String name;
-   private long price;
-   private String img;
-   private String taste;
-   private ArrayList<String> radonejskayaTastes;
-   private ArrayList<String> karlaMarkasaTastes;
-   private Boolean isAvailable;
-   private String description;
-   private String fortress;
+    private long id;
+    private String name;
+    private long price;
+    private String img;
+    private String taste;
+    private ArrayList<String> radonejskayaTastes;
+    private ArrayList<String> karlaMarksaTastes;
+    private Boolean isAvailable;
+    private String description;
+    private String fortress;
+
+    public Tobacco() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -20,14 +31,6 @@ public class Tobacco extends Product {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public long getPrice() {
@@ -54,12 +57,12 @@ public class Tobacco extends Product {
         this.radonejskayaTastes = radonejskayaTastes;
     }
 
-    public ArrayList<String> getKarlaMarkasaTastes() {
-        return karlaMarkasaTastes;
+    public ArrayList<String> getKarlaMarksaTastes() {
+        return karlaMarksaTastes;
     }
 
-    public void setKarlaMarkasaTastes(ArrayList<String> karlaMarkasaTastes) {
-        this.karlaMarkasaTastes = karlaMarkasaTastes;
+    public void setKarlaMarksaTastes(ArrayList<String> karlaMarksaTastes) {
+        this.karlaMarksaTastes = karlaMarksaTastes;
     }
 
     public String getTaste() {
@@ -97,16 +100,15 @@ public class Tobacco extends Product {
     @Override
     public String toString() {
         return "Tobacco{" +
-                "brand='" + brand + '\'' +
-                ", name='" + name + '\'' +
+                "name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
                 ", taste='" + taste + '\'' +
                 ", radonejskayaTastes=" + radonejskayaTastes +
-                ", karlaMarkasaTastes=" + karlaMarkasaTastes +
+                ", karlaMarkasaTastes=" + karlaMarksaTastes +
                 ", isAvailable=" + isAvailable +
                 ", description='" + description + '\'' +
-                ", strength='" + fortress + '\'' +
-                '}' + "\n";
+                ", fortress='" + fortress + '\'' +
+                '}';
     }
 }

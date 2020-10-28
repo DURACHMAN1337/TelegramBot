@@ -11,7 +11,6 @@ import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -19,6 +18,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -26,7 +27,7 @@ public class Bot extends TelegramLongPollingBot {
     private static final TobaccoService TOBACCO_SERVICE = new TobaccoService();
     private static final CartService CART_SERVICE = new CartService();
     private static final ArrayList<String> allHookahBrands = HOOKAH_SERVICE.getAllBrandsList();
-    private static final ArrayList<String> allTobaccoFortresses = new ArrayList<>(TOBACCO_SERVICE.getAllFortresses());
+    private static final ArrayList<String> allTobaccoFortresses = TOBACCO_SERVICE.getAllFortresses();
 
 
     public static void main(String[] args) {
@@ -196,15 +197,14 @@ public class Bot extends TelegramLongPollingBot {
             case "Корзина":
                 return cartHandle("c" + text, sendMessage);
         }
-        return sendMessage.setText("Не понял");
+        return sendMessage.setText("*Данный функционал находится в разработке*");
     }
 
     public SendMessage hookahHandle(String text, SendMessage sendMessage) {
         text = text.substring(1);
         long chat_id = Long.parseLong(sendMessage.getChatId());
         ArrayList<String> hookahsNames = HOOKAH_SERVICE.getAllNamesList();
-        Hookah currHookah = null;
-        SendPhoto sendPhoto = new SendPhoto();
+        Hookah currHookah;
 
         if (allHookahBrands.contains(text)) {
             ArrayList<Hookah> hookahs = HOOKAH_SERVICE.getHookahsByBrand(text);
@@ -270,32 +270,56 @@ public class Bot extends TelegramLongPollingBot {
                     .build();
             return sendMessage;
         }
-        else if (text.contains("В корзину")) {
-            currTobacco = TOBACCO_SERVICE.getTobaccoByName(text.replace(" В корзину", ""));
-/*            try {
-                ArrayList<String> tastes = TOBACCO_SERVICE.getTobaccoTastes(currTobacco);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }*/
-            CART_SERVICE.getUserCart(chat_id).getCart().add(currTobacco);
+        else if (text.contains("crt")) {
+            currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("crt", "")));
+            Set<String> allTastes = new HashSet<>();
+            if (currTobacco.getRadonejskayaTastes() != null) {
+                allTastes.addAll(currTobacco.getRadonejskayaTastes());
+            }
+            if (currTobacco.getKarlaMarksaTastes() != null) {
+                allTastes.addAll(currTobacco.getKarlaMarksaTastes());
+            }
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText("Товар: " + currTobacco.getName() + "\nУспешно добавлен в корзину")
+                    .setText("Выберите интересующий вкус:")
+                    .buttons(new ArrayList<>(allTastes), "t" + currTobacco.getId() + "&")
                     .row()
                     .button("Назад", "Табаки")
                     .endRow()
                     .build();
         }
-        else if (tobaccoNames.contains(text)) {
-            Tobacco t = TOBACCO_SERVICE.getTobaccoByName(text);
+        else if (text.contains("&")) {
+            String[] arr = text.split("&");
+            currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(arr[0]));
+            currTobacco.setTaste(arr[1]);
+            CART_SERVICE.getUserCart(chat_id).getCart().add(currTobacco);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText("Товар: " + text + "\nЦена: " + t.getPrice() + " руб.\nОписание:\n" + t.getDescription() + "\n" + t.getImg())
-                    .row()
-                    .button("В корзину", "t" + t.getName() + " В корзину")
-                    .endRow()
+                    .setText("Товар: " + currTobacco.getName() + " (" + currTobacco.getTaste() + ") был успешно добавлен в корзину!")
                     .row()
                     .button("Назад", "Табаки")
                     .endRow()
                     .build();
+        }
+        else if (text.contains("id")) {
+            Tobacco t = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("id","")));
+            if (t.getAvailable()) {
+                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .setText("Товар: " + t.getName() + "\n\nЦена: " + t.getPrice() + " руб.\n\nОписание:\n" + t.getDescription() + "\n\n" + t.getImg())
+                        .row()
+                        .button("В корзину", "t" + t.getId() + "crt")
+                        .endRow()
+                        .row()
+                        .button("Назад", "Табаки")
+                        .endRow()
+                        .build();
+            }
+            else {
+                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .setText("Товар: " + t.getName() + "(нет в наличии)\n\nЦена: " + t.getPrice() + " руб.\n\nОписание:\n" + t.getDescription() + "\n\n" + t.getImg())
+                        .row()
+                        .button("Назад", "Табаки")
+                        .endRow()
+                        .build();
+            }
         }
         else {
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)

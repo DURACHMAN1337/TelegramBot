@@ -1,6 +1,8 @@
 package Models;
 
+import Models.Products.Hookah;
 import Models.Products.Product;
+import Models.Products.Tobacco;
 
 import java.util.ArrayList;
 
@@ -37,17 +39,24 @@ public class Cart {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         long sumPrice = 0;
-        sb.append("———КОРЗИНА———\n\n");
+        sb.append("КОРЗИНА\n\n");
         for (Product product : cart) {
-            sumPrice+=product.getPrice();
-            sb.append(cart.indexOf(product)+1)
-                    .append(".   ").append(product.getName()).append(" | ")
-                    .append(product.getPrice()).append(" руб.\n\n———————————————\n\n");
+            if (product instanceof Tobacco) {
+                sumPrice += product.getPrice();
+                sb.append(cart.indexOf(product) + 1)
+                        .append(".   Табак:  ").append(product.getName()).append("\n\t").append("    Вкус: ").append(product.getTaste())
+                        .append("\n\t     ").append(product.getPrice()).append(" руб.\n\n---\n\n");
+            }
+            else if (product instanceof Hookah) {
+                sumPrice += product.getPrice();
+                sb.append(cart.indexOf(product) + 1)
+                        .append(".   Кальян:  ").append(product.getName()).append("\n\t")
+                        .append(product.getPrice()).append(" руб.\n\n---\n\n");
+            }
         }
         sb.append("ИТОГО: ").append(sumPrice).append(" руб.");
-
         if (sumPrice == 0)
-            return "—————КОРЗИНА—————\n\nВаша корзина пуста!\n\n———————————————\n\nДавайте скорее добавим туда что-нибудь...";
+            return "КОРЗИНА\n\nВаша корзина пуста!\n\n---\n\n";
         else
             return new String(sb);
     }

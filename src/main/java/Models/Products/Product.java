@@ -4,6 +4,7 @@ public class Product {
     private String name;
     private long price;
     private String img;
+    private String taste;
 
     public Product() {
     }
@@ -18,5 +19,9 @@ public class Product {
 
     public String getImg() {
         return img;
+    }
+
+    public String getTaste() {
+        return taste;
     }
 }

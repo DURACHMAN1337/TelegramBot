@@ -42,24 +42,9 @@ public class TobaccoService {
         return names;
     }
 
-    public Set<String> getAllFortresses() {
-        ArrayList<Tobacco> list = getAllTobacco();
-        ArrayList<String> fortresses = new ArrayList<>();
-        for (Tobacco t : list) {
-            if (t.getFortress() != null)
-            fortresses.add(t.getFortress());
-        }
-        return new HashSet<>(fortresses);
-    }
-
-    public ArrayList<Tobacco> getTobaccoByBrand(String brandName) {
-        ArrayList<Tobacco> tobacco = getAllTobacco();
-        ArrayList<Tobacco> resTobacco = new ArrayList<>();
-        for (Tobacco t : tobacco) {
-            if (t.getName().contains(brandName.trim()))
-                resTobacco.add(t);
-        }
-        return resTobacco;
+    public ArrayList<String> getAllFortresses() {
+        List<String> fortresses = Arrays.asList("Легкая", "Средняя", "Выше средней", "Высокая", "Очень высокая");
+        return new ArrayList<>(fortresses);
     }
 
     public ArrayList<Tobacco> getTobaccoByFortress(String fortress) {
@@ -72,11 +57,43 @@ public class TobaccoService {
         return resTobacco;
     }
 
+    public Tobacco getTobaccoById(long id) {
+        ArrayList<Tobacco> tobacco = getAllTobacco();
+        Tobacco tob = new Tobacco();
+        for (Tobacco t : tobacco) {
+            if (t.getId() == id) {
+                tob.setId(t.getId());
+                tob.setName(t.getName());
+                tob.setPrice(t.getPrice());
+                tob.setImg(t.getImg());
+                tob.setTaste(t.getTaste());
+                tob.setAvailable(t.getAvailable());
+                tob.setDescription(t.getDescription());
+                tob.setKarlaMarksaTastes(t.getKarlaMarksaTastes());
+                tob.setRadonejskayaTastes(t.getRadonejskayaTastes());
+                tob.setFortress(t.getFortress());
+                return tob;
+            }
+        }
+        return null;
+    }
+
     public Tobacco getTobaccoByName(String name) {
         ArrayList<Tobacco> tobacco = getAllTobacco();
-        for (Tobacco h : tobacco) {
-            if (h.getName().equals(name))
-                return h;
+        Tobacco tob = new Tobacco();
+        for (Tobacco t : tobacco) {
+            if (t.getName().equals(name)) {
+                tob.setName(t.getName());
+                tob.setPrice(t.getPrice());
+                tob.setImg(t.getImg());
+                tob.setTaste(t.getTaste());
+                tob.setAvailable(t.getAvailable());
+                tob.setDescription(t.getDescription());
+                tob.setKarlaMarksaTastes(t.getKarlaMarksaTastes());
+                tob.setRadonejskayaTastes(t.getRadonejskayaTastes());
+                tob.setFortress(t.getFortress());
+                return tob;
+            }
         }
         return null;
     }
@@ -105,7 +122,6 @@ public class TobaccoService {
                 Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
                 String name = info.first().child(0).text();
                 tobacco.setName(name);
-                tobacco.setBrand(name.replaceAll("\\w+гр", "").trim());
                 tobacco.setImg(image.child(0).child(0).attr("src"));
                 String price = info.first().child(1).text().replaceAll(".00 руб.", "");
                 if (price.length() > 5) {
@@ -153,7 +169,7 @@ public class TobaccoService {
                     }
                     if (!karlaMarksa.isEmpty()) {
                         tobacco.setAvailable(true);
-                        tobacco.setKarlaMarkasaTastes(karlaMarksa);
+                        tobacco.setKarlaMarksaTastes(karlaMarksa);
                     }
                 }
                 else {
@@ -162,6 +178,8 @@ public class TobaccoService {
                 tempTobacco.add(tobacco);
             }
             tobaccoList.addAll(tempTobacco);
+            for (int id = 0; id < tobaccoList.size(); id++)
+                tobaccoList.get(id).setId(id);
         }
     }
 }
