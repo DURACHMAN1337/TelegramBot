@@ -8,15 +8,18 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 
 public class TobaccoService {
     private ArrayList<Tobacco> tobaccoList;
 
     public static void main(String[] args) throws IOException {
         TobaccoService tobaccoService = new TobaccoService();
-        ArrayList<Tobacco> list = tobaccoService.tobaccoList;
+        ArrayList<Tobacco> tobaccos = tobaccoService.getAllTobacco();
+        for (Tobacco t : tobaccos) {
+            System.out.println(t.getName() + " | " + t.getFortress());
+        }
+        System.out.println(tobaccoService.getAllFortresses());
     }
 
     public TobaccoService() {
@@ -33,18 +36,38 @@ public class TobaccoService {
 
     public ArrayList<String> getAllNamesList() {
         ArrayList<String> names = new ArrayList<>();
-        for (Tobacco h : getAllTobacco()) {
-            names.add(h.getName());
+        for (Tobacco t : getAllTobacco()) {
+            names.add(t.getName());
         }
         return names;
+    }
+
+    public Set<String> getAllFortresses() {
+        ArrayList<Tobacco> list = getAllTobacco();
+        ArrayList<String> fortresses = new ArrayList<>();
+        for (Tobacco t : list) {
+            if (t.getFortress() != null)
+            fortresses.add(t.getFortress());
+        }
+        return new HashSet<>(fortresses);
     }
 
     public ArrayList<Tobacco> getTobaccoByBrand(String brandName) {
         ArrayList<Tobacco> tobacco = getAllTobacco();
         ArrayList<Tobacco> resTobacco = new ArrayList<>();
-        for (Tobacco h : tobacco) {
-            if (h.getName().contains(brandName.trim()))
-                resTobacco.add(h);
+        for (Tobacco t : tobacco) {
+            if (t.getName().contains(brandName.trim()))
+                resTobacco.add(t);
+        }
+        return resTobacco;
+    }
+
+    public ArrayList<Tobacco> getTobaccoByFortress(String fortress) {
+        ArrayList<Tobacco> tobacco = getAllTobacco();
+        ArrayList<Tobacco> resTobacco = new ArrayList<>();
+        for (Tobacco t : tobacco) {
+            if (t.getFortress().contains(fortress))
+                resTobacco.add(t);
         }
         return resTobacco;
     }
@@ -69,45 +92,76 @@ public class TobaccoService {
                 break;
             }
             ArrayList<Tobacco> tempTobacco = new ArrayList<>();
-            Elements elements = document.getElementsByClass("products columns-4");
-            Elements namesElem = elements.select("H2");
-            Elements priceElem = document.getElementsByClass("price");
-            Tobacco tobacco;
-            for (Element element : elements.select("img")) {
-                tobacco = new Tobacco();
-                tobacco.setImg(element.attr("src"));
-                tempTobacco.add(tobacco);
-            }
-            for (Element element : namesElem) {
-                Tobacco t = tempTobacco.get(namesElem.indexOf(element));
-                t.setName(element.text().toUpperCase());
+            Elements elements = document.getElementsByClass("products columns-4").select("li");
+            for (Element e : elements) {
+                Tobacco tobacco = new Tobacco();
+                String productUrl = e.child(0).attr("href");
                 try {
-                    parseTobaccoTastes(t);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    document = Jsoup.connect(productUrl).get();
+                } catch (IOException ioException) {
+                    System.err.println("Такой странички с табаком не существует");
                 }
-            }
-            for (Element element : priceElem) {
-                tempTobacco.get(priceElem.indexOf(element)).setPrice(Long.parseLong(element.text().replaceAll(".00 руб.+", "")));
+                Elements info = document.getElementsByClass("summary entry-summary");
+                Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
+                String name = info.first().child(0).text();
+                tobacco.setName(name);
+                tobacco.setBrand(name.replaceAll("\\w+гр", "").trim());
+                tobacco.setImg(image.child(0).child(0).attr("src"));
+                String price = info.first().child(1).text().replaceAll(".00 руб.", "");
+                if (price.length() > 5) {
+                    String[] priceArr = price.split(" ");
+                    tobacco.setPrice(Long.parseLong(priceArr[1]));
+                }
+                else {
+                    tobacco.setPrice(Long.parseLong(price));
+                }
+                Element description = document.getElementsByClass("woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab").first();
+                if (description.child(1).text().contains("Крепость:")) {
+                    tobacco.setFortress(description.child(1).textNodes().get(0).text().replace("Крепость: ", "").trim());
+                    tobacco.setDescription(description.child(3).text());
+                }
+                else {
+                    if (description.child(2).text().contains("Крепость:")) {
+                        tobacco.setFortress(description.child(2).textNodes().get(0).text().replace("Крепость: ", "").trim());
+                        tobacco.setDescription(description.child(4).text());
+                    }
+                    else if (description.child(3).text().contains("Крепость:")) {
+                        tobacco.setFortress(description.child(3).textNodes().get(0).text().replace("Крепость: ", "").trim());
+                        tobacco.setDescription(description.child(5).text());
+                    }
+                    else {
+                        tobacco.setDescription(description.child(1).text());
+                    }
+                }
+                ArrayList<String> radonejskaya = new ArrayList<>();
+                ArrayList<String> karlaMarksa = new ArrayList<>();
+                Elements table = document.getElementsByClass("woocommerce-product-details__short-description").select("tr");
+                if (!table.isEmpty()) {
+                    Element tbody = table.get(1);
+                    Elements addresses = tbody.children();
+                    for (TextNode taste : addresses.get(0).textNodes()) {
+                        if (!taste.text().isEmpty() && !taste.text().equals("–"))
+                            radonejskaya.add(taste.text().toLowerCase().trim());
+                    }
+                    for (TextNode taste : addresses.get(1).textNodes()) {
+                        if (!taste.text().isEmpty() && !taste.text().equals("–"))
+                            karlaMarksa.add(taste.text().toLowerCase().trim());
+                    }
+                    if (!radonejskaya.isEmpty()) {
+                        tobacco.setAvailable(true);
+                        tobacco.setRadonejskayaTastes(radonejskaya);
+                    }
+                    if (!karlaMarksa.isEmpty()) {
+                        tobacco.setAvailable(true);
+                        tobacco.setKarlaMarkasaTastes(karlaMarksa);
+                    }
+                }
+                else {
+                    tobacco.setAvailable(false);
+                }
+                tempTobacco.add(tobacco);
             }
             tobaccoList.addAll(tempTobacco);
         }
-    }
-
-    public void parseTobaccoTastes(Tobacco currTobacco) throws IOException {
-/*        ArrayList<String> radonejskaya = new ArrayList<>();
-        ArrayList<String> karlaMarksa = new ArrayList<>();
-        Document document = Jsoup.connect("https://hookahinrussia.ru/shop/%D0%B1%D1%80%D0%B5%D0%BD%D0%B4%D1%8B/%D1%82%D0%B0%D0%B1%D0%B0%D0%BA-%D0%B4%D0%BB%D1%8F-%D0%BA%D0%B0%D0%BB%D1%8C%D1%8F%D0%BD%D0%B0-" +
-                currTobacco.getName().replaceAll(" ", "-").toLowerCase() + "/").get();
-        Element tbody = document.getElementsByClass("woocommerce-product-details__short-description").select("tr").get(1);
-        Elements addresses = tbody.children();
-        for (TextNode taste : addresses.get(0).textNodes()) {
-            radonejskaya.add(taste.text().trim());
-        }
-        for (TextNode taste : addresses.get(1).textNodes()) {
-            karlaMarksa.add(taste.text().trim());
-        }
-        currTobacco.setRadonejskayaTastes(radonejskaya);
-        currTobacco.setKarlaMarkasaTastes(karlaMarksa);*/
     }
 }

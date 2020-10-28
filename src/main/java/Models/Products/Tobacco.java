@@ -7,10 +7,12 @@ public class Tobacco extends Product {
    private String name;
    private long price;
    private String img;
+   private String taste;
    private ArrayList<String> radonejskayaTastes;
    private ArrayList<String> karlaMarkasaTastes;
    private Boolean isAvailable;
-
+   private String description;
+   private String fortress;
 
     public String getName() {
         return name;
@@ -60,12 +62,51 @@ public class Tobacco extends Product {
         this.karlaMarkasaTastes = karlaMarkasaTastes;
     }
 
+    public String getTaste() {
+        return taste;
+    }
+
+    public void setTaste(String taste) {
+        this.taste = taste;
+    }
+
+    public Boolean getAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getFortress() {
+        return fortress;
+    }
+
+    public void setFortress(String fortress) {
+        this.fortress = fortress;
+    }
+
     @Override
     public String toString() {
         return "Tobacco{" +
-                "name='" + name + '\'' +
+                "brand='" + brand + '\'' +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
+                ", taste='" + taste + '\'' +
+                ", radonejskayaTastes=" + radonejskayaTastes +
+                ", karlaMarkasaTastes=" + karlaMarkasaTastes +
+                ", isAvailable=" + isAvailable +
+                ", description='" + description + '\'' +
+                ", strength='" + fortress + '\'' +
                 '}' + "\n";
     }
 }

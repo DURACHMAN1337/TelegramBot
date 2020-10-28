@@ -1,8 +1,7 @@
 package Bot;
 
-import Bot.Keyboard.InlineKeyboardMarkupBuilder;
-import Bot.Keyboard.ReplyKeyboardMarkupBuilder;
-import Models.Cart;
+import Bot.Keyboards.InlineKeyboardMarkupBuilder;
+import Bot.Keyboards.ReplyKeyboardMarkupBuilder;
 import Service.CartService;
 import Service.HookahService;
 import Service.TobaccoService;
@@ -18,7 +17,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -28,7 +26,7 @@ public class Bot extends TelegramLongPollingBot {
     private static final TobaccoService TOBACCO_SERVICE = new TobaccoService();
     private static final CartService CART_SERVICE = new CartService();
     private static final ArrayList<String> allHookahBrands = HOOKAH_SERVICE.getAllBrandsList();
-    private static final ArrayList<String> allTobaccoBrands = TOBACCO_SERVICE.getAllNamesList();
+    private static final ArrayList<String> allTobaccoFortresses = new ArrayList<>(TOBACCO_SERVICE.getAllFortresses());
 
 
     public static void main(String[] args) {
@@ -212,7 +210,7 @@ public class Bot extends TelegramLongPollingBot {
             ArrayList<Hookah> hookahs = HOOKAH_SERVICE.getHookahsByBrand(text);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText("Товары бренда " + text + ": ")
-                    .productButtons(hookahs, text)
+                    .hookahButtons(hookahs, text)
                     .row()
                     .button("Назад", "Кальяны")
                     .endRow()
@@ -261,7 +259,18 @@ public class Bot extends TelegramLongPollingBot {
         ArrayList<String> tobaccoNames = TOBACCO_SERVICE.getAllNamesList();
         Tobacco currTobacco;
 
-        if (text.contains("В корзину")) {
+        if (allTobaccoFortresses.contains(text)) {
+            ArrayList<Tobacco> tobaccos = TOBACCO_SERVICE.getTobaccoByFortress(text);
+            sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .setText("Табаки крепости: " + text)
+                    .tobaccoButtons(tobaccos)
+                    .row()
+                    .button("Назад", "Табаки")
+                    .endRow()
+                    .build();
+            return sendMessage;
+        }
+        else if (text.contains("В корзину")) {
             currTobacco = TOBACCO_SERVICE.getTobaccoByName(text.replace(" В корзину", ""));
 /*            try {
                 ArrayList<String> tastes = TOBACCO_SERVICE.getTobaccoTastes(currTobacco);
@@ -277,11 +286,11 @@ public class Bot extends TelegramLongPollingBot {
                     .build();
         }
         else if (tobaccoNames.contains(text)) {
-            Tobacco tobacco = TOBACCO_SERVICE.getTobaccoByName(text);
+            Tobacco t = TOBACCO_SERVICE.getTobaccoByName(text);
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText("Товар: " + text + "\nЦена: " + tobacco.getPrice() + " руб.\nОписание товара бла бла.\n" + tobacco.getImg())
+                    .setText("Товар: " + text + "\nЦена: " + t.getPrice() + " руб.\nОписание:\n" + t.getDescription() + "\n" + t.getImg())
                     .row()
-                    .button("В корзину", "t" + tobacco.getName() + " В корзину")
+                    .button("В корзину", "t" + t.getName() + " В корзину")
                     .endRow()
                     .row()
                     .button("Назад", "Табаки")
@@ -290,8 +299,8 @@ public class Bot extends TelegramLongPollingBot {
         }
         else {
             sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText("Выберите бренд табака:")
-                    .buttons(allTobaccoBrands, "t")
+                    .setText("Выберите крепость табака:")
+                    .buttons(allTobaccoFortresses, "t")
                     .row()
                     .button("Назад", "Каталог")
                     .endRow()

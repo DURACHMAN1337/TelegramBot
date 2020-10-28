@@ -1,4 +1,4 @@
-package Bot.Keyboard;
+package Bot.Keyboards;
 
 import Models.Products.Hookah;
 import Models.Products.Tobacco;
@@ -62,24 +62,23 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
     }
 
     public InlineKeyboardMarkupBuilder buttons(ArrayList<String> text, String handle) {
-        int counter = 0;
+        ArrayList<List<InlineKeyboardButton>> rows = new ArrayList<>();
+        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
         for (String s : text) {
-            counter++;
-            if (counter % 2 == 1) {
-                this.row = new ArrayList<>();
-            }
-            row.add(new InlineKeyboardButton()
-                    .setText(s)
-                    .setCallbackData(handle + s));
-            if (counter % 2 == 0) {
-                this.keyboard.add(this.row);
-                this.row = null;
+            if (row.size() < 3) {
+                row.add(new InlineKeyboardButton()
+                        .setText(s)
+                        .setCallbackData(handle + s));
+            } else {
+                rows.add(row);
+                row.clear();
             }
         }
+        this.keyboard.addAll(rows);
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder productButtons(ArrayList<Hookah> hookahs, String brand) {
+    public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs, String brand) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
@@ -90,12 +89,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
-    public InlineKeyboardMarkupBuilder tobaccoProductButtons(ArrayList<Tobacco> tobacco, String brand) {
-        for (Tobacco tob : tobacco) {
+    public InlineKeyboardMarkupBuilder tobaccoButtons(ArrayList<Tobacco> tobacco) {
+        for (Tobacco t : tobacco) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
-                    .setText(tob.getName().replace(brand, "").trim().replace("X","").trim() + " | " + tob.getPrice() + " руб.")
-                    .setCallbackData("t" + tob.getName()));
+                    .setText(t.getName() + " | " + t.getPrice() + " руб.")
+                    .setCallbackData("t" + t.getName()));
             this.keyboard.add(this.row);
             this.row = null;
         }
