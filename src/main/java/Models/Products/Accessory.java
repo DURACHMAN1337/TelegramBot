@@ -5,6 +5,42 @@ public class Accessory extends Product {
     private String name;
     private long price;
     private String img;
+    private String type;
+    private Boolean isAvailable;
+    private String description;
+    private long id;
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Boolean getAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     public String getBrand() {
         return brand;
@@ -47,6 +83,11 @@ public class Accessory extends Product {
                 "name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
+                ", type='" + type + '\'' +
+                ", description='" + description + '\'' +
+                ", isAvailable='" + isAvailable + '\'' +
+                ", id='" + id + '\'' +
+
                 '}' + "\n";
     }
 }
