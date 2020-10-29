@@ -83,12 +83,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs, String brand) {
+    public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
-                    .setText(hookah.getName().replace(brand, "").trim().replace("X","").trim() + " | " + hookah.getPrice() + " руб.")
-                    .setCallbackData("h" + hookah.getName()));
+                    .setText(hookah.getName() + " | " + hookah.getPrice() + " руб.")
+                    .setCallbackData("hid" + hookah.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }

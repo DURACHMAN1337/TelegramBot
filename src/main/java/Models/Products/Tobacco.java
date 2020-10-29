@@ -2,7 +2,7 @@ package Models.Products;
 
 import java.util.ArrayList;
 
-public class Tobacco extends Product {
+public class Tobacco extends Product implements Cloneable {
     private long id;
     private String name;
     private long price;
@@ -74,7 +74,7 @@ public class Tobacco extends Product {
         this.taste = taste;
     }
 
-    public boolean getAvailable() {
+    public boolean isAvailable() {
         return isAvailable;
     }
 
@@ -98,26 +98,29 @@ public class Tobacco extends Product {
         this.fortress = fortress;
     }
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
-
     public void setAvailable(boolean available) {
         isAvailable = available;
     }
 
     @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+
+    @Override
     public String toString() {
         return "Tobacco{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
                 ", taste='" + taste + '\'' +
+                ", sale=" + sale +
                 ", radonejskayaTastes=" + radonejskayaTastes +
-                ", karlaMarkasaTastes=" + karlaMarksaTastes +
+                ", karlaMarksaTastes=" + karlaMarksaTastes +
                 ", isAvailable=" + isAvailable +
                 ", description='" + description + '\'' +
                 ", fortress='" + fortress + '\'' +
-                '}';
+                '}' + "\n";
     }
 }

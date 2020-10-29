@@ -1,10 +1,11 @@
 package Models.Products;
 
-public class Product {
+public class Product implements Cloneable {
     private String name;
     private long price;
     private String img;
     private String taste;
+    private String brand;
 
     public Product() {
     }
@@ -23,5 +24,9 @@ public class Product {
 
     public String getTaste() {
         return taste;
+    }
+
+    public String getBrand() {
+        return brand;
     }
 }

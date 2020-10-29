@@ -7,7 +7,6 @@ public class Hookah extends Product {
     private String name;
     private long price;
     private String img;
-    private boolean sale;
     private boolean isAvailable;
     private String description;
 
@@ -54,7 +53,7 @@ public class Hookah extends Product {
         this.img = img;
     }
 
-    public boolean getAvailable() {
+    public boolean isAvailable() {
         return isAvailable;
     }
 
@@ -78,17 +77,8 @@ public class Hookah extends Product {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
-                ", sale=" + sale +
                 ", isAvailable=" + isAvailable +
                 ", description='" + description + '\'' +
-                '}';
-    }
-
-    public boolean isSale() {
-        return sale;
-    }
-
-    public void setSale(boolean sale) {
-        this.sale = sale;
+                '}' + "\n";
     }
 }

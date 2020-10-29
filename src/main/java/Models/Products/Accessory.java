@@ -87,7 +87,6 @@ public class Accessory extends Product {
                 ", description='" + description + '\'' +
                 ", isAvailable='" + isAvailable + '\'' +
                 ", id='" + id + '\'' +
-
                 '}' + "\n";
     }
 }

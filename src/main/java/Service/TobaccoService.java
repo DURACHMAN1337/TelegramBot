@@ -13,13 +13,8 @@ import java.util.*;
 public class TobaccoService {
     private ArrayList<Tobacco> tobaccoList;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, CloneNotSupportedException {
         TobaccoService tobaccoService = new TobaccoService();
-        ArrayList<Tobacco> tobaccos = tobaccoService.getAllTobacco();
-        for (Tobacco t : tobaccos) {
-            System.out.println(t.getName() + " | " + t.getFortress());
-        }
-        System.out.println(tobaccoService.getAllFortresses());
     }
 
     public TobaccoService() {
@@ -32,14 +27,6 @@ public class TobaccoService {
 
     public ArrayList<Tobacco> getAllTobacco() {
         return tobaccoList;
-    }
-
-    public ArrayList<String> getAllNamesList() {
-        ArrayList<String> names = new ArrayList<>();
-        for (Tobacco t : getAllTobacco()) {
-            names.add(t.getName());
-        }
-        return names;
     }
 
     public ArrayList<String> getAllFortresses() {
@@ -59,40 +46,13 @@ public class TobaccoService {
 
     public Tobacco getTobaccoById(long id) {
         ArrayList<Tobacco> tobacco = getAllTobacco();
-        Tobacco tob = new Tobacco();
         for (Tobacco t : tobacco) {
             if (t.getId() == id) {
-                tob.setId(t.getId());
-                tob.setName(t.getName());
-                tob.setPrice(t.getPrice());
-                tob.setImg(t.getImg());
-                tob.setTaste(t.getTaste());
-                tob.setAvailable(t.getAvailable());
-                tob.setDescription(t.getDescription());
-                tob.setKarlaMarksaTastes(t.getKarlaMarksaTastes());
-                tob.setRadonejskayaTastes(t.getRadonejskayaTastes());
-                tob.setFortress(t.getFortress());
-                return tob;
-            }
-        }
-        return null;
-    }
-
-    public Tobacco getTobaccoByName(String name) {
-        ArrayList<Tobacco> tobacco = getAllTobacco();
-        Tobacco tob = new Tobacco();
-        for (Tobacco t : tobacco) {
-            if (t.getName().equals(name)) {
-                tob.setName(t.getName());
-                tob.setPrice(t.getPrice());
-                tob.setImg(t.getImg());
-                tob.setTaste(t.getTaste());
-                tob.setAvailable(t.getAvailable());
-                tob.setDescription(t.getDescription());
-                tob.setKarlaMarksaTastes(t.getKarlaMarksaTastes());
-                tob.setRadonejskayaTastes(t.getRadonejskayaTastes());
-                tob.setFortress(t.getFortress());
-                return tob;
+                try {
+                    return (Tobacco) t.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
             }
         }
         return null;
