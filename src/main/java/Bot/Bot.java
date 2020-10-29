@@ -295,7 +295,7 @@ public class Bot extends TelegramLongPollingBot {
             if (t.getAvailable()) {
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .setText("\n*" + t.getName() + "*\nЦена: " + t.getPrice() + " руб.\n\nОписание:\n" + t.getDescription() + "\n\n"
-                                + "(Изображение)" + "[" + t.getImg() + "]")
+                                + "[Изображение]" + "(" + t.getImg() + ")")
                         .row()
                         .button("В корзину", "t" + t.getId() + "crt")
                         .endRow()
