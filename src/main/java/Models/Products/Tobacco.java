@@ -8,9 +8,10 @@ public class Tobacco extends Product {
     private long price;
     private String img;
     private String taste;
+    private boolean sale;
     private ArrayList<String> radonejskayaTastes;
     private ArrayList<String> karlaMarksaTastes;
-    private Boolean isAvailable;
+    private boolean isAvailable;
     private String description;
     private String fortress;
 
@@ -73,7 +74,7 @@ public class Tobacco extends Product {
         this.taste = taste;
     }
 
-    public Boolean getAvailable() {
+    public boolean getAvailable() {
         return isAvailable;
     }
 
@@ -95,6 +96,14 @@ public class Tobacco extends Product {
 
     public void setFortress(String fortress) {
         this.fortress = fortress;
+    }
+
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
     }
 
     @Override

@@ -2,13 +2,24 @@ package Models.Products;
 
 public class Hookah extends Product {
 
+    private long id;
     private String brand;
     private String name;
     private long price;
     private String img;
     private boolean sale;
+    private boolean isAvailable;
+    private String description;
 
     public Hookah() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getBrand() {
@@ -43,13 +54,34 @@ public class Hookah extends Product {
         this.img = img;
     }
 
+    public boolean getAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(Boolean available) {
+        isAvailable = available;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
         return "Hookah{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
-                '}' + "\n";
+                ", sale=" + sale +
+                ", isAvailable=" + isAvailable +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     public boolean isSale() {
