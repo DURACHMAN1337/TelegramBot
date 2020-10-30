@@ -45,12 +45,12 @@ public class Cart {
                 sumPrice += product.getPrice();
                 sb.append(cart.indexOf(product) + 1)
                         .append(".  *").append(product.getName()).append("*\n").append("Вкус: ").append(product.getTaste())
-                        .append("\n  ").append(product.getPrice()).append(" _руб._\n\n---\n\n");
+                        .append("\n").append(product.getPrice()).append(" _руб._\n\n---\n\n");
             }
             else if (product instanceof Hookah) {
                 sumPrice += product.getPrice();
                 sb.append(cart.indexOf(product) + 1)
-                        .append(".  *").append(product.getBrand()).append("* ").append(product.getName()).append("\n  ")
+                        .append(".  *").append(product.getBrand()).append("* ").append(product.getName()).append("\n")
                         .append(product.getPrice()).append(" _руб._\n\n---\n\n");
             }
         }

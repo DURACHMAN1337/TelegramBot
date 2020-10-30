@@ -35,13 +35,56 @@ public class TobaccoService {
     }
 
     public ArrayList<Tobacco> getTobaccoByFortress(String fortress) {
-        ArrayList<Tobacco> tobacco = getAllTobacco();
         ArrayList<Tobacco> resTobacco = new ArrayList<>();
-        for (Tobacco t : tobacco) {
+        for (Tobacco t : tobaccoList) {
             if (t.getFortress().contains(fortress))
                 resTobacco.add(t);
         }
         return resTobacco;
+    }
+
+    public ArrayList<Tobacco> getAvailableTobaccoByFortress(String fortress, String street) {
+        ArrayList<Tobacco> resTobacco = getTobaccoByFortress(fortress);
+        ArrayList<Tobacco> resTobaccoRad = new ArrayList<>();
+        ArrayList<Tobacco> resTobaccoKar = new ArrayList<>();
+        for (Tobacco t : resTobacco) {
+            if (t.getRadonejskayaTastes() != null)
+                resTobaccoRad.add(t);
+            else if (t.getKarlaMarksaTastes() != null)
+                resTobaccoKar.add(t);
+        }
+        if (street.equals("Rad"))
+            return resTobaccoRad;
+        else
+            return resTobaccoKar;
+    }
+
+    public ArrayList<String> getAllAvailableFortresses() {
+        HashSet<String> resFortresses = new HashSet<>();
+        for (Tobacco t : tobaccoList) {
+            if (t.isAvailable()) {
+                resFortresses.add(t.getFortress());
+            }
+        }
+        return new ArrayList<>(resFortresses);
+    }
+
+    public ArrayList<String> getAvailableFortressesByStreet(String street) {
+        HashSet<String> resFortressesRad = new HashSet<>();
+        HashSet<String> resFortressesKar = new HashSet<>();
+        for (Tobacco t : tobaccoList) {
+            if (t.isAvailable()) {
+                String fortress = t.getFortress();
+                if (t.getRadonejskayaTastes() != null)
+                    resFortressesRad.add(fortress);
+                else if (t.getKarlaMarksaTastes() != null)
+                    resFortressesKar.add(fortress);
+            }
+        }
+        if (street.equals("Rad"))
+            return new ArrayList<>(resFortressesRad);
+        else
+            return new ArrayList<>(resFortressesKar);
     }
 
     public Tobacco getTobaccoById(long id) {

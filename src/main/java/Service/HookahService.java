@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 
 public class HookahService {
 
@@ -62,6 +63,25 @@ public class HookahService {
                 resHookahs.add(h);
         }
         return resHookahs;
+    }
+    public ArrayList<Hookah> getAvailableHookahsByBrand(String brandName) {
+        ArrayList<Hookah> resHookahs = new ArrayList<>();
+        for (Hookah h : hookahsList) {
+            if (h.isAvailable()) {
+                if (h.getBrand().equals(brandName))
+                    resHookahs.add(h);
+            }
+        }
+        return resHookahs;
+    }
+
+    public ArrayList<String> getAvailableBrandsList() {
+        HashSet<String> resBrands = new HashSet<>();
+        for (Hookah h : hookahsList) {
+            if (h.isAvailable())
+                resBrands.add(h.getBrand());
+        }
+        return new ArrayList<>(resBrands);
     }
 
     public void parseAllHookahs() {

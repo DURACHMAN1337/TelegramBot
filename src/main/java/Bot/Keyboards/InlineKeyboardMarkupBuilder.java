@@ -106,7 +106,6 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-
     public InlineKeyboardMarkupBuilder buttonWithURL(String text, String URL) {
         row.add(new InlineKeyboardButton()
                 .setText(text)
