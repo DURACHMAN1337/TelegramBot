@@ -13,7 +13,7 @@ import java.util.HashSet;
 
 public class HookahService {
 
-    private ArrayList<Hookah> hookahsList;
+    private ArrayList<Hookah> hookahsList = new ArrayList<>();
 
     public static void main(String[] args) {
         HookahService hookahService = new HookahService();

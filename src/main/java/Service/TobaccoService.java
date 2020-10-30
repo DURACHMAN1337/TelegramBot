@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class TobaccoService {
-    private ArrayList<Tobacco> tobaccoList;
+    private ArrayList<Tobacco> tobaccoList = new ArrayList<>();
 
     public static void main(String[] args) throws IOException, CloneNotSupportedException {
         TobaccoService tobaccoService = new TobaccoService();

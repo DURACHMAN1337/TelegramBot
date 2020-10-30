@@ -94,12 +94,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
-    public InlineKeyboardMarkupBuilder tobaccoButtons(ArrayList<Tobacco> tobacco) {
+    public InlineKeyboardMarkupBuilder tobaccoButtons(ArrayList<Tobacco> tobacco, String callBackData) {
         for (Tobacco t : tobacco) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(t.getName() + " | " + t.getPrice() + " руб.")
-                    .setCallbackData("tid" + t.getId()));
+                    .setCallbackData("tid" + t.getId() + callBackData));
             this.keyboard.add(this.row);
             this.row = null;
         }
