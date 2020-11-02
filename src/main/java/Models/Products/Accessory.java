@@ -10,6 +10,10 @@ public class Accessory extends Product {
     private String description;
     private long id;
 
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
     public long getId() {
         return id;
     }

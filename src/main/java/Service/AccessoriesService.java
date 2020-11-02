@@ -19,6 +19,8 @@ public class AccessoriesService {
 
     public static void main(String[] args) {
         AccessoriesService accessoriesService = new AccessoriesService();
+        System.out.println(accessoriesService.getAllTypes());
+
 
 
     }
@@ -35,6 +37,28 @@ public class AccessoriesService {
         return accessoriesList;
     }
 
+    public ArrayList<Accessory> getAvailableAccessories(){
+        ArrayList<Accessory> list = getAllAccessories();
+        ArrayList<Accessory> result = new ArrayList<>();
+
+        for (Accessory accessory : list) {
+            if (accessory.isAvailable()){
+                result.add(accessory);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<String> getAvailableAccessoriesNamesList(){
+        ArrayList<Accessory> list = getAvailableAccessories();
+        ArrayList<String> result = new ArrayList<>();
+
+        for (Accessory accessory : list) {
+            result.add(accessory.getName());
+        }
+        return result;
+    }
+
     public List<String> getAllTypes() {
         List<String> types = Arrays.asList("Чаша", "Колба", "Мундштук", "Щипцы", "Прочее");
         return types;
@@ -49,6 +73,16 @@ public class AccessoriesService {
             }
         }
         return resAccessories;
+    }
+    public ArrayList<Accessory> getAvailableAccessoriesByType(String type){
+        ArrayList<Accessory> result = new ArrayList<>();
+        ArrayList<Accessory> list = getAvailableAccessories();
+        for (Accessory a : list) {
+            if (a.getType().equals(type)){
+                result.add(a);
+            }
+        }
+        return result;
     }
 
     public ArrayList<String> getAllNamesList() {
@@ -77,7 +111,7 @@ public class AccessoriesService {
         return null;
     }
 
-    public Accessory getAccessoryByIName(String name) {
+    public Accessory getAccessoryByName(String name) {
         ArrayList<Accessory> accessories = getAllAccessories();
         Accessory accessory = new Accessory();
         for (Accessory a : accessories) {
@@ -112,9 +146,17 @@ public class AccessoriesService {
             ArrayList<Accessory> tempAccessories = new ArrayList<>();
             Elements elements = document.getElementsByClass("products columns-4").select("li");
             Accessory accessory;
+            System.out.println();
 
             for (Element e : elements) {
                 accessory = new Accessory();
+                if (e.child(1).text().contains("В корзину")){
+                    accessory.setAvailable(true);
+                }
+                else{
+                    accessory.setAvailable(false);
+                }
+
                 String productUrl = e.child(0).attr("href");
                 try {
                     document = Jsoup.connect(productUrl).get();
@@ -168,7 +210,7 @@ public class AccessoriesService {
         for (int i = 0; i < accessoriesList.size(); i++) {
             accessoriesList.get(i).setId(i);
         }
-        System.out.println(accessoriesList.toString());
+
     }
 
 

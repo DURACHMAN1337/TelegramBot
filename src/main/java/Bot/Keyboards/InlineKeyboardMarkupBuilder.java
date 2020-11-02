@@ -1,5 +1,6 @@
 package Bot.Keyboards;
 
+import Models.Products.Accessory;
 import Models.Products.Hookah;
 import Models.Products.Tobacco;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -100,6 +101,17 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             row.add(new InlineKeyboardButton()
                     .setText(t.getName() + " | " + t.getPrice() + " руб.")
                     .setCallbackData("tid" + t.getId() + callBackData));
+            this.keyboard.add(this.row);
+            this.row = null;
+        }
+        return this;
+    }
+    public InlineKeyboardMarkupBuilder accessoryButtons(ArrayList<Accessory> accessory){
+        for (Accessory a : accessory) {
+            this.row = new ArrayList<>();
+            row.add(new InlineKeyboardButton()
+            .setText(a.getName() + " | " + a.getPrice() + " руб.")
+            .setCallbackData("aid" + a.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
