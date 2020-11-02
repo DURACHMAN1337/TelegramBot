@@ -20,6 +20,7 @@ public class AccessoriesService {
     public static void main(String[] args) {
         AccessoriesService accessoriesService = new AccessoriesService();
 
+
     }
 
     public AccessoriesService() {
@@ -118,7 +119,7 @@ public class AccessoriesService {
                 try {
                     document = Jsoup.connect(productUrl).get();
                 } catch (IOException ioException) {
-                    System.err.println("Такой странички с акссесуаром не существует");
+                    System.err.println("Такой странички с акссесуаром не существует " + productUrl);
                 }
                 Elements info = document.getElementsByClass("summary entry-summary");
                 Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
@@ -136,7 +137,12 @@ public class AccessoriesService {
                 }
                 accessory.setPrice(Long.parseLong(price));
                 Element description = document.getElementsByClass("woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab").first();
-                accessory.setDescription(description.child(1).text());
+                if (description != null) {
+                    accessory.setDescription(description.child(1).text());
+                }
+                else{
+                    accessory.setDescription("Описание данного товара не доступно.");
+                }
 
 
 
@@ -144,7 +150,7 @@ public class AccessoriesService {
             }
 
             accessoriesList.addAll(tempAccessories);
-            System.out.println(accessoriesList);
+
         }
         for (Accessory accessory : accessoriesList) {
             if (accessory.getName().contains("Чаша")) {
@@ -162,6 +168,7 @@ public class AccessoriesService {
         for (int i = 0; i < accessoriesList.size(); i++) {
             accessoriesList.get(i).setId(i);
         }
+        System.out.println(accessoriesList.toString());
     }
 
 
