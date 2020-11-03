@@ -1,6 +1,10 @@
 package Service;
 
 import Models.Cart;
+import Models.Products.Hookah;
+import Models.Products.Product;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CartService {
@@ -28,5 +32,10 @@ public class CartService {
 
     public long cartsSize() {
         return carts.size();
+    }
+
+    public void deleteFromCart(Product product, long chat_id) {
+        ArrayList<Product> cart = carts.get(chat_id).getCart();
+        cart.removeIf(p -> p.getName().equals(product.getName()));
     }
 }

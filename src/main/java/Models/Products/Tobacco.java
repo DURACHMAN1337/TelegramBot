@@ -7,11 +7,10 @@ public class Tobacco extends Product implements Cloneable {
     private String name;
     private long price;
     private String img;
+    private boolean isAvailable;
     private String taste;
-    private boolean sale;
     private ArrayList<String> radonejskayaTastes;
     private ArrayList<String> karlaMarksaTastes;
-    private boolean isAvailable;
     private String description;
     private String fortress;
 
@@ -114,13 +113,12 @@ public class Tobacco extends Product implements Cloneable {
                 ", name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
+                ", isAvailable=" + isAvailable +
                 ", taste='" + taste + '\'' +
-                ", sale=" + sale +
                 ", radonejskayaTastes=" + radonejskayaTastes +
                 ", karlaMarksaTastes=" + karlaMarksaTastes +
-                ", isAvailable=" + isAvailable +
                 ", description='" + description + '\'' +
                 ", fortress='" + fortress + '\'' +
-                '}' + "\n";
+                '}';
     }
 }

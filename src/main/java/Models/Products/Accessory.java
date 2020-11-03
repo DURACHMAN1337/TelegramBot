@@ -1,14 +1,14 @@
 package Models.Products;
 
 public class Accessory extends Product {
+    private long id;
     private String brand;
     private String name;
     private long price;
     private String img;
-    private String type;
     private Boolean isAvailable;
+    private String type;
     private String description;
-    private long id;
 
     public boolean isAvailable() {
         return isAvailable;

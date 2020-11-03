@@ -12,6 +12,7 @@ import Models.Products.Tobacco;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -231,7 +232,6 @@ public class Bot extends TelegramLongPollingBot {
         text = text.substring(1);
         EditMessageText editMessage;
         Hookah currHookah;
-
         if (allHookahBrands.contains(text)) {
             ArrayList<Hookah> hookahs = HOOKAH_SERVICE.getHookahsByBrand(text);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -246,10 +246,16 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.getUserCart(chat_id).getCart().add(currHookah);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
+                    .button("Убрать из корзины", "c" + currHookah.getId() + "delh")
+                    .endRow()
+                    .row()
                     .button("Назад", "hnal")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("Товар: " + currHookah.getBrand() + " " + currHookah.getName() + "\nУспешно добавлен в корзину");
+            editMessage.setText("*" + currHookah.getBrand() + "* | " + currHookah.getName() +
+                    "\nЦена: " + currHookah.getPrice() + " руб." +
+                    "\n\n" + currHookah.getDescription().trim() +
+                    "\n[_](" + currHookah.getImg() + ")");
         } else if (text.contains("id")) {
             currHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("id", "")));
             if (currHookah.isAvailable()) {
@@ -393,42 +399,41 @@ public class Bot extends TelegramLongPollingBot {
 
     public EditMessageText tobaccoHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
-        EditMessageText editMessageText;
+        EditMessageText editMessage;
         Tobacco currTobacco;
-
         if (allTobaccoFortresses.contains(text)) {
             ArrayList<Tobacco> tobaccos = TOBACCO_SERVICE.getTobaccoByFortress(text);
-            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .tobaccoButtons(tobaccos, "")
                     .row()
                     .button("Назад", "tТабаки")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("*Каталог / Табаки*\nТабаки крепости: " + text);
+            editMessage.setText("*Каталог / Табаки*\nТабаки крепости: " + text);
         } else if (text.contains("crt")) {
             if (text.contains("RRR")) {
                 currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("crtRRR", "")));
                 ArrayList<String> allTastes = currTobacco.getRadonejskayaTastes();
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(allTastes, "t" + currTobacco.getId() + "&")
                         .row()
                         .button("Назад", "tid" + currTobacco.getId() + "RRR")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("Выберите интересующий вкус:");
+                editMessage.setText("Выберите интересующий вкус:");
             } else if (text.contains("KKK")) {
                 currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("crtKKK", "")));
                 ArrayList<String> allTastes = currTobacco.getKarlaMarksaTastes();
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(allTastes, "t" + currTobacco.getId() + "&")
                         .row()
                         .button("Назад", "tid" + currTobacco.getId() + "KKK")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("Выберите интересующий вкус:");
+                editMessage.setText("Выберите интересующий вкус:");
             } else {
                 currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("crt", "")));
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("Ул. Радонежская 1", "t" + currTobacco.getId() + "crtRRR")
                         .endRow()
@@ -439,7 +444,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Назад", "tid" + currTobacco.getId())
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("Для данного табака в наличии есть следующие вкусы:\n\n"
+                editMessage.setText("Для данного табака в наличии есть следующие вкусы:\n\n"
                         + "*ул. Радонежская 1* | `" + currTobacco.getRadonejskayaTastes().toString().replace("{", "")
                         .replace("}", "") + "`\n\n*Проспект Карла Маркса 196* | `"
                         + currTobacco.getKarlaMarksaTastes().toString().replace("{", "")
@@ -450,30 +455,36 @@ public class Bot extends TelegramLongPollingBot {
             currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(arr[0]));
             currTobacco.setTaste(arr[1]);
             CART_SERVICE.getUserCart(chat_id).getCart().add(currTobacco);
-            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("Назад", "tТабаки")
+                    .button("Убрать из корзины", "c" + currTobacco.getId() + "delt")
+                    .endRow()
+                    .row()
+                    .button("Назад", "tnal")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("Товар: " + currTobacco.getName() + " (" + currTobacco.getTaste() + ") был успешно добавлен в корзину!");
+            editMessage.setText("*" + currTobacco.getName() + "*" +
+                    "\nЦена: " + currTobacco.getPrice() + " руб." +
+                    "\n\n" + currTobacco.getDescription().trim() +
+                    "\n[_](" + currTobacco.getImg() + ")");
         } else if (text.contains("id")) {
             if (text.contains("RRR")) {
-                Tobacco t = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("id", "").replace("RRR", "")));
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("id", "").replace("RRR", "")));
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("В корзину", "t" + t.getId() + "crtRRR")
+                        .button("В корзину", "t" + currTobacco.getId() + "crtRRR")
                         .endRow()
                         .row()
                         .button("Назад", "tavlbRad")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*" + t.getName() + "*" +
-                        "\nЦена: " + t.getPrice() + " руб." +
-                        "\n\n" + t.getDescription().trim() +
-                        "\n[_](" + t.getImg() + ")");
+                editMessage.setText("*" + currTobacco.getName() + "*" +
+                        "\nЦена: " + currTobacco.getPrice() + " руб." +
+                        "\n\n" + currTobacco.getDescription().trim() +
+                        "\n[_](" + currTobacco.getImg() + ")");
             } else if (text.contains("KKK")) {
                 Tobacco t = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("id", "").replace("KKK", "")));
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("В корзину", "t" + t.getId() + "crtKKK")
                         .endRow()
@@ -481,14 +492,14 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Назад", "tavlbKar")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*" + t.getName() + "*" +
+                editMessage.setText("*" + t.getName() + "*" +
                         "\nЦена: " + t.getPrice() + " руб." +
                         "\n\n" + t.getDescription().trim() +
                         "\n[_](" + t.getImg() + ")");
             } else {
                 Tobacco t = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("id", "")));
                 if (t.isAvailable()) {
-                    editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
                             .button("В корзину", "t" + t.getId() + "crt")
                             .endRow()
@@ -496,17 +507,17 @@ public class Bot extends TelegramLongPollingBot {
                             .button("Назад", "tТабаки")
                             .endRow()
                             .rebuild(mes_id);
-                    editMessageText.setText("*" + t.getName() + "*" +
+                    editMessage.setText("*" + t.getName() + "*" +
                             "\nЦена: " + t.getPrice() + " руб." +
                             "\n\n" + t.getDescription().trim() +
                             "\n[_](" + t.getImg() + ")");
                 } else {
-                    editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
                             .button("Назад", "tТабаки")
                             .endRow()
                             .rebuild(mes_id);
-                    editMessageText.setText("*" + t.getName() + "* \n_(нет в наличии)_" +
+                    editMessage.setText("*" + t.getName() + "* \n_(нет в наличии)_" +
                             "\n\nЦена: " + t.getPrice() + " руб." +
                             "\n\n" + t.getDescription().trim() +
                             "\n[_](" + t.getImg() + ")");
@@ -514,60 +525,99 @@ public class Bot extends TelegramLongPollingBot {
             }
         } else if (text.contains("nal")) {
             if (text.contains("Rad")) {
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(availableFortressesRad, "tavlbRad")
                         .row()
                         .button("Назад", "mnalT")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*Наличие / Табаки / Радонежская 1*\nВыберите крепость табака:");
+                editMessage.setText("*Наличие / Табаки / Радонежская 1*\nВыберите крепость табака:");
             } else {
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(availableFortressesKar, "tavlbKar")
                         .row()
                         .button("Назад", "mnalT")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*Наличие / Табаки / Проспект Карла Маркса 196*\nВыберите крепость табака:");
+                editMessage.setText("*Наличие / Табаки / Проспект Карла Маркса 196*\nВыберите крепость табака:");
             }
         } else if (text.contains("avlb")) {
             ArrayList<Tobacco> avlTobacco;
             if (text.contains("Rad")) {
                 avlTobacco = TOBACCO_SERVICE.getAvailableTobaccoByFortress(text.replace("avlbRad", ""), "Rad");
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .tobaccoButtons(avlTobacco, "RRR")
                         .row()
                         .button("Назад", "tnalRad")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*Наличие / Табаки / Радонежская 1*\nТабаки крепости: " + text);
+                editMessage.setText("*Наличие / Табаки / Радонежская 1*\nТабаки крепости: " + text);
             } else {
                 avlTobacco = TOBACCO_SERVICE.getAvailableTobaccoByFortress(text.replace("avlbKar", ""), "Kar");
-                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .tobaccoButtons(avlTobacco, "KKK")
                         .row()
                         .button("Назад", "tnalKar")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*Наличие / Табаки / Проспект Карла Маркса 196*\nТабаки крепости: " + text);
+                editMessage.setText("*Наличие / Табаки / Проспект Карла Маркса 196*\nТабаки крепости: " + text);
             }
         } else {
-            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allTobaccoFortresses, "t")
                     .row()
                     .button("Назад", "mКаталог")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("*Каталог / Табаки*\nВыберите крепость табака:");
+            editMessage.setText("*Каталог / Табаки*\nВыберите крепость табака:");
         }
-        return editMessageText;
+        return editMessage;
     }
 
     public EditMessageText cartHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
-        EditMessageText editMessageText;
+        EditMessageText editMessage;
+        if (text.contains("del")) {
+            if (text.contains("delh")) {
+                Hookah currHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("delh","")));
+                CART_SERVICE.deleteFromCart(currHookah, chat_id);
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("В корзину", "h" + currHookah.getId() + "crt")
+                        .endRow()
+                        .row()
+                        .button("Назад", "hnal")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessage.setText("*" + currHookah.getBrand() + "* | " + currHookah.getName() +
+                        "\nЦена: " + currHookah.getPrice() + " руб." +
+                        "\n\n" + currHookah.getDescription().trim() +
+                        "\n[_](" + currHookah.getImg() + ")");
+                return editMessage;
+            }
+            else if (text.contains("delt")) {
+                Tobacco currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("delt","")));
+                CART_SERVICE.deleteFromCart(currTobacco, chat_id);
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("В корзину", "c" + currTobacco.getId() + "crt")
+                        .endRow()
+                        .row()
+                        .button("Назад", "tnal")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessage.setText("*" + currTobacco.getName() + "*" +
+                        "\nЦена: " + currTobacco.getPrice() + " руб." +
+                        "\n\n" + currTobacco.getDescription().trim() +
+                        "\n[_](" + currTobacco.getImg() + ")");
+            }
+            else if (text.contains("dela")) {
+                Accessory currAccessory = ACCESSORIES_SERVICE.getAccessoryById(Long.parseLong(text.replace("dela","")));
+                CART_SERVICE.deleteFromCart(currAccessory, chat_id);
+            }
+        }
         if (text.equals("Корзина")) {
-            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText(CART_SERVICE.getUserCart(chat_id).toString())
                     .row()
                     .button("Очистить корзину", "cОчистить корзину")
@@ -578,34 +628,41 @@ public class Bot extends TelegramLongPollingBot {
                     .rebuild(mes_id);
         } else if (text.equals("Очистить корзину")) {
             CART_SERVICE.clearUserCart(chat_id);
-            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
                     .button("Вернуться к покупкам", "mКаталог")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("Ваша корзина успешно очищена!");
-        } else {
-            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+            editMessage.setText("Ваша корзина успешно очищена!");
+        }
+        else {
+            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .setText("Оформление заказа\nТут что-то должно быть")
                     .row()
                     .button("Назад", "cКорзина")
                     .endRow()
                     .rebuild(mes_id);
         }
-        return editMessageText;
+        return editMessage;
     }
 
+    public synchronized AnswerCallbackQuery answerCallbackQuery(String callbackId, String message) {
+        AnswerCallbackQuery answer = new AnswerCallbackQuery();
+        answer.setCallbackQueryId(callbackId);
+        answer.setText(message);
+        answer.setShowAlert(false);
+        return answer;
+    }
 
     public void updateHandle(Update update) throws TelegramApiException {
         if (update.hasMessage() && update.getMessage().hasText()) {
             Message inMessage = update.getMessage();
             long chat_id = inMessage.getChatId();
-            long mes_id = inMessage.getMessageId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
             System.out.println(new Date() + ": " + inMessage.getFrom().getFirstName() + " " +
                     inMessage.getFrom().getLastName() + " (" + inMessage.getFrom().getUserName() +
-                    ") совершил действие: " + text);
+                    "): " + text);
             execute(messageStarter(text, outMessage).setParseMode("Markdown"));
         } else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
@@ -614,17 +671,42 @@ public class Bot extends TelegramLongPollingBot {
             String text = update.getCallbackQuery().getData();
             System.out.println(new Date() + ": " + update.getCallbackQuery().getFrom().getFirstName() + " " +
                     update.getCallbackQuery().getFrom().getLastName() + " (" + update.getCallbackQuery().getFrom().getUserName() +
-                    ") совершил действие: " + text);
-            if (text.startsWith("c"))
+                    "): " + text);
+            if (text.startsWith("c")) {
+                if (text.contains("crt"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
+                if (text.contains("del"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно удалён из корзины!"));
                 execute(cartHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            else if (text.startsWith("h"))
+            }
+            else if (text.startsWith("h")) {
+                if (text.contains("crt"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
+                if (text.contains("del"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно удалён из корзины!"));
                 execute(hookahHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            else if (text.startsWith("t"))
+            }
+            else if (text.startsWith("t")) {
+                if (text.contains("&"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
+                if (text.contains("del"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно удалён из корзины!"));
                 execute(tobaccoHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            else if (text.startsWith("m"))
+            }
+            else if (text.startsWith("m")) {
+                if (text.contains("crt"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
+                if (text.contains("del"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно удалён из корзины!"));
                 execute(messageHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            else if (text.startsWith("a"))
+            }
+            else if (text.startsWith("a")) {
+                if (text.contains("crt"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
+                if (text.contains("del"))
+                    execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно удалён из корзины!"));
                 execute(accessoryHandle(text, chat_id, mes_id).setParseMode("Markdown"));
+            }
 
         }
     }

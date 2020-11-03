@@ -110,8 +110,8 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         for (Accessory a : accessory) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
-            .setText(a.getName() + " | " + a.getPrice() + " руб.")
-            .setCallbackData("aid" + a.getId()));
+                    .setText(a.getName() + " | " + a.getPrice() + " руб.")
+                    .setCallbackData("aid" + a.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
