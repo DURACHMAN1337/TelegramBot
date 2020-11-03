@@ -163,21 +163,16 @@ public class HookahService {
                     }
                     hookah.setAvailable(!info.first().child(4).text().contains("Нет в наличии"));
                     Element description = document.getElementsByClass("woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab").first();
-                    if (description.child(4).text().contains("ПОДРОБНЕЕ")) {
-                        hookah.setDescription(description.child(5).text());
-                    } else {
-                        if (description.child(5).text().contains("ПОДРОБНЕЕ")) {
-                            hookah.setDescription(description.child(6).text());
-                        } else if (description.child(6).text().contains("ПОДРОБНЕЕ")) {
-                            hookah.setDescription(description.child(7).text());
-                        } else {
-                            try {
-                                hookah.setDescription(description.text().split("ПОДРОБНЕЕ О КАЛЬЯНЕ")[1].split("Купить кальян")[0]);
-                            } catch (Exception e1) {
-                                hookah.setDescription(description.child(3).text());
-                            }
-                        }
+                    if (description.text().split("ПОДРОБНЕЕ О КАЛЬЯНЕ").length > 1) {
+                        String desc = description.text().split("ПОДРОБНЕЕ О КАЛЬЯНЕ")[1].trim();
+                        hookah.setDescription(desc.split("Купить кальян")[0].trim());
                     }
+                    else if (description.text().split("ПОДРОБНЕЕ О КАЛЬЯНЕ.").length > 1) {
+                        String desc = description.text().split("ПОДРОБНЕЕ О КАЛЬЯНЕ.")[1].trim();
+                        hookah.setDescription(desc.split("Купить кальян")[0].trim());
+                    }
+                    else
+                        hookah.setDescription("Неправильный description");
                     tempHookahs.add(hookah);
                 }
                 hookahsList.addAll(tempHookahs);

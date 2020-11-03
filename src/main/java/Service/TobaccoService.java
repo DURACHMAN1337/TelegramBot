@@ -183,19 +183,17 @@ public class TobaccoService {
                         tobacco.setPrice(Long.parseLong(price));
                     }
                     Element description = document.getElementsByClass("woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab").first();
-                    if (description.child(1).text().contains("Крепость:")) {
-                        tobacco.setFortress(description.child(1).textNodes().get(0).text().replace("Крепость: ", "").trim());
-                        tobacco.setDescription(description.child(3).text());
-                    } else {
-                        if (description.child(2).text().contains("Крепость:")) {
-                            tobacco.setFortress(description.child(2).textNodes().get(0).text().replace("Крепость: ", "").trim());
-                            tobacco.setDescription(description.child(4).text());
-                        } else if (description.child(3).text().contains("Крепость:")) {
-                            tobacco.setFortress(description.child(3).textNodes().get(0).text().replace("Крепость: ", "").trim());
-                            tobacco.setDescription(description.child(5).text());
-                        } else {
-                            tobacco.setDescription(description.child(1).text());
-                        }
+                    if (description.text().split("ПОДРОБНЕЕ").length > 1) {
+                        String desc = description.text().replace("Описание","").split("ПОДРОБНЕЕ")[1].trim();
+                        tobacco.setDescription(desc.split("Купить")[0].trim());
+                        String fortress = description.text().split("Крепость: ")[1].split(" ")[0];
+                        if (fortress.equals("Очень"))
+                            tobacco.setFortress("Очень высокая");
+                        else
+                            tobacco.setFortress(fortress);
+                    }
+                    else {
+                        tobacco.setDescription("Неправильный description");
                     }
                     ArrayList<String> radonejskaya = new ArrayList<>();
                     ArrayList<String> karlaMarksa = new ArrayList<>();
@@ -204,8 +202,8 @@ public class TobaccoService {
                         Element tbody = table.get(1);
                         Elements addresses = tbody.children();
                         for (TextNode taste : addresses.get(0).textNodes()) {
-                            if (!taste.text().isEmpty() && !taste.text().equals("–"))
-                                radonejskaya.add(taste.text().toLowerCase().trim());
+                            if (taste.text() != null && !taste.text().equals("–"))
+                                radonejskaya.add(taste.text().toLowerCase());
                         }
                         for (TextNode taste : addresses.get(1).textNodes()) {
                             if (!taste.text().isEmpty() && !taste.text().equals("–"))

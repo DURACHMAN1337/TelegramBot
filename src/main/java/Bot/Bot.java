@@ -154,6 +154,7 @@ public class Bot extends TelegramLongPollingBot {
                         .setText("*Добро пожаловать в GRIZZLY SHOP!*" +
                                 "\nУ нас вы найдёте большой ассортимент кальянной " +
                                 "продукции, включая всевозможные аксесуары и огромный выбор табака!" +
+//                                "\n[Наш сайт](https://hookahinrussia.ru/)" +
                                 "\n\nИспользуйте кнопки на клавиатуре снизу для навигации")
                         .row()
                         .button("Каталог")
@@ -433,22 +434,46 @@ public class Bot extends TelegramLongPollingBot {
                 editMessage.setText("Выберите интересующий вкус:");
             } else {
                 currTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("crt", "")));
-                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .row()
-                        .button("Ул. Радонежская 1", "t" + currTobacco.getId() + "crtRRR")
-                        .endRow()
-                        .row()
-                        .button("Ул. Проспект Карла Маркса 196", "t" + currTobacco.getId() + "crtKKK")
-                        .endRow()
-                        .row()
-                        .button("Назад", "tid" + currTobacco.getId())
-                        .endRow()
-                        .rebuild(mes_id);
-                editMessage.setText("Для данного табака в наличии есть следующие вкусы:\n\n"
-                        + "*ул. Радонежская 1* | `" + currTobacco.getRadonejskayaTastes().toString().replace("{", "")
-                        .replace("}", "") + "`\n\n*Проспект Карла Маркса 196* | `"
-                        + currTobacco.getKarlaMarksaTastes().toString().replace("{", "")
-                        .replace("}", "") + "`\nВыберите магазин:");
+                if (currTobacco.getRadonejskayaTastes().get(0) == null && currTobacco.getKarlaMarksaTastes().get(0) == null) {
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .row()
+                            .button("Ул. Радонежская 1", "t" + currTobacco.getId() + "crtRRR")
+                            .endRow()
+                            .row()
+                            .button("Ул. Проспект Карла Маркса 196", "t" + currTobacco.getId() + "crtKKK")
+                            .endRow()
+                            .row()
+                            .button("Назад", "tid" + currTobacco.getId())
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText("Для данного табака в наличии есть следующие вкусы:\n\n"
+                            + "*ул. Радонежская 1* | `" + currTobacco.getRadonejskayaTastes().toString().replace("{", "")
+                            .replace("}", "") + "`\n\n*Проспект Карла Маркса 196* | `"
+                            + currTobacco.getKarlaMarksaTastes().toString().replace("{", "")
+                            .replace("}", "") + "`\n\nВыберите магазин:");
+                }
+                else if (currTobacco.getRadonejskayaTastes().get(0) != null) {
+                    ArrayList<String> allTastes = currTobacco.getRadonejskayaTastes();
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .buttons(allTastes, "t" + currTobacco.getId() + "&")
+                            .row()
+                            .button("Назад", "tid" + currTobacco.getId() + "RRR")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText("Данный табак доступен по адресу *Ул. Радонежская 1*.\n\n" +
+                            "Выберите интересующий вкус:");
+                }
+                else {
+                    ArrayList<String> allTastes = currTobacco.getKarlaMarksaTastes();
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .buttons(allTastes, "t" + currTobacco.getId() + "&")
+                            .row()
+                            .button("Назад", "tid" + currTobacco.getId() + "KKK")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText("Данный табак доступен по адресу *Проспект Карла Маркса 196*.\n\n" +
+                            "Выберите интересующий вкус:");
+                }
             }
         } else if (text.contains("&")) {
             String[] arr = text.split("&");
@@ -649,8 +674,9 @@ public class Bot extends TelegramLongPollingBot {
     public synchronized AnswerCallbackQuery answerCallbackQuery(String callbackId, String message) {
         AnswerCallbackQuery answer = new AnswerCallbackQuery();
         answer.setCallbackQueryId(callbackId);
-        answer.setText(message);
         answer.setShowAlert(false);
+        answer.setText(message);
+        answer.setShowAlert(true);
         return answer;
     }
 
