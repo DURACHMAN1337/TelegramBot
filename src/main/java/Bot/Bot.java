@@ -32,7 +32,7 @@ public class Bot extends TelegramLongPollingBot {
     private static final AccessoriesService ACCESSORIES_SERVICE = new AccessoriesService();
     private static final ArrayList<String> allAccessories = ACCESSORIES_SERVICE.getAllNamesList();
     private static final ArrayList<String> availableAccessories = ACCESSORIES_SERVICE.getAvailableAccessoriesNamesList();
-    private static final List<String> allAccessoryTypes = ACCESSORIES_SERVICE.getAllTypes();
+    private static final ArrayList<String> allAccessoryTypes = ACCESSORIES_SERVICE.getAllTypes();
     private static final ArrayList<String> allHookahBrands = HOOKAH_SERVICE.getAllBrandsList();
     private static final ArrayList<String> availableBrands = HOOKAH_SERVICE.getAvailableBrandsList();
     private static final ArrayList<String> allTobaccoFortresses = TOBACCO_SERVICE.getAllFortresses();
@@ -139,6 +139,8 @@ public class Bot extends TelegramLongPollingBot {
                 return tobaccoHandle(text, chat_id, mes_id);
             case "Корзина":
                 return cartHandle(text, chat_id, mes_id);
+            case "Акссесуары":
+                return accessoryHandle(text, chat_id, mes_id);
         }
         return InlineKeyboardMarkupBuilder.create(chat_id)
                 .rebuild(mes_id).setText("*Данный функционал находится в разработке*");
@@ -338,7 +340,7 @@ public class Bot extends TelegramLongPollingBot {
 
         }
         else if (text.contains("id")){
-            currAccessory = ACCESSORIES_SERVICE.getAccessoryById(Long.parseLong(text.replace("crt", "")));
+            currAccessory = ACCESSORIES_SERVICE.getAccessoryById(Long.parseLong(text.replace("id", "")));
             if (currAccessory.isAvailable()){
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
@@ -367,7 +369,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         else if (text.contains("nal")){
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .buttons((ArrayList<String>) allAccessoryTypes,"aavl")
+                    .buttons(allAccessoryTypes,"aavl")
                     .row()
                     .button("Назад","mНаличие")
                     .endRow()
@@ -387,7 +389,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         else {
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .buttons((ArrayList<String>) allAccessoryTypes,"a")
+                    .buttons(allAccessoryTypes,"a")
                     .row()
                     .button("Назад","mКаталог")
                     .endRow()

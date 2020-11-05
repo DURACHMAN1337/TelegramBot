@@ -1,5 +1,6 @@
 package Models;
 
+import Models.Products.Accessory;
 import Models.Products.Hookah;
 import Models.Products.Product;
 import Models.Products.Tobacco;
@@ -53,6 +54,13 @@ public class Cart {
                         .append(".  *").append(product.getBrand()).append("* ").append(product.getName()).append("\n")
                         .append(product.getPrice()).append(" _руб._\n\n---\n\n");
             }
+            else if (product instanceof Accessory){
+                sumPrice += product.getPrice();
+                sb.append(cart.indexOf(product) +1)
+                        .append(".  *").append(((Accessory) product).getType()).append("* ").append(product.getName()).append("\n")
+                        .append(product.getPrice()).append(" _руб._\n\n---\n\n");
+            }
+
         }
         sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._");
         if (sumPrice == 0)

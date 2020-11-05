@@ -23,9 +23,13 @@ import java.util.List;
 public class AccessoriesService {
     private ArrayList<Accessory> accessoriesList = new ArrayList<>();
 
+
     public static void main(String[] args) {
         AccessoriesService accessoriesService = new AccessoriesService();
         System.out.println(accessoriesService.getAllTypes());
+        System.out.println(accessoriesService.getAccessoryById(125));
+        System.out.println(accessoriesService.getAllAccessories());
+
     }
 
     public AccessoriesService() {
@@ -62,9 +66,11 @@ public class AccessoriesService {
         return result;
     }
 
-    public List<String> getAllTypes() {
-        return Arrays.asList("Чаша", "Колба", "Мундштук", "Щипцы", "Прочее");
+    public ArrayList<String> getAllTypes() {
+        List<String> list =  Arrays.asList("Чаша", "Колба", "Мундштук", "Щипцы", "Прочее");
+        return new ArrayList<>(list);
     }
+
 
     public ArrayList<Accessory> getAccessoriesByType(String type) {
         ArrayList<Accessory> accessories = getAllAccessories();
