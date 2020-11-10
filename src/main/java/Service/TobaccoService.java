@@ -36,34 +36,27 @@ public class TobaccoService {
         return tobaccoList;
     }
 
+    public ArrayList<Tobacco> getAllAvailableTobacco() {
+        ArrayList<Tobacco> availableTobaccos = new ArrayList<>();
+        for(Tobacco t : tobaccoList) {
+            if (t.isAvailable())
+                availableTobaccos.add(t);
+        }
+        return availableTobaccos;
+    }
+
     public ArrayList<String> getAllFortresses() {
         List<String> fortresses = Arrays.asList("Легкая", "Средняя", "Выше средней", "Высокая", "Очень высокая");
         return new ArrayList<>(fortresses);
     }
 
-    public ArrayList<Tobacco> getTobaccoByFortress(String fortress) {
+    public ArrayList<Tobacco> getTobaccoByFortress(String fortress, ArrayList<Tobacco> tobaccos) {
         ArrayList<Tobacco> resTobacco = new ArrayList<>();
-        for (Tobacco t : tobaccoList) {
+        for (Tobacco t : tobaccos) {
             if (t.getFortress().contains(fortress))
                 resTobacco.add(t);
         }
         return resTobacco;
-    }
-
-    public ArrayList<Tobacco> getAvailableTobaccoByFortress(String fortress, String street) {
-        ArrayList<Tobacco> resTobacco = getTobaccoByFortress(fortress);
-        ArrayList<Tobacco> resTobaccoRad = new ArrayList<>();
-        ArrayList<Tobacco> resTobaccoKar = new ArrayList<>();
-        for (Tobacco t : resTobacco) {
-            if (t.getRadonejskayaTastes() != null)
-                resTobaccoRad.add(t);
-            else if (t.getKarlaMarksaTastes() != null)
-                resTobaccoKar.add(t);
-        }
-        if (street.equals("Rad"))
-            return resTobaccoRad;
-        else
-            return resTobaccoKar;
     }
 
     public ArrayList<String> getAllAvailableFortresses() {
@@ -134,11 +127,11 @@ public class TobaccoService {
             tobacco.setImg(tobaccoNode.getAttributes().getNamedItem("img").getNodeValue());
             tobacco.setAvailable(Boolean.valueOf(tobaccoNode.getAttributes().getNamedItem("isAvailable").getNodeValue()));
             String[] temp1 = tobaccoNode.getAttributes().getNamedItem("radTastes").getNodeValue()
-                    .replace("[","").replace("]","").replace(",", "").split(" ");
+                    .replace("[","").replace("]","").split(",");
             ArrayList<String> radTastes = new ArrayList<>(Arrays.asList(temp1));
             tobacco.setRadonejskayaTastes(radTastes);
             String[] temp2 = tobaccoNode.getAttributes().getNamedItem("karTastes").getNodeValue()
-                    .replace("[","").replace("]","").replace(",", "").split(" ");
+                    .replace("[","").replace("]","").split(",");
             ArrayList<String> karTastes = new ArrayList<>(Arrays.asList(temp2));
             tobacco.setKarlaMarksaTastes(karTastes);
             tobacco.setDescription(tobaccoNode.getAttributes().getNamedItem("description").getNodeValue());
@@ -150,7 +143,8 @@ public class TobaccoService {
     public void parseAllTobacco(String type) {
         if (type.equals("xml")) {
             parseTobaccosFromXML();
-        } else {
+        }
+        else {
             tobaccoList = new ArrayList<>();
             for (int i = 1; i < 5; i++) {
                 Document document;
@@ -189,6 +183,8 @@ public class TobaccoService {
                         String fortress = description.text().split("Крепость: ")[1].split(" ")[0];
                         if (fortress.equals("Очень"))
                             tobacco.setFortress("Очень высокая");
+                        else if (fortress.equals("Выше"))
+                            tobacco.setFortress("Выше средней");
                         else
                             tobacco.setFortress(fortress);
                     }
@@ -201,13 +197,19 @@ public class TobaccoService {
                     if (!table.isEmpty()) {
                         Element tbody = table.get(1);
                         Elements addresses = tbody.children();
-                        for (TextNode taste : addresses.get(0).textNodes()) {
-                            if (taste.text() != null && !taste.text().equals("–"))
-                                radonejskaya.add(taste.text().toLowerCase());
+                        List<org.jsoup.nodes.Node> rTastes = addresses.get(0).childNodes();
+                        List<org.jsoup.nodes.Node> kTastes = addresses.get(1).childNodes();
+                        for (org.jsoup.nodes.Node tasteNode : rTastes) {
+                            String taste = tasteNode.toString().replace("<p>","").replace("</p>","")
+                                    .replaceAll("<br>","");
+                            if (!taste.isEmpty() && !taste.equals("–") && !taste.equals("-") && !taste.equals(" "))
+                                radonejskaya.add(taste.toLowerCase().trim());
                         }
-                        for (TextNode taste : addresses.get(1).textNodes()) {
-                            if (!taste.text().isEmpty() && !taste.text().equals("–"))
-                                karlaMarksa.add(taste.text().toLowerCase().trim());
+                        for (org.jsoup.nodes.Node tasteNode : kTastes) {
+                            String taste = tasteNode.toString().replace("<p>","").replace("</p>","")
+                                    .replaceAll("<br>","");
+                            if (!taste.isEmpty() && !taste.equals("–") && !taste.equals("-") && !taste.equals(" "))
+                                karlaMarksa.add(taste.toLowerCase().trim());
                         }
                         if (!radonejskaya.isEmpty()) {
                             tobacco.setAvailable(true);

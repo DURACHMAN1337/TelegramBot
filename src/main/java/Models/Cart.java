@@ -40,7 +40,7 @@ public class Cart {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         long sumPrice = 0;
-        sb.append("*КОРЗИНА*\n\n");
+        sb.append("*🛒 КОРЗИНА*\n\n");
         for (Product product : cart) {
             if (product instanceof Tobacco) {
                 sumPrice += product.getPrice();
@@ -64,7 +64,7 @@ public class Cart {
         }
         sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._");
         if (sumPrice == 0)
-            return "*КОРЗИНА*\n\nВаша корзина пуста!\n\n---\n\n";
+            return "*🛒 КОРЗИНА*\n\nВаша корзина пуста!\n\n---\n\n";
         else
             return new String(sb);
     }

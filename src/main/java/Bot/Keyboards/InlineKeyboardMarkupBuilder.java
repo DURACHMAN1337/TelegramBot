@@ -67,17 +67,13 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         ArrayList<List<InlineKeyboardButton>> rows = new ArrayList<>();
         ArrayList<InlineKeyboardButton> row = new ArrayList<>();
         for (String s : text) {
-            if (row.size() < 2) {
-                row.add(new InlineKeyboardButton()
-                        .setText(s)
-                        .setCallbackData(handle + s));
-            } else {
+            if (row.size() >= 2) {
                 rows.add(row);
                 row = new ArrayList<>();
-                row.add(new InlineKeyboardButton()
-                        .setText(s)
-                        .setCallbackData(handle + s));
             }
+            row.add(new InlineKeyboardButton()
+                    .setText(s.trim())
+                    .setCallbackData(handle + s));
         }
         if (!row.isEmpty())
             rows.add(row);
@@ -96,12 +92,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
-    public InlineKeyboardMarkupBuilder tobaccoButtons(ArrayList<Tobacco> tobacco, String callBackData) {
+    public InlineKeyboardMarkupBuilder tobaccoButtons(ArrayList<Tobacco> tobacco, String handler, String callBackData) {
         for (Tobacco t : tobacco) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(t.getName() + " | " + t.getPrice() + " руб.")
-                    .setCallbackData("tid" + t.getId() + callBackData));
+                    .setCallbackData(handler + "id" + t.getId() + callBackData));
             this.keyboard.add(this.row);
             this.row = null;
         }

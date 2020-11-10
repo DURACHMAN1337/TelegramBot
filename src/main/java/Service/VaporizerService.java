@@ -1,6 +1,5 @@
 package Service;
 
-import Models.Products.Charcoal;
 import Models.Products.Vaporizer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +23,7 @@ public class VaporizerService {
 
     public VaporizerService() {
         Date date = new Date();
-        parseAllVaporizers();
+        //parseAllVaporizers();
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг испарителей занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
