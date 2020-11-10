@@ -1,6 +1,5 @@
 package Service;
 
-import Models.Products.Accessory;
 import Models.Products.Charcoal;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -25,7 +24,7 @@ public class CharcoalService {
 
     public CharcoalService() {
         Date date = new Date();
-        parseAllCharcoal();
+        //parseAllCharcoal();
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг углей занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
