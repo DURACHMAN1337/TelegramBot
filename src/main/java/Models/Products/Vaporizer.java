@@ -8,6 +8,7 @@ public class Vaporizer extends Product {
     private String img;
     private boolean isAvailable;
     private String description;
+    private int count = 1;
 
     public long getId() {
         return id;
@@ -63,6 +64,16 @@ public class Vaporizer extends Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int getCount() {
+        return count;
+    }
+
+    @Override
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override

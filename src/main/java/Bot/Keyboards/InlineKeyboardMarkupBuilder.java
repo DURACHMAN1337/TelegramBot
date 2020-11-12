@@ -81,6 +81,42 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
+    public InlineKeyboardMarkupBuilder countButtons(String text) {
+        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
+        int count;
+        if (text.startsWith("t")) {
+            count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
+        }
+        else {
+            count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+        }
+        if (count > 1) {
+            row.add(new InlineKeyboardButton()
+                    .setText("⬅")
+                    .setCallbackData(text + "?down"));
+        }
+        else {
+            row.add(new InlineKeyboardButton()
+                    .setText("〰")
+                    .setCallbackData("."));
+        }
+        row.add(new InlineKeyboardButton()
+                .setText(String.valueOf(count))
+                .setCallbackData(text + "?crt"));
+        if (count < 5) {
+            row.add(new InlineKeyboardButton()
+                    .setText("➡")
+                    .setCallbackData(text + "?up"));
+        }
+        else {
+            row.add(new InlineKeyboardButton()
+                    .setText("〰")
+                    .setCallbackData("."));
+        }
+        this.keyboard.add(row);
+        return this;
+    }
+
     public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
@@ -92,6 +128,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
+
     public InlineKeyboardMarkupBuilder tobaccoButtons(ArrayList<Tobacco> tobacco, String handler, String callBackData) {
         for (Tobacco t : tobacco) {
             this.row = new ArrayList<>();
@@ -103,6 +140,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
+
     public InlineKeyboardMarkupBuilder accessoryButtons(ArrayList<Accessory> accessory){
         for (Accessory a : accessory) {
             this.row = new ArrayList<>();
@@ -114,6 +152,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         return this;
     }
+
     public InlineKeyboardMarkupBuilder charcoalButtons(ArrayList<Charcoal> charcoals){
         for (Charcoal c : charcoals){
             this.row = new ArrayList<>();

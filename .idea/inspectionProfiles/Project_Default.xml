@@ -6,5 +6,8 @@
         <language minSize="102" name="Java" />
       </Languages>
     </inspection_tool>
+    <inspection_tool class="IfStatementWithIdenticalBranches" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="myHighlightWhenLastStatementIsCall" value="false" />
+    </inspection_tool>
   </profile>
 </component>
