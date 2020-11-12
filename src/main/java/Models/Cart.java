@@ -1,9 +1,6 @@
 package Models;
 
-import Models.Products.Accessory;
-import Models.Products.Hookah;
-import Models.Products.Product;
-import Models.Products.Tobacco;
+import Models.Products.*;
 
 import java.util.ArrayList;
 
@@ -58,6 +55,11 @@ public class Cart {
                 sumPrice += product.getPrice();
                 sb.append(cart.indexOf(product) +1)
                         .append(".  *").append(((Accessory) product).getType()).append("* ").append(product.getName()).append("\n")
+                        .append(product.getCount() + " X " + product.getPrice()).append(" _руб._\n\n---\n\n");
+            } else if (product instanceof Charcoal){
+                sumPrice += product.getPrice();
+                sb.append(cart.indexOf(product) +1)
+                        .append(".  *").append(product.getName()).append("* ").append("\n")
                         .append(product.getCount() + " X " + product.getPrice()).append(" _руб._\n\n---\n\n");
             }
 

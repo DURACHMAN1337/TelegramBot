@@ -24,7 +24,7 @@ public class CharcoalService {
 
     public CharcoalService() {
         Date date = new Date();
-        //parseAllCharcoal();
+        parseAllCharcoal();
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг углей занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
@@ -120,7 +120,7 @@ public class CharcoalService {
                 Elements info = document.getElementsByClass("summary entry-summary");
                 Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
 
-                String name = info.first().child(0).text();
+                String name = info.first().child(0).text().replace("Уголь для кальяна ", "");
                 charcoal.setName(name);
 
                 charcoal.setImg(image.child(0).child(0).attr("src"));
