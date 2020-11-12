@@ -13,8 +13,19 @@ public class Tobacco extends Product implements Cloneable {
     private ArrayList<String> karlaMarksaTastes;
     private String description;
     private String fortress;
+    private int count = 1;
 
     public Tobacco() {
+    }
+
+    @Override
+    public int getCount() {
+        return count;
+    }
+
+    @Override
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public long getId() {

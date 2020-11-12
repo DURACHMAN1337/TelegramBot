@@ -126,13 +126,17 @@ public class TobaccoService {
             tobacco.setPrice(Long.parseLong(tobaccoNode.getAttributes().getNamedItem("price").getNodeValue()));
             tobacco.setImg(tobaccoNode.getAttributes().getNamedItem("img").getNodeValue());
             tobacco.setAvailable(Boolean.valueOf(tobaccoNode.getAttributes().getNamedItem("isAvailable").getNodeValue()));
-            String[] temp1 = tobaccoNode.getAttributes().getNamedItem("radTastes").getNodeValue()
-                    .replace("[","").replace("]","").split(",");
-            ArrayList<String> radTastes = new ArrayList<>(Arrays.asList(temp1));
+            String rt = tobaccoNode.getAttributes().getNamedItem("radTastes").getNodeValue()
+                    .replace("[","").replace("]","");
+            String kt = tobaccoNode.getAttributes().getNamedItem("karTastes").getNodeValue()
+                    .replace("[","").replace("]","");
+            ArrayList<String> radTastes = new ArrayList<>();
+            ArrayList<String> karTastes = new ArrayList<>();
+            for (String s : rt.split(","))
+                radTastes.add(s.trim());
+            for (String s : kt.split(","))
+                karTastes.add(s.trim());
             tobacco.setRadonejskayaTastes(radTastes);
-            String[] temp2 = tobaccoNode.getAttributes().getNamedItem("karTastes").getNodeValue()
-                    .replace("[","").replace("]","").split(",");
-            ArrayList<String> karTastes = new ArrayList<>(Arrays.asList(temp2));
             tobacco.setKarlaMarksaTastes(karTastes);
             tobacco.setDescription(tobaccoNode.getAttributes().getNamedItem("description").getNodeValue());
             tobacco.setFortress(tobaccoNode.getAttributes().getNamedItem("fortress").getNodeValue());

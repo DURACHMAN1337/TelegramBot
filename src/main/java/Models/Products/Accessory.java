@@ -9,6 +9,7 @@ public class Accessory extends Product {
     private Boolean isAvailable;
     private String type;
     private String description;
+    private int count = 1;
 
     public boolean isAvailable() {
         return isAvailable;
@@ -79,6 +80,14 @@ public class Accessory extends Product {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override

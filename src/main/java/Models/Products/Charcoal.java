@@ -8,8 +8,15 @@ public class Charcoal extends Product {
     private String img;
     private boolean isAvailable;
     private String description;
+    private int count = 1;
 
+    public int getCount() {
+        return count;
+    }
 
+    public void setCount(int count) {
+        this.count = count;
+    }
 
     public long getId() {
         return id;

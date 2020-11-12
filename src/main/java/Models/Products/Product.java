@@ -6,8 +6,17 @@ public class Product implements Cloneable {
     private String img;
     private String taste;
     private String brand;
+    private int count = 1;
 
     public Product() {
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public String getName() {
