@@ -120,6 +120,37 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
+    public InlineKeyboardMarkupBuilder positionButtons(String text, int cartSize) {
+        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
+        int count;
+        count = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
+        if (count > 0) {
+            row.add(new InlineKeyboardButton()
+                    .setText("⬅")
+                    .setCallbackData(text + "?down"));
+        }
+        else {
+            row.add(new InlineKeyboardButton()
+                    .setText("⬅")
+                    .setCallbackData("."));
+        }
+        row.add(new InlineKeyboardButton()
+                .setText(String.valueOf(count))
+                .setCallbackData("."));
+        if (count < cartSize) {
+            row.add(new InlineKeyboardButton()
+                    .setText("➡")
+                    .setCallbackData(text + "?up"));
+        }
+        else {
+            row.add(new InlineKeyboardButton()
+                    .setText("➡")
+                    .setCallbackData("."));
+        }
+        this.keyboard.add(row);
+        return this;
+    }
+
     public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs, String handler) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();

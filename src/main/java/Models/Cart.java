@@ -69,10 +69,15 @@ public class Cart {
             }
 
         }
-        sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._");
+        sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._").append("\n---");
         if (sumPrice == 0)
-            return "*🛒 КОРЗИНА*\n\nВаша корзина пуста!\n\n---\n\n";
+            return "*🛒 КОРЗИНА*\n\nВаша корзина пуста!\nВоспользуйтесь каталогом чтобы найти всё что нужно\n---";
         else
             return new String(sb);
+    }
+
+    public String toStringEdit(int position) {
+        String pos = String.valueOf(position);
+        return toString().replace(pos + ".","\uD83D\uDCCC");
     }
 }

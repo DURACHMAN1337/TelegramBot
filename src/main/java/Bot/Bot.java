@@ -231,15 +231,22 @@ public class Bot extends TelegramLongPollingBot {
                         .build();
                 break;
             case "🛒 Корзина":
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText(CART_SERVICE.getUserCart(chat_id).toString())
-                        .row()
-                        .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrder")
-                        .endRow()
-                        .row()
-                        .button("Изменить корзину", "c&edit")
-                        .endRow()
-                        .build();
+                if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText(CART_SERVICE.getUserCart(chat_id).toString())
+                            .build();
+                }
+                else {
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText(CART_SERVICE.getUserCart(chat_id).toString())
+                            .row()
+                            .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrder")
+                            .endRow()
+                            .row()
+                            .button("Изменить корзину", "c&edit")
+                            .endRow()
+                            .build();
+                }
                 break;
             case "Наши Контакты":
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1268,19 +1275,19 @@ public class Bot extends TelegramLongPollingBot {
                     .button("Вернуться к покупкам", "mКаталог")
                     .endRow()
                     .row()
-                    .button("🔙 Назад", "CКорзина")
+                    .button("🔙 Назад", "cКорзина")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("Оформление заказа\nТут что-то должно быть");
+            editMessage.setText("Ваша корзина успешно очищена!\nВоспользуйтесь каталогом чтобы найти всё что нужно");
         }
         else if (text.contains("&")) {
             ArrayList<Product> cart = CART_SERVICE.getUserCart(chat_id).getCart();
-            int position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
-            Product product = cart.get(position-1);
+            int position;
             if (text.contains("up")) {
+                position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("c&" + ++position + "?")
+                        .positionButtons("c&" + ++position, cart.size())
                         .endRow()
                         .row()
                         .button("Изменить количество", "cdel")
@@ -1292,32 +1299,44 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "cКорзина")
                         .endRow()
                         .rebuild(mes_id);
-                editMessage.setText("🏷 *" + product.getName() +
-                        "\n\nКоличество: *" + product.getCount() + "*" +
-                        "\n💵 *" + product.getCount() + " X " + product.getPrice() + " руб.*" +
-                        "\n\nВыберите необходимое действие:");
+                editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                        "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
             }
             else if (text.contains("down")) {
-                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .row()
-                        .countButtons("c&" + --position + "?")
-                        .endRow()
-                        .row()
-                        .button("Изменить количество", "cdel")
-                        .endRow()
-                        .row()
-                        .button("Удалить из корзины", "cdel")
-                        .endRow()
-                        .row()
-                        .button("🔙 Назад", "cКорзина")
-                        .endRow()
-                        .rebuild(mes_id);
-                editMessage.setText("🏷 *" + product.getName() +
-                        "\n\nКоличество: *" + product.getCount() + "*" +
-                        "\n💵 *" + product.getCount() + " X " + product.getPrice() + " руб.*" +
-                        "\n\nВыберите необходимое действие:");
+                position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
+                if (position == 1) {
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .positionButtons("c&" + --position, cart.size())
+                            .row()
+                            .button("Очистить всю корзину", "cclear")
+                            .endRow()
+                            .row()
+                            .button("🔙 Назад", "cКорзина")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
+                            "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                }
+                else {
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .row()
+                            .positionButtons("c&" + --position, cart.size())
+                            .endRow()
+                            .row()
+                            .button("Изменить количество", "ccount&" + position)
+                            .endRow()
+                            .row()
+                            .button("Удалить из корзины", "cdel&" + position)
+                            .endRow()
+                            .row()
+                            .button("🔙 Назад", "cКорзина")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                            "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                }
             }
-/*            else if (text.contains("crt")) {
+/*            else if (text.contains("changePos")) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .countButtons("c&" + ++position + "?")
@@ -1338,14 +1357,18 @@ public class Bot extends TelegramLongPollingBot {
                         "\n\nВыберите необходимое действие:");
             }*/
             else {
+                position = 0;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .countButtons("c&1?")
+                        .positionButtons("c&" + position, cart.size())
                         .row()
                         .button("Очистить всю корзину", "cclear")
                         .endRow()
+                        .row()
+                        .button("🔙 Назад", "cКорзина")
+                        .endRow()
                         .rebuild(mes_id);
                 editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
-                        "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить");
+                        "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
             }
         }
 /*        else if (text.equals("makeOrder")) {
@@ -1360,15 +1383,22 @@ public class Bot extends TelegramLongPollingBot {
                     "\n[_](" + delTobacco.getImg() + ")");
         }*/
         else {
-            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .setText(CART_SERVICE.getUserCart(chat_id).toString())
-                    .row()
-                    .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrder")
-                    .endRow()
-                    .row()
-                    .button("Изменить корзину", "c&edit")
-                    .endRow()
-                    .rebuild(mes_id);
+            if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .rebuild(mes_id);
+                editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
+            }
+            else {
+                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrder")
+                        .endRow()
+                        .row()
+                        .button("Изменить корзину", "c&edit")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
+            }
         }
         return editMessage;
     }
