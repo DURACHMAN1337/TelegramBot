@@ -42,25 +42,30 @@ public class Cart {
             if (product instanceof Tobacco) {
                 sumPrice += product.getPrice() * product.getCount();
                 sb.append(cart.indexOf(product) + 1)
-                        .append(".  *").append(product.getName()).append("*\n").append("Вкус: ").append(product.getTaste()).append("\n")
-                        .append(product.getCount() + " X " + product.getPrice()).append(" _руб._\n\n---\n\n");
+                        .append(".  *").append(product.getName()).append("*\n     (`").append(product.getTaste()).append("`)\n")
+                        .append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
             }
             else if (product instanceof Hookah) {
-                sumPrice += product.getPrice();
+                sumPrice += product.getPrice() * product.getCount();
                 sb.append(cart.indexOf(product) + 1)
-                        .append(".  *").append(product.getBrand()).append("* ").append(product.getName()).append("\n")
-                        .append(product.getCount() + " X " + product.getPrice()).append(" _руб._\n\n---\n\n");
+                        .append(".  *").append(product.getBrand()).append(" ").append(product.getName()).append("*\n")
+                        .append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
             }
-            else if (product instanceof Accessory){
-                sumPrice += product.getPrice();
-                sb.append(cart.indexOf(product) +1)
-                        .append(".  *").append(((Accessory) product).getType()).append("* ").append(product.getName()).append("\n")
-                        .append(product.getCount() + " X " + product.getPrice()).append(" _руб._\n\n---\n\n");
-            } else if (product instanceof Charcoal){
-                sumPrice += product.getPrice();
-                sb.append(cart.indexOf(product) +1)
+            else if (product instanceof Accessory) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append(cart.indexOf(product) + 1)
+                        .append(".  *").append(((Accessory) product).getType()).append("* ").append(product.getName())
+                        .append("\n").append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
+            }
+            else if (product instanceof Charcoal) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append(cart.indexOf(product) + 1)
                         .append(".  *").append(product.getName()).append("* ").append("\n")
-                        .append(product.getCount() + " X " + product.getPrice()).append(" _руб._\n\n---\n\n");
+                        .append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
             }
 
         }

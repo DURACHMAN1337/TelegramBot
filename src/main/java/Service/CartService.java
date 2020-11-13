@@ -2,6 +2,7 @@ package Service;
 
 import Models.Cart;
 import Models.Products.Product;
+import Models.Products.Tobacco;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,27 +40,44 @@ public class CartService {
 
     public void addToCart(Product product, long chat_id) {
         ArrayList<Product> cart = getUserCart(chat_id).getCart();
-        boolean isContains = false;
-        for (Product p : cart) {
-            if (cartIsContains(product, chat_id)) {
-                int count = p.getCount() + product.getCount();
-                p.setCount(count);
-                isContains = true;
-            }
+        if (cartIsContain(product, chat_id)) {
+            setProductCount(product, chat_id);
         }
-        if (!isContains)
+        else
             cart.add(product);
     }
 
-    public boolean cartIsContains(Product product, long chat_id) {
+    public boolean cartIsContain(Product product, long chat_id) {
         ArrayList<Product> cart = carts.get(chat_id).getCart();
         for (Product p : cart) {
             if (p.getName().equals(product.getName())) {
                 if (p.getPrice() == product.getPrice()) {
-                    return true;
+                    if (product instanceof Tobacco) {
+                        if (p.getTaste().equals(product.getTaste()))
+                            return true;
+                    }
+                    else
+                        return true;
                 }
             }
         }
         return false;
+    }
+
+    public void setProductCount(Product product, long chat_id) {
+        ArrayList<Product> cart = carts.get(chat_id).getCart();
+        for (Product p : cart) {
+            if (p.getName().equals(product.getName())) {
+                if (p.getPrice() == product.getPrice()) {
+                    if (product instanceof Tobacco) {
+                        if (p.getTaste().equals(product.getTaste())) {
+                            p.setCount(p.getCount() + product.getCount());
+                        }
+                    }
+                    else
+                        p.setCount(p.getCount() + product.getCount());
+                }
+            }
+        }
     }
 }

@@ -87,6 +87,9 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         if (text.startsWith("t")) {
             count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
         }
+        else if (text.startsWith("c")) {
+            count = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
+        }
         else {
             count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
         }
@@ -97,32 +100,32 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         else {
             row.add(new InlineKeyboardButton()
-                    .setText("〰")
+                    .setText("⬅")
                     .setCallbackData("."));
         }
         row.add(new InlineKeyboardButton()
                 .setText(String.valueOf(count))
                 .setCallbackData(text + "?crt"));
-        if (count < 5) {
+        if (count < 50) {
             row.add(new InlineKeyboardButton()
                     .setText("➡")
                     .setCallbackData(text + "?up"));
         }
         else {
             row.add(new InlineKeyboardButton()
-                    .setText("〰")
+                    .setText("➡")
                     .setCallbackData("."));
         }
         this.keyboard.add(row);
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs) {
+    public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs, String handler) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(hookah.getName() + " | " + hookah.getPrice() + " руб.")
-                    .setCallbackData("hid" + hookah.getId()));
+                    .setCallbackData(handler + "id" + hookah.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
