@@ -4,10 +4,13 @@ import Models.Products.Accessory;
 import Models.Products.Charcoal;
 import Models.Products.Hookah;
 import Models.Products.Tobacco;
+import org.checkerframework.checker.units.qual.A;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultContact;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,48 +90,9 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         if (text.startsWith("t")) {
             count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
         }
-        else if (text.startsWith("c")) {
-            count = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
-        }
         else {
             count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
         }
-        if (count > 1) {
-            row.add(new InlineKeyboardButton()
-                    .setText("➖")
-                    .setCallbackData(text + "?down"));
-        }
-        else {
-            row.add(new InlineKeyboardButton()
-                    .setText("✖")
-                    .setCallbackData("."));
-        }
-        row.add(new InlineKeyboardButton()
-                .setText(String.valueOf(count))
-                .setCallbackData("."));
-        if (count < 50) {
-            row.add(new InlineKeyboardButton()
-                    .setText("➕")
-                    .setCallbackData(text + "?up"));
-        }
-        else {
-            row.add(new InlineKeyboardButton()
-                    .setText("✖")
-                    .setCallbackData("."));
-        }
-        this.keyboard.add(row);
-        row = new ArrayList<>();
-        row.add(new InlineKeyboardButton()
-                .setText("🛒 Подтвердить количество")
-                .setCallbackData(text + "?" + callbackAction));
-        this.keyboard.add(row);
-        return this;
-    }
-
-    public InlineKeyboardMarkupBuilder cartCountButtons(String text, String callbackAction) {
-        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
-        int count;
-        count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
         if (count > 1) {
             row.add(new InlineKeyboardButton()
                     .setText("➖")
@@ -188,6 +152,48 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
                     .setText("✖")
                     .setCallbackData("."));
         }
+        this.keyboard.add(row);
+        return this;
+    }
+
+    public InlineKeyboardMarkupBuilder phoneNumberButtons() {
+        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
+        row.add(new InlineKeyboardButton()
+                .setText("1")
+                .setCallbackData("onumber&1"));
+        row.add(new InlineKeyboardButton()
+                .setText("2")
+                .setCallbackData("onumber&2"));
+        row.add(new InlineKeyboardButton()
+                .setText("3")
+                .setCallbackData("onumber&3"));
+        this.keyboard.add(row);
+        row = new ArrayList<>();
+        row.add(new InlineKeyboardButton()
+                .setText("4")
+                .setCallbackData("onumber&4"));
+        row.add(new InlineKeyboardButton()
+                .setText("5")
+                .setCallbackData("onumber&5"));
+        row.add(new InlineKeyboardButton()
+                .setText("6")
+                .setCallbackData("onumber&6"));
+        this.keyboard.add(row);
+        row = new ArrayList<>();
+        row.add(new InlineKeyboardButton()
+                .setText("7")
+                .setCallbackData("onumber&7"));
+        row.add(new InlineKeyboardButton()
+                .setText("8")
+                .setCallbackData("onumber&8"));
+        row.add(new InlineKeyboardButton()
+                .setText("9")
+                .setCallbackData("onumber&9"));
+        this.keyboard.add(row);
+        row = new ArrayList<>();
+        row.add(new InlineKeyboardButton()
+                .setText("0")
+                .setCallbackData("onumber&0"));
         this.keyboard.add(row);
         return this;
     }
