@@ -780,7 +780,7 @@ public class Bot extends TelegramLongPollingBot {
         if (allAccessoryTypes.contains(text)) {
             ArrayList<Accessory> accessories = ACCESSORIES_SERVICE.getAccessoriesByType(text);
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .accessoryButtons(accessories)
+                    .accessoryButtons(accessories, "a")
                     .row()
                     .button("🔙 Назад", "aАкссесуары")
                     .endRow()
@@ -835,7 +835,7 @@ public class Bot extends TelegramLongPollingBot {
         } else if (text.contains("avl")) {
             ArrayList<Accessory> accessories = ACCESSORIES_SERVICE.getAvailableAccessoriesByType(text.replace("avl", ""));
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .accessoryButtons(accessories)
+                    .accessoryButtons(accessories, "a")
                     .row()
                     .button("🔙 Назад", "anal")
                     .endRow()

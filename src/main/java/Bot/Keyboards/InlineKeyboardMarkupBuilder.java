@@ -216,12 +216,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder accessoryButtons(ArrayList<Accessory> accessory){
+    public InlineKeyboardMarkupBuilder accessoryButtons(ArrayList<Accessory> accessory,String handler){
         for (Accessory a : accessory) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(a.getName() + " | " + a.getPrice() + " руб.")
-                    .setCallbackData("aid" + a.getId()));
+                    .setCallbackData(handler + "id" + a.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
