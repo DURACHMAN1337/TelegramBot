@@ -81,7 +81,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder countButtons(String text) {
+    public InlineKeyboardMarkupBuilder countButtons(String text, String callbackAction) {
         ArrayList<InlineKeyboardButton> row = new ArrayList<>();
         int count;
         if (text.startsWith("t")) {
@@ -95,27 +95,68 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         }
         if (count > 1) {
             row.add(new InlineKeyboardButton()
-                    .setText("⬅")
+                    .setText("➖")
                     .setCallbackData(text + "?down"));
         }
         else {
             row.add(new InlineKeyboardButton()
-                    .setText("⬅")
+                    .setText("✖")
                     .setCallbackData("."));
         }
         row.add(new InlineKeyboardButton()
                 .setText(String.valueOf(count))
-                .setCallbackData(text + "?crt"));
+                .setCallbackData("."));
         if (count < 50) {
             row.add(new InlineKeyboardButton()
-                    .setText("➡")
+                    .setText("➕")
                     .setCallbackData(text + "?up"));
         }
         else {
             row.add(new InlineKeyboardButton()
-                    .setText("➡")
+                    .setText("✖")
                     .setCallbackData("."));
         }
+        this.keyboard.add(row);
+        row = new ArrayList<>();
+        row.add(new InlineKeyboardButton()
+                .setText("🛒 Подтвердить количество")
+                .setCallbackData(text + "?" + callbackAction));
+        this.keyboard.add(row);
+        return this;
+    }
+
+    public InlineKeyboardMarkupBuilder cartCountButtons(String text, String callbackAction) {
+        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
+        int count;
+        count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+        if (count > 1) {
+            row.add(new InlineKeyboardButton()
+                    .setText("➖")
+                    .setCallbackData(text + "?down"));
+        }
+        else {
+            row.add(new InlineKeyboardButton()
+                    .setText("✖")
+                    .setCallbackData("."));
+        }
+        row.add(new InlineKeyboardButton()
+                .setText(String.valueOf(count))
+                .setCallbackData("."));
+        if (count < 50) {
+            row.add(new InlineKeyboardButton()
+                    .setText("➕")
+                    .setCallbackData(text + "?up"));
+        }
+        else {
+            row.add(new InlineKeyboardButton()
+                    .setText("✖")
+                    .setCallbackData("."));
+        }
+        this.keyboard.add(row);
+        row = new ArrayList<>();
+        row.add(new InlineKeyboardButton()
+                .setText("🛒 Подтвердить количество")
+                .setCallbackData(text + "?" + callbackAction));
         this.keyboard.add(row);
         return this;
     }
@@ -126,12 +167,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         count = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
         if (count > 0) {
             row.add(new InlineKeyboardButton()
-                    .setText("⬅")
+                    .setText("➖")
                     .setCallbackData(text + "?down"));
         }
         else {
             row.add(new InlineKeyboardButton()
-                    .setText("⬅")
+                    .setText("✖")
                     .setCallbackData("."));
         }
         row.add(new InlineKeyboardButton()
@@ -139,12 +180,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
                 .setCallbackData("."));
         if (count < cartSize) {
             row.add(new InlineKeyboardButton()
-                    .setText("➡")
+                    .setText("➕")
                     .setCallbackData(text + "?up"));
         }
         else {
             row.add(new InlineKeyboardButton()
-                    .setText("➡")
+                    .setText("✖")
                     .setCallbackData("."));
         }
         this.keyboard.add(row);

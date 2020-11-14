@@ -35,7 +35,22 @@ public class CartService {
 
     public void deleteFromCart(Product product, long chat_id) {
         ArrayList<Product> cart = getUserCart(chat_id).getCart();
-        cart.removeIf(p -> p.getName().equals(product.getName()));
+        for (Product p : cart) {
+            if (p.getName().equals(product.getName())) {
+                if (p.getPrice() == product.getPrice()) {
+                    if (product instanceof Tobacco) {
+                        if (p.getTaste().equals(product.getTaste())) {
+                            cart.remove(p);
+                            break;
+                        }
+                    }
+                    else {
+                        cart.remove(p);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     public void addToCart(Product product, long chat_id) {

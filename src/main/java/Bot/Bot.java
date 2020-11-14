@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -61,7 +62,7 @@ public class Bot extends TelegramLongPollingBot {
         text = text.substring(1);
         EditMessageText editMessageText;
         switch (text) {
-            case "Наши Контакты":
+            case "📞 Контакты":
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id).rebuild(mes_id);
                 editMessageText.setText("г. Самара, ул. Радонежская, 1\n" +
                         "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
@@ -73,7 +74,7 @@ public class Bot extends TelegramLongPollingBot {
                         "\n" +
                         "Телефон: 8 (927) 760-11-17");
                 return editMessageText;
-            case "Каталог":
+            case "📓 Каталог":
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("Табаки", "mТабаки")
@@ -106,10 +107,10 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Электронные испарители", "mИспарители")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*Каталог GRIZZLY SHOP*\n\nДля совершения заказа необходимо:\n*-* Выбрать интересующий товар из каталога" +
-                        "\n*-* Добавить его в корзину\n*-* Оформить заказ, сформировав необходимые данные по доставке");
+                editMessageText.setText("*Каталог GRIZZLY SHOP*\n\nДля совершения заказа необходимо:\n\n☑ Выбрать интересующий товар из каталога" +
+                        "\n☑ Добавить его в корзину\n☑ Оформить заказ, сформировав необходимые данные по доставке");
                 return editMessageText;
-            case "Наличие":
+            case "📔 Наличие":
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("Табаки", "tA/Табаки")
@@ -142,8 +143,8 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Электронные испарители", "mИспарители")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("*Наличие GRIZZLY SHOP*\n\nДля совершения заказа необходимо:\n*-* Выбрать интересующий товар из каталога" +
-                        "\n*-* Добавить его в корзину\n*-* Оформить заказ, сформировав необходимые данные по доставке");
+                editMessageText.setText("*Наличие GRIZZLY SHOP*\n\nДля совершения заказа необходимо:\n\n☑ Выбрать интересующий товар из каталога" +
+                        "\n☑ Добавить его в корзину\n☑ Оформить заказ, сформировав необходимые данные по доставке");
                 return editMessageText;
             case "Кальяны":
                 return hookahHandle(text, chat_id, mes_id);
@@ -183,16 +184,16 @@ public class Bot extends TelegramLongPollingBot {
 //                                "\n[Наш сайт](https://hookahinrussia.ru/)" +
                                 "\n\nИспользуйте кнопки на клавиатуре снизу для навигации")
                         .row()
-                        .button("Каталог")
-                        .button("Наличие")
+                        .button("📓 Каталог")
+                        .button("📔 Наличие")
                         .endRow()
                         .row()
                         .button("🛒 Корзина")
-                        .button("Наши Контакты")
+                        .button("📞 Контакты")
                         .endRow()
                         .build();
                 break;
-            case "Каталог":
+            case "📓 Каталог":
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .setText("*Каталог GRIZZLY SHOP*\nВыберите категорию интересующего товара:")
                         .row()
@@ -211,7 +212,7 @@ public class Bot extends TelegramLongPollingBot {
                         .endRow()
                         .build();
                 break;
-            case "Наличие":
+            case "📔 Наличие":
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .setText("*Наличие GRIZZLY SHOP*\nВыберите категорию интересующего товара:")
                         .row()
@@ -234,6 +235,9 @@ public class Bot extends TelegramLongPollingBot {
                 if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
                     sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .setText(CART_SERVICE.getUserCart(chat_id).toString())
+                            .row()
+                            .button("📓 Каталог", "m📓 Каталог")
+                            .endRow()
                             .build();
                 }
                 else {
@@ -243,12 +247,12 @@ public class Bot extends TelegramLongPollingBot {
                             .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrder")
                             .endRow()
                             .row()
-                            .button("Изменить корзину", "c&edit")
+                            .button("📝 Изменить корзину", "c&edit")
                             .endRow()
                             .build();
                 }
                 break;
-            case "Наши Контакты":
+            case "📞 Контакты":
                 sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .setText("г. Самара, ул. Радонежская, 1\n" +
                                 "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
@@ -276,7 +280,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "hA/Кальяны")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("Товары бренда " + text + ": ");
+            editMessage.setText("Товары бренда *" + text + "*: ");
         }
         else if (text.contains("&")) {
             Hookah cartHookah;
@@ -287,7 +291,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("hA/&" + id + "?" + ++count)
+                        .countButtons("hA/&" + id + "?" + ++count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/id" + id)
@@ -303,7 +307,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("hA/&" + id + "?" + --count)
+                        .countButtons("hA/&" + id + "?" + --count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/id" + id)
@@ -321,7 +325,7 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartHookah, chat_id);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "hA/" + id + "del")
+                        .button("⛔ Убрать из корзины", "hA/" + id + "del")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/Кальяны")
@@ -336,7 +340,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("hA/&" + id + "?" + "1")
+                        .countButtons("hA/&" + id + "?" + "1","crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/id" + id)
@@ -353,7 +357,7 @@ public class Bot extends TelegramLongPollingBot {
             Hookah idHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("id", "")));
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "hA/&" + idHookah.getId() + "?")
+                    .button("🛒 Добавить в корзину", "hA/&" + idHookah.getId() + "?")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "hA/Кальяны")
@@ -369,7 +373,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.deleteFromCart(delHookah, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "hA/&" + delHookah.getId() + "?")
+                    .button("🛒 Добавить в корзину", "hA/&" + delHookah.getId() + "?")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "hA/Кальяны")
@@ -384,7 +388,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(availableBrands, "hA/")
                     .row()
-                    .button("🔙 Назад", "mНаличие")
+                    .button("🔙 Назад", "m📔 Наличие")
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Наличие / Кальяны*\nВыберите бренд кальяна:");
@@ -404,7 +408,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "hКальяны")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("Товары бренда " + text + ": ");
+            editMessage.setText("Товары бренда *" + text + "*: ");
         }
         else if (text.contains("&")) {
             Hookah cartHookah;
@@ -415,7 +419,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("h&" + id + "?" + ++count)
+                        .countButtons("h&" + id + "?" + ++count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hid" + id)
@@ -431,7 +435,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("h&" + id + "?" + --count)
+                        .countButtons("h&" + id + "?" + --count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hid" + id)
@@ -449,7 +453,7 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartHookah, chat_id);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "h" + id + "del")
+                        .button("⛔ Убрать из корзины", "h" + id + "del")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hКальяны")
@@ -464,7 +468,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("h&" + id + "?" + "1")
+                        .countButtons("h&" + id + "?" + "1","crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hid" + id)
@@ -482,7 +486,7 @@ public class Bot extends TelegramLongPollingBot {
             if (currHookah.isAvailable()) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("🛒 В корзину", "h&" + currHookah.getId() + "?")
+                        .button("🛒 Добавить в корзину", "h&" + currHookah.getId() + "?")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hКальяны")
@@ -510,7 +514,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.deleteFromCart(delHookah, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "h&" + delHookah.getId() + "?")
+                    .button("🛒 Добавить в корзину", "h&" + delHookah.getId() + "?")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "hКальяны")
@@ -525,7 +529,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allHookahBrands, "h")
                     .row()
-                    .button("🔙 Назад", "mКаталог")
+                    .button("🔙 Назад", "m📓 Каталог")
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Каталог / Кальяны*\nВыберите бренд кальяна:");
@@ -545,7 +549,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("uA/&" + id + "?" + ++count)
+                        .countButtons("uA/&" + id + "?" + ++count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uA/id" + id)
@@ -559,7 +563,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("uA/&" + id + "?" + --count)
+                        .countButtons("uA/&" + id + "?" + --count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uA/id" + id)
@@ -575,7 +579,7 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartCharcoal, chat_id);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "uA/" + id + "del")
+                        .button("⛔ Убрать из корзины", "uA/" + id + "del")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uA/Уголь")
@@ -590,7 +594,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = 1;
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("uA/&" + id + "?" + "1")
+                        .countButtons("uA/&" + id + "?" + "1","crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uA/id" + id)
@@ -606,7 +610,7 @@ public class Bot extends TelegramLongPollingBot {
             Charcoal idCharcoal = CHARCOAL_SERVICE.getCharcoalById(Long.parseLong(text.replace("id", "")));
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "uA/&" + idCharcoal.getId() + "?")
+                    .button("🛒 Добавить в корзину", "uA/&" + idCharcoal.getId() + "?")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "uA/Уголь")
@@ -622,7 +626,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.deleteFromCart(delCharcoal, chat_id);
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "uA/&" + delCharcoal.getId() + "?")
+                    .button("🛒 Добавить в корзину", "uA/&" + delCharcoal.getId() + "?")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "uA/Уголь")
@@ -636,7 +640,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .charcoalButtons(CHARCOAL_SERVICE.getAvailableCharcoal())
                     .row()
-                    .button("🔙 Назад", "mНаличие")
+                    .button("🔙 Назад", "m📔 Наличие")
                     .endRow()
                     .rebuild(mes_id);
             editMessageText.setText("*Каталог / Уголь*\nВыберите Уголь:");
@@ -659,7 +663,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("u&" + id + "?" + ++count)
+                        .countButtons("u&" + id + "?" + ++count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uid" + id)
@@ -674,7 +678,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("u&" + id + "?" + --count)
+                        .countButtons("u&" + id + "?" + --count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uid" + id)
@@ -690,7 +694,7 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartCharcoal, chat_id);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "u" + id + "del")
+                        .button("⛔ Убрать из корзины", "u" + id + "del")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uУголь")
@@ -704,7 +708,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = 1;
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("u&" + id + "?" + "1")
+                        .countButtons("u&" + id + "?" + "1","crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uid" + id)
@@ -721,7 +725,7 @@ public class Bot extends TelegramLongPollingBot {
             if (currCharcoal.isAvailable()) {
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("🛒 В корзину", "u&" + currCharcoal.getId() + "?")
+                        .button("🛒 Добавить в корзину", "u&" + currCharcoal.getId() + "?")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uУголь")
@@ -747,7 +751,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.deleteFromCart(delCharcoal, chat_id);
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "u&" + delCharcoal.getId() + "?")
+                    .button("🛒 Добавить в корзину", "u&" + delCharcoal.getId() + "?")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "uУголь")
@@ -761,7 +765,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .charcoalButtons(CHARCOAL_SERVICE.getAllCharcoal())
                     .row()
-                    .button("🔙 Назад", "mКаталог")
+                    .button("🔙 Назад", "m📓 Каталог")
                     .endRow()
                     .rebuild(mes_id);
             editMessageText.setText("*Каталог / Уголь*\nВыберите Уголь:");
@@ -798,7 +802,7 @@ public class Bot extends TelegramLongPollingBot {
             if (currAccessory.isAvailable()) {
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("🛒 В корзину", "a" + currAccessory.getId() + "crt")
+                        .button("🛒 Добавить в корзину", "a" + currAccessory.getId() + "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "anal")
@@ -823,7 +827,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allAccessoryTypes, "aavl")
                     .row()
-                    .button("🔙 Назад", "mНаличие")
+                    .button("🔙 Назад", "m📔 Наличие")
                     .endRow()
                     .rebuild(mes_id);
             editMessageText.setText("*Наличие / Акссесуары*\nВыберите категорию акссесуаров:");
@@ -841,7 +845,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allAccessoryTypes, "a")
                     .row()
-                    .button("🔙 Назад", "mКаталог")
+                    .button("🔙 Назад", "m📓 Каталог")
                     .endRow()
                     .rebuild(mes_id);
             editMessageText.setText("*Каталог / Акссесуары*\nВыберите категорию:");
@@ -861,7 +865,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "tA/Табаки")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("*Наличие / Табаки*\nТабаки крепости: " + text);
+            editMessage.setText("*Наличие / Табаки*\nТабаки крепости: *" + text + "*");
         }
         else if (text.contains("cart")) {
             Tobacco crtTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("cart", "")));
@@ -920,7 +924,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("tA/&" + id + "?" + taste + "?" + ++count)
+                        .countButtons("tA/&" + id + "?" + taste + "?" + ++count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tid" + id)
@@ -935,7 +939,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("tA/&" + id + "?" + taste + "?" + --count)
+                        .countButtons("tA/&" + id + "?" + taste + "?" + --count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tid" + id)
@@ -952,7 +956,7 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(tasteTobacco, chat_id);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "t" + id + "del")
+                        .button("⛔ Убрать из корзины", "t" + id + "del")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tA/Табаки")
@@ -967,8 +971,10 @@ public class Bot extends TelegramLongPollingBot {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("tA/&" + id + "?" + taste + "?" + count)
+                        .countButtons("tA/&" + id + "?" + taste + "?" + count,"crt")
                         .endRow()
+                        .row()
+                        .button("Добавить в корзину", "")
                         .row()
                         .button("🔙 Назад", "tid" + id)
                         .endRow()
@@ -984,7 +990,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.deleteFromCart(delTobacco, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "tA/" + delTobacco.getId() + "crt")
+                    .button("🛒 Добавить в корзину", "tA/" + delTobacco.getId() + "crt")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "tA/Табаки")
@@ -1000,7 +1006,7 @@ public class Bot extends TelegramLongPollingBot {
             if (idTobacco.isAvailable()) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("🛒 В корзину", "tA/" + idTobacco.getId() + "cart")
+                        .button("🛒 Добавить в корзину", "tA/" + idTobacco.getId() + "cart")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tA/Табаки")
@@ -1050,7 +1056,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allAvailableTobaccoFortresses, "tA/")
                     .row()
-                    .button("🔙 Назад", "mНаличие")
+                    .button("🔙 Назад", "m📔 Наличие")
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Наличие / Табаки*\nВыберите крепость табака:");
@@ -1069,7 +1075,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "tТабаки")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("*Каталог / Табаки*\nТабаки крепости: " + text);
+            editMessage.setText("*Каталог / Табаки*\nТабаки крепости: *" + text + "*");
         }
         else if (text.contains("cart")) {
             Tobacco crtTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("cart", "")));
@@ -1128,7 +1134,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("t&" + id + "?" + taste + "?" + ++count)
+                        .countButtons("t&" + id + "?" + taste + "?" + ++count,"crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tid" + id)
@@ -1143,7 +1149,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("t&" + id + "?" + taste + "?" + --count)
+                        .countButtons("t&" + id + "?" + taste + "?" + --count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tid" + id)
@@ -1160,7 +1166,7 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(tasteTobacco, chat_id);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "t" + id + "del")
+                        .button("⛔ Убрать из корзины", "t" + id + "del")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tТабаки")
@@ -1175,7 +1181,7 @@ public class Bot extends TelegramLongPollingBot {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("t&" + id + "?" + taste + "?" + count)
+                        .countButtons("t&" + id + "?" + taste + "?" + count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tid" + id)
@@ -1192,7 +1198,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.deleteFromCart(delTobacco, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🛒 В корзину", "t" + delTobacco.getId() + "crt")
+                    .button("🛒 Добавить в корзину", "t" + delTobacco.getId() + "crt")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "tnal")
@@ -1208,7 +1214,7 @@ public class Bot extends TelegramLongPollingBot {
             if (idTobacco.isAvailable()) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("🛒 В корзину", "t" + idTobacco.getId() + "cart")
+                        .button("🛒 Добавить в корзину", "t" + idTobacco.getId() + "cart")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "tТабаки")
@@ -1257,7 +1263,7 @@ public class Bot extends TelegramLongPollingBot {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allTobaccoFortresses, "t")
                     .row()
-                    .button("🔙 Назад", "mКаталог")
+                    .button("🔙 Назад", "m📓 Каталог")
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Каталог / Табаки*\nВыберите крепость табака:");
@@ -1272,7 +1278,7 @@ public class Bot extends TelegramLongPollingBot {
             CART_SERVICE.clearUserCart(chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("Вернуться к покупкам", "mКаталог")
+                    .button("Вернуться к покупкам", "m📓 Каталог")
                     .endRow()
                     .row()
                     .button("🔙 Назад", "cКорзина")
@@ -1283,108 +1289,190 @@ public class Bot extends TelegramLongPollingBot {
         else if (text.contains("&")) {
             ArrayList<Product> cart = CART_SERVICE.getUserCart(chat_id).getCart();
             int position;
-            if (text.contains("up")) {
+            if (text.contains("count")) {
                 position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
-                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .row()
-                        .positionButtons("c&" + ++position, cart.size())
-                        .endRow()
-                        .row()
-                        .button("Изменить количество", "cdel")
-                        .endRow()
-                        .row()
-                        .button("Удалить из корзины", "cdel")
-                        .endRow()
-                        .row()
-                        .button("🔙 Назад", "cКорзина")
-                        .endRow()
-                        .rebuild(mes_id);
-                editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
-                        "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
-            }
-            else if (text.contains("down")) {
-                position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
-                if (position == 1) {
+                Product product = cart.get(position-1);
+                int count;
+                if (text.contains("up")) {
+                    count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                    cart.get(position-1).setCount(count+1);
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .positionButtons("c&" + --position, cart.size())
                             .row()
-                            .button("Очистить всю корзину", "cclear")
-                            .endRow()
-                            .row()
-                            .button("🔙 Назад", "cКорзина")
+                            .cartCountButtons("ccount&" + position + "?" + ++count,"accept")
                             .endRow()
                             .rebuild(mes_id);
-                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
-                            "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                            "\nВыберите необходимое количество:");
                 }
-                else {
+                else if (text.contains("down")) {
+                    count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                    cart.get(position-1).setCount(count-1);
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
-                            .positionButtons("c&" + --position, cart.size())
+                            .cartCountButtons("ccount&" + position + "?" + --count,"accept")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                            "\nВыберите необходимое количество:");
+                }
+                else if (text.contains("accept")) {
+                    count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                    cart.get(position-1).setCount(count);
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .row()
+                            .positionButtons("c&" + position, cart.size())
                             .endRow()
                             .row()
-                            .button("Изменить количество", "ccount&" + position)
+                            .button("📝 Изменить количество", "ccount&" + position + "?")
                             .endRow()
                             .row()
-                            .button("Удалить из корзины", "cdel&" + position)
+                            .button("⛔ Убрать из корзины", "calert&" + position)
                             .endRow()
                             .row()
                             .button("🔙 Назад", "cКорзина")
                             .endRow()
                             .rebuild(mes_id);
                     editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
-                            "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                            "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                }
+                else {
+                    count = product.getCount();
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .row()
+                            .cartCountButtons("ccount&" + position + "?" + count,"accept")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                            "\nВыберите необходимое количество:");
                 }
             }
-/*            else if (text.contains("changePos")) {
-                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .row()
-                        .countButtons("c&" + ++position + "?")
-                        .endRow()
-                        .row()
-                        .button("Изменить количество", "cdel")
-                        .endRow()
-                        .row()
-                        .button("Удалить из корзины", "cdel")
-                        .endRow()
-                        .row()
-                        .button("🔙 Назад", "cКорзина")
-                        .endRow()
-                        .rebuild(mes_id);
-                editMessage.setText("🏷 *" + product.getName() +
-                        "\n\nКоличество: *" + product.getCount() + "*" +
-                        "\n💵 *" + product.getCount() + " X " + product.getPrice() + " руб.*" +
-                        "\n\nВыберите необходимое действие:");
-            }*/
             else {
-                position = 0;
-                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .positionButtons("c&" + position, cart.size())
-                        .row()
-                        .button("Очистить всю корзину", "cclear")
-                        .endRow()
-                        .row()
-                        .button("🔙 Назад", "cКорзина")
-                        .endRow()
-                        .rebuild(mes_id);
-                editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
-                        "\n\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                if (text.contains("up")) {
+                    position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .row()
+                            .positionButtons("c&" + ++position, cart.size())
+                            .endRow()
+                            .row()
+                            .button("📝 Изменить количество", "ccount&" + position + "?")
+                            .endRow()
+                            .row()
+                            .button("⛔ Убрать из корзины", "calert&" + position)
+                            .endRow()
+                            .row()
+                            .button("🔙 Назад", "cКорзина")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                            "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                }
+                else if (text.contains("down")) {
+                    position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
+                    if (position == 1) {
+                        editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                .positionButtons("c&" + --position, cart.size())
+                                .row()
+                                .button("⛔ Очистить всю корзину", "cclear")
+                                .endRow()
+                                .row()
+                                .button("🔙 Назад", "cКорзина")
+                                .endRow()
+                                .rebuild(mes_id);
+                        editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
+                                "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                    }
+                    else {
+                        editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                .row()
+                                .positionButtons("c&" + --position, cart.size())
+                                .endRow()
+                                .row()
+                                .button("📝 Изменить количество", "ccount&" + position + "?")
+                                .endRow()
+                                .row()
+                                .button("⛔ Убрать из корзины", "calert&" + position)
+                                .endRow()
+                                .row()
+                                .button("🔙 Назад", "cКорзина")
+                                .endRow()
+                                .rebuild(mes_id);
+                        editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
+                                "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                    }
+                }
+                else if (text.contains("alert")) {
+                    position = Integer.parseInt(text.split("&")[1]);
+                    Product product = CART_SERVICE.getUserCart(chat_id).getCart().get(position - 1);
+                    if (text.contains("del")) {
+                        CART_SERVICE.deleteFromCart(product, chat_id);
+                        position = 0;
+                        if (cart.size() == 0) {
+                            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                    .row()
+                                    .button("📓 Каталог", "m📓 Каталог")
+                                    .endRow()
+                                    .rebuild(mes_id);
+                            editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
+                        } else {
+                            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                    .positionButtons("c&" + position, cart.size())
+                                    .row()
+                                    .button("⛔ Очистить всю корзину", "cclear")
+                                    .endRow()
+                                    .row()
+                                    .button("🔙 Назад", "cКорзина")
+                                    .endRow()
+                                    .rebuild(mes_id);
+                            editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
+                                    "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                        }
+                    }
+                    else {
+                        String brand = product.getBrand();
+                        if (brand == null)
+                            brand = "";
+                        editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                .row()
+                                .button("Удалить", "calertdel&" + position)
+                                .endRow()
+                                .row()
+                                .button("🔙 Назад", "c&edit")
+                                .endRow()
+                                .rebuild(mes_id);
+                        editMessage.setText("Вы действительно хотите удалить *" + brand + " "
+                                + product.getName() + "* из корзины?");
+                    }
+                }
+                else {
+                    position = 0;
+                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .positionButtons("c&" + position, cart.size())
+                            .row()
+                            .button("⛔ Очистить всю корзину", "cclear")
+                            .endRow()
+                            .row()
+                            .button("🔙 Назад", "cКорзина")
+                            .endRow()
+                            .rebuild(mes_id);
+                    editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
+                            "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
+                }
             }
         }
-/*        else if (text.equals("makeOrder")) {
+        else if (text.equals("makeOrder")) {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
-                    .button("🔙 Назад", "tnal")
+                    .button("🔙 Назад", "cКорзина")
                     .endRow()
                     .rebuild(mes_id);
-            editMessage.setText("🏷 *" + delTobacco.getName() + "*" +
-                    "\n💵 *" + delTobacco.getPrice() + " руб.*" +
-                    "\n\n" + delTobacco.getDescription().trim() +
-                    "\n[_](" + delTobacco.getImg() + ")");
-        }*/
+            editMessage.setText("Оформление заказа. Тут скоро что-то будет.");
+        }
         else {
             if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("📓 Каталог", "m📓 Каталог")
+                        .endRow()
                         .rebuild(mes_id);
                 editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
             }
@@ -1394,7 +1482,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrder")
                         .endRow()
                         .row()
-                        .button("Изменить корзину", "c&edit")
+                        .button("📝 Изменить корзину", "c&edit")
                         .endRow()
                         .rebuild(mes_id);
                 editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
