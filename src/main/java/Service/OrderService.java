@@ -1,11 +1,7 @@
 package Service;
 
-import Models.Cart;
 import Models.Order;
-import Models.Products.Product;
-import Models.Products.Tobacco;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class OrderService {
@@ -19,7 +15,8 @@ public class OrderService {
     public Order getOrder(long chat_id) {
         if (orders.containsKey(chat_id)) {
             return orders.get(chat_id);
-        } else {
+        }
+        else {
             Order order = new Order();
             order.setChat_id(chat_id);
             orders.put(chat_id, order);

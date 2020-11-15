@@ -67,7 +67,6 @@ public class Cart {
                         .append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
                         .append(" _руб._\n\n");
             }
-
         }
         sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._").append("\n");
         if (sumPrice == 0)
@@ -79,5 +78,35 @@ public class Cart {
     public String toStringEdit(int position) {
         String pos = String.valueOf(position);
         return toString().replace(pos + ".","\uD83D\uDCCD");
+    }
+
+    public String toStringOrder() {
+        StringBuilder sb = new StringBuilder();
+        long sumPrice = 0;
+        for (Product product : cart) {
+            if (product instanceof Tobacco) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("_Табак_ *").append(product.getName()).append("*\n(`").append(product.getTaste()).append("`)\n")
+                        .append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
+            } else if (product instanceof Hookah) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("_Кальян_ *").append(product.getBrand()).append(" ").append(product.getName()).append("*\n")
+                        .append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
+            } else if (product instanceof Accessory) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("_Аксессуар_ *").append(product.getName())
+                        .append("*\n").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
+            } else if (product instanceof Charcoal) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("_Уголь_ *").append(product.getName()).append("*\n")
+                        .append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
+            }
+        }
+        sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._").append("\n");
+        return new String(sb);
     }
 }

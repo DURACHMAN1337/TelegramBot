@@ -2,6 +2,7 @@ package Bot;
 
 import Bot.Keyboards.InlineKeyboardMarkupBuilder;
 import Bot.Keyboards.ReplyKeyboardMarkupBuilder;
+import Models.Order;
 import Models.Products.*;
 import Service.*;
 import org.telegram.telegrambots.ApiContextInitializer;
@@ -10,7 +11,6 @@ import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
@@ -164,110 +164,237 @@ public class Bot extends TelegramLongPollingBot {
 
     public SendMessage messageStarter(String text, SendMessage sendMessage) {
         long chat_id = Long.parseLong(sendMessage.getChatId());
-        switch (text) {
-            case "/start":
-                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
-                        .setText(" \uD83D\uDD1E *Данный магазин предназначен для лиц " +
-                                "старше 18 лет.*\n\nНажимая данную кнопку, " +
-                                "Вы подтверждаете что Вам исполнилось 18 лет")
-                        .row()
-                        .button("Продолжить")
-                        .endRow()
-                        .build();
-                break;
-            case "Назад":
-            case "Продолжить":
-            case "Главное меню":
-                sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
-                        .setText("*Добро пожаловать в GRIZZLY SHOP!*" +
-                                "\nУ нас вы найдёте большой ассортимент кальянной " +
-                                "продукции, включая всевозможные аксесуары и огромный выбор табака!" +
-//                                "\n[Наш сайт](https://hookahinrussia.ru/)" +
-                                "\n\nИспользуйте кнопки на клавиатуре снизу для навигации")
-                        .row()
-                        .button("📓 Каталог")
-                        .button("📔 Наличие")
-                        .endRow()
-                        .row()
-                        .button("🛒 Корзина")
-                        .button("📞 Контакты")
-                        .endRow()
-                        .build();
-                break;
-            case "📓 Каталог":
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("*Каталог GRIZZLY SHOP*\n\nВыберите категорию интересующего товара:")
-                        .row()
-                        .button("Табаки", "mТабаки")
-                        .button("Кальяны", "mКальяны")
-                        .endRow()
-                        .row()
-                        .button("Акссесуары", "mАкссесуары")
-                        .button("Уголь", "mУголь")
-                        .endRow()
-                        .row()
-                        .button("Электронные испарители", "mЭлектронные испарители")
-                        .endRow()
-                        .row()
-                        .button("📌 Помощь", "mПомощьКаталог")
-                        .endRow()
-                        .build();
-                break;
-            case "📔 Наличие":
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("*Наличие GRIZZLY SHOP*\n\nВыберите категорию интересующего товара:")
-                        .row()
-                        .button("Табаки", "tA/Табаки")
-                        .button("Кальяны", "hA/Кальяны")
-                        .endRow()
-                        .row()
-                        .button("Акссесуары", "aA/Аксесуары")
-                        .button("Уголь", "uA/Уголь")
-                        .endRow()
-                        .row()
-                        .button("Электронные испарители", "eA/Испарители")
-                        .endRow()
-                        .row()
-                        .button("📌 Помощь", "mПомощьНаличие")
-                        .endRow()
-                        .build();
-                break;
-            case "🛒 Корзина":
-                if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
-                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .setText(CART_SERVICE.getUserCart(chat_id).toString())
-                            .row()
-                            .button("📓 Каталог", "m📓 Каталог")
-                            .endRow()
-                            .build();
-                }
-                else {
-                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .setText(CART_SERVICE.getUserCart(chat_id).toString())
-                            .row()
-                            .button("\uD83D\uDCE6 Оформить заказ", "omakeOrd")
-                            .endRow()
-                            .row()
-                            .button("📝 Изменить корзину", "c&edit")
-                            .endRow()
-                            .build();
-                }
-                break;
-            case "📞 Контакты":
-                sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .setText("г. Самара, ул. Радонежская, 1\n" +
-                                "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
-                                "\n" +
-                                "Телефон: 8 (927) 002-75-57" +
-                                "\n" +
-                                "\nг. Самара, пр. Карла Маркса, 196 (ЖК Центральный)\n" +
-                                "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
-                                "\n" +
-                                "Телефон: 8 (927) 760-11-17")
-                        .build();
-                break;
+        if (text.contains("Ул.") || text.contains("ул.") || text.contains("ул ") || text.contains("Ул ") ||
+                text.contains("район") || text.contains("Улица") || text.contains("улица") || text.contains("г.")
+                && text.contains("город") || text.contains("г ") || text.contains("дом") || text.contains("д.")
+                && text.contains("д ") || text.contains("квартира") || text.contains("кв.") || text.contains("кв ") ||
+                text.contains("Самара")) {
+            ORDER_SERVICE.getOrder(chat_id).setAddress(text);
+            sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                    .setText("*Оформление заказа / Доставка*\n\nПожалуйста, проверьте указанный адрес доставки." +
+                            "\n\n\uD83C\uDFE0 Доставка по адресу:\n" + text)
+                    .row()
+                    .button("✅ Адрекс указан верно")
+                    .endRow()
+                    .row()
+                    .button("❎ Изменить адрес доставки")
+                    .endRow()
+                    .build();
         }
-        return sendMessage;
+        else {
+            switch (text) {
+                case "/start":
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Добро пожаловать в GRIZZLY SHOP!*\n" +
+                                    "У нас вы найдёте большой ассортимент кальянной продукции, " +
+                                    "включая всевозможные аксесуары и огромный выбор табака!" +
+                                    "\n\n\uD83D\uDD1E *Данный магазин предназначен для лиц " +
+                                    "старше 18 лет.*\nНажимая кнопку \"Продолжить\", " +
+                                    "Вы подтверждаете что Вам исполнилось 18 лет!\n" +
+                                    "[_](https://sun9-19.userapi.com/c850720/v850720693/1666fd/HhIdoIXc2rI.jpg)")
+                            .row()
+                            .button("Продолжить")
+                            .endRow()
+                            .build();
+                    break;
+                case "Назад":
+                case "Продолжить":
+                case "Главное меню":
+                case "\uD83D\uDD19 Вернуться в главное меню":
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Главное меню магазина*" +
+                                    "\n\nИспользуйте кнопки на клавиатуре снизу для навигации")
+                            .row()
+                            .button("📓 Каталог")
+                            .button("📔 Наличие")
+                            .endRow()
+                            .row()
+                            .button("🛒 Корзина")
+                            .button("📞 Контакты")
+                            .endRow()
+                            .build();
+                    break;
+                case "📓 Каталог":
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Каталог GRIZZLY SHOP*\n\nВыберите категорию интересующего товара:")
+                            .row()
+                            .button("Табаки", "mТабаки")
+                            .button("Кальяны", "mКальяны")
+                            .endRow()
+                            .row()
+                            .button("Акссесуары", "mАкссесуары")
+                            .button("Уголь", "mУголь")
+                            .endRow()
+                            .row()
+                            .button("Электронные испарители", "mЭлектронные испарители")
+                            .endRow()
+                            .row()
+                            .button("📌 Помощь", "mПомощьКаталог")
+                            .endRow()
+                            .build();
+                    break;
+                case "📔 Наличие":
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Наличие GRIZZLY SHOP*\n\nВыберите категорию интересующего товара:")
+                            .row()
+                            .button("Табаки", "tA/Табаки")
+                            .button("Кальяны", "hA/Кальяны")
+                            .endRow()
+                            .row()
+                            .button("Акссесуары", "aA/Аксесуары")
+                            .button("Уголь", "uA/Уголь")
+                            .endRow()
+                            .row()
+                            .button("Электронные испарители", "eA/Испарители")
+                            .endRow()
+                            .row()
+                            .button("📌 Помощь", "mПомощьНаличие")
+                            .endRow()
+                            .build();
+                    break;
+                case "🛒 Корзина":
+                    if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
+                        sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                .setText(CART_SERVICE.getUserCart(chat_id).toString())
+                                .row()
+                                .button("📓 Каталог", "m📓 Каталог")
+                                .endRow()
+                                .build();
+                    } else {
+                        sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                                .setText(CART_SERVICE.getUserCart(chat_id).toString())
+                                .row()
+                                .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrd")
+                                .endRow()
+                                .row()
+                                .button("📝 Изменить корзину", "c&edit")
+                                .endRow()
+                                .build();
+                    }
+                    break;
+                case "📞 Контакты":
+                    sendMessage = InlineKeyboardMarkupBuilder.create(chat_id)
+                            .setText("г. Самара, ул. Радонежская, 1\n" +
+                                    "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+                                    "\n" +
+                                    "Телефон: 8 (927) 002-75-57" +
+                                    "\n" +
+                                    "\nг. Самара, пр. Карла Маркса, 196 (ЖК Центральный)\n" +
+                                    "Часы работы: ПН – ВС, с 12.00 до 24.00\n" +
+                                    "\n" +
+                                    "Телефон: 8 (927) 760-11-17")
+                            .build();
+                    break;
+                case "\uD83D\uDCE6 Оформить заказ":
+                case "\uD83D\uDD19 Изменить способ получения":
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("\uD83D\uDCE6 *Оформление заказа*\n\nДля успешного оформления заказа мы" +
+                                    " попросим ответить вас на несколько важных уточняющих вопросов." +
+                                    "\nДля ответов используйте кнопки клавиатуры снизу" +
+                                    "\n\nВыберите удобный способ получения:")
+                            .row()
+                            .button("🚚 Доставка")
+                            .button("🏬 Самовывоз")
+                            .endRow()
+                            .row()
+                            .button("\uD83D\uDD19 Вернуться в главное меню")
+                            .endRow()
+                            .build();
+                    break;
+                case "🚚 Доставка":
+                case "❎ Изменить адрес доставки":
+                    ORDER_SERVICE.getOrder(chat_id).setDeliveryMethod("Доставка");
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Оформление заказа / Доставка*\n\n" +
+                                    "\nПожалуйста, введите в чат адрес по которому необходимо будет " +
+                                    "совершить доставку. Доставка осуществляется по городу Самара." +
+                                    "\nАдрес записывается в формате:" +
+                                    "\n\n`Ул. Название улицы, д. Номер дома, кв. Номер квартиры`")
+                            .row()
+                            .button("\uD83D\uDD19 Вернуться в главное меню")
+                            .endRow()
+                            .build();
+                    break;
+                case "🏬 Самовывоз":
+                case "\uD83D\uDD19 Изменить адрес самовывоза":
+                    ORDER_SERVICE.getOrder(chat_id).setDeliveryMethod("Самовывоз");
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Оформление заказа / Самовывоз*\n\nСамовывоз осуществляется в одном из наших магазинов. 🏬" +
+                                    "\nПожалуйста, выберите удобный для Вас адрес магазина:")
+                            .row()
+                            .button("Радонежская 1")
+                            .endRow()
+                            .row()
+                            .button("Проспект Карла Маркса 196")
+                            .endRow()
+                            .row()
+                            .button("\uD83D\uDD19 Изменить способ получения")
+                            .endRow()
+                            .build();
+                    break;
+                case "Радонежская 1":
+                    ORDER_SERVICE.getOrder(chat_id).setAddress("Магазин на ул. Радонежская 1");
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Оформление заказа / Самовывоз*\n\nЗаказ проктически оформлен. Пожалуйста, " +
+                                    "поделитесь с нами своим номером телефона для согласования времени для самовывоза" +
+                                    " и получения дополнительной информации.\n\nУверяем Вас, телефон будет " +
+                                    "использован исключительно в данных целях")
+                            .row()
+                            .buttonWithContactRequest("\uD83D\uDCDE Поделиться номером телефона")
+                            .endRow()
+                            .row()
+                            .button("\uD83D\uDD19 Изменить адрес самовывоза")
+                            .endRow()
+                            .build();
+                    break;
+                case "Проспект Карла Маркса 196":
+                    ORDER_SERVICE.getOrder(chat_id).setAddress("Магазин на ул. Проспект Карла Маркса 196");
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Оформление заказа / Самовывоз*\n\nЗаказ проктически оформлен. Пожалуйста, " +
+                                    "поделитесь с нами своим номером телефона для согласования времени для самовывоза" +
+                                    " и получения дополнительной информации.\n\nУверяем Вас, телефон будет " +
+                                    "использован исключительно в данных целях")
+                            .row()
+                            .buttonWithContactRequest("\uD83D\uDCDE Поделиться номером телефона")
+                            .endRow()
+                            .row()
+                            .button("\uD83D\uDD19 Изменить адрес самовывоза")
+                            .endRow()
+                            .build();
+                    break;
+                case "Да":
+                case "Верно":
+                case "✅ Адрекс указан верно":
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("*Оформление заказа / Доставка*\n\nЗаказ практически оформлен. Пожалуйста, поделитесь с " +
+                                    "нами своим номером телефона для согласования времени доставки и получения дополнительной " +
+                                    "информации.\n\nУверяем Вас, телефон будет использован исключительно в данных целях")
+                            .row()
+                            .buttonWithContactRequest("Поделиться номером телефона")
+                            .endRow()
+                            .row()
+                            .buttonWithContactRequest("\uD83D\uDD19 Вернуться в главное меню")
+                            .endRow()
+                            .build();
+                    break;
+                case "Поделились номером телефона":
+                    Order order = ORDER_SERVICE.getOrder(chat_id);
+                    order.setCustomerCart(CART_SERVICE.getUserCart(chat_id).toStringOrder());
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText(order.toString())
+                            .row()
+                            .button("Главное меню")
+                            .endRow()
+                            .build();
+                    break;
+                case "Не поделились номером телефона":
+                    sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
+                            .setText("Плохо, что вы не поделились номером. Теперь мы найдём и убьём вас")
+                            .build();
+                    break;
+            }
+        }
+        return sendMessage.setParseMode("Markdown");
     }
 
     public EditMessageText availableHookahHandle(String text, long chat_id, long mes_id) {
@@ -1472,7 +1599,7 @@ public class Bot extends TelegramLongPollingBot {
             else {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("\uD83D\uDCE6 Оформить заказ", "omakeOrd")
+                        .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrd")
                         .endRow()
                         .row()
                         .button("📝 Изменить корзину", "c&edit")
@@ -1480,79 +1607,6 @@ public class Bot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
             }
-        }
-        return editMessage;
-    }
-
-    public EditMessageText orderHandle(String text, long chat_id, long mes_id) {
-        text = text.substring(1);
-        EditMessageText editMessage;
-        if (text.equals("Самовывоз")) {
-            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .row()
-                    .button("Ул. Радонежская 1", "oRadStreet")
-                    .endRow()
-                    .row()
-                    .button("Ул. Проспект Карла Маркса 196", "oKarStreet")
-                    .endRow()
-                    .row()
-                    .button("🔙 Назад", "oЗаказ")
-                    .endRow()
-                    .rebuild(mes_id);
-            editMessage.setText("*Оформление заказа*\n\nВыберите магазин для самовывоза:");
-        }
-        else if (text.contains("number")) {
-            if (text.contains("Accept")) {
-                editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                        .row()
-                        .button("🔙 Назад", "oЗаказ")
-                        .endRow()
-                        .rebuild(mes_id);
-                editMessage.setText("*Поздравляем, Ваш заказ успешно совершён!*\nВ ближайшее время с Вами свяжутся" +
-                        "наши сотрудники для уточнения информации\n\n" +
-                        "Сохранённый номер:" + ORDER_SERVICE.getOrder(chat_id).getCustomerPhone());
-//                Вот тут нужно вызвать какой-то сервис, чтобы отправить Заказ
-//                CART_SERVICE.clearUserCart(chat_id);
-            }
-            else {
-                ORDER_SERVICE.getOrder(chat_id).setCustomerPhone(ORDER_SERVICE.getOrder(chat_id).getCustomerPhone()
-                        + text.split("&")[1]);
-                String phoneNumber = ORDER_SERVICE.getOrder(chat_id).getCustomerPhone();
-                if (phoneNumber.length() < 12) {
-                    ORDER_SERVICE.getOrder(chat_id).setCustomerPhone(phoneNumber);
-                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .phoneNumberButtons()
-                            .row()
-                            .button("🔙 Назад", "oЗаказ")
-                            .endRow()
-                            .rebuild(mes_id);
-                    editMessage.setText("Пожалуйста, поделитесь с нами номером телефона, чтобы мы могли связаться с вами" +
-                            " и согласовать доставку\n\n`" + phoneNumber + "`");
-                }
-                else {
-                    editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                            .row()
-                            .button("Продолжить оформление заказа", "onumberAccept")
-                            .endRow()
-                            .row()
-                            .button("🔙 Назад", "onumber&+7")
-                            .endRow()
-                            .rebuild(mes_id);
-                    editMessage.setText("Пожалуйста, поделитесь с нами номером телефона, чтобы мы могли связаться с вами" +
-                            " и согласовать доставку\n\n`" + phoneNumber + "`");
-                }
-            }
-        }
-        else {
-            editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .row()
-                    .button("Самовывоз", "oСамовывоз")
-                    .endRow()
-                    .row()
-                    .button("Доставка", "onumber&+7")
-                    .endRow()
-                    .rebuild(mes_id);
-            editMessage.setText("*Оформление заказа*\n\nВыберите удобный способ получения:");
         }
         return editMessage;
     }
@@ -1576,7 +1630,8 @@ public class Bot extends TelegramLongPollingBot {
                     inMessage.getFrom().getLastName() + " (" + inMessage.getFrom().getUserName() +
                     "): " + text);
             execute(messageStarter(text, outMessage).setParseMode("Markdown"));
-        } else if (update.hasCallbackQuery()) {
+        }
+        else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
             long chat_id = inMessage.getChatId();
             long mes_id = inMessage.getMessageId();
@@ -1588,9 +1643,14 @@ public class Bot extends TelegramLongPollingBot {
                 execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
             if (text.contains("del"))
                 execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно удалён из корзины!"));
-
-            if (text.startsWith("c"))
-                execute(cartHandle(text, chat_id, mes_id).setParseMode("Markdown"));
+            if (text.startsWith("c")) {
+                if (text.contains("makeOrd")) {
+                    SendMessage outMessage = new SendMessage().setChatId(chat_id);
+                    execute(messageStarter("\uD83D\uDCE6 Оформить заказ", outMessage));
+                }
+                else
+                    execute(cartHandle(text, chat_id, mes_id).setParseMode("Markdown"));
+            }
             else if (text.startsWith("h")) {
                 if (text.contains("hA/"))
                     execute(availableHookahHandle(text, chat_id, mes_id).setParseMode("Markdown"));
@@ -1611,8 +1671,20 @@ public class Bot extends TelegramLongPollingBot {
                 else
                     execute(charcoalHandle(text, chat_id, mes_id).setParseMode("Markdown"));
             }
-             else if (text.startsWith("o"))
-                 execute(orderHandle(text, chat_id, mes_id).setParseMode("Markdown"));
+        }
+        else {
+            long chat_id = update.getMessage().getChatId();
+            if (update.getMessage().hasContact()) {
+                    ORDER_SERVICE.getOrder(chat_id).setCustomerPhone(update.getMessage().getContact().getPhoneNumber());
+                    ORDER_SERVICE.getOrder(chat_id).setCustomerName(update.getMessage().getContact().getFirstName());
+                    ORDER_SERVICE.getOrder(chat_id).setCustomerSurname(update.getMessage().getContact().getLastName());
+                    SendMessage sendMessage = new SendMessage().setChatId(chat_id);
+                    execute(messageStarter("Поделились номером телефона", sendMessage));
+                }
+            else {
+                SendMessage sendMessage = new SendMessage().setChatId(chat_id);
+                execute(messageStarter("Не поделились номером телефона", sendMessage));
+            }
         }
     }
 

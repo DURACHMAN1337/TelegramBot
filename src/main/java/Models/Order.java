@@ -1,27 +1,15 @@
 package Models;
 
-import Service.CartService;
-
 public class Order {
     private long chat_id;
     private String customerName;
     private String customerSurname;
-    private String customerPhone;
+    private String customerPhone = "";
+    private String deliveryMethod;
     private String address;
-    private Cart customerCart;
+    String customerCart;
 
     public Order() {
-        CartService CART_SERVICE = new CartService();
-        customerCart = CART_SERVICE.getUserCart(chat_id);
-        customerPhone = "";
-    }
-
-    public Order(int chat_id, String customerName, String customerSurname, String address, Cart customerCart) {
-        this.chat_id = chat_id;
-        this.customerName = customerName;
-        this.customerSurname = customerSurname;
-        this.address = address;
-        this.customerCart = customerCart;
     }
 
     public void setChat_id(long chat_id) {
@@ -65,11 +53,32 @@ public class Order {
         this.address = address;
     }
 
-    public Cart getCustomerCart() {
+    public String getDeliveryMethod() {
+        return deliveryMethod;
+    }
+
+    public void setDeliveryMethod(String deliveryMethod) {
+        this.deliveryMethod = deliveryMethod;
+    }
+
+    public String getCustomerCart() {
         return customerCart;
     }
 
-    public void setCustomerCart(Cart customerCart) {
+    public void setCustomerCart(String customerCart) {
         this.customerCart = customerCart;
+    }
+
+    @Override
+    public String toString() {
+        return "*Заказ* (номер чата " + chat_id + "):\n-\n" +
+                "*Покупатель*" +
+                "\nИмя: " + customerName +
+                "\nФамилия: " + customerSurname +
+                "\nНомер телефона: " + customerPhone + "\n-\n" +
+                "*Получение*" +
+                "\nСпособ получения: " + deliveryMethod +
+                "\nАдрес получения: " + address + "\n-\n" +
+                "*Содержимое корзины*\n" + customerCart;
     }
 }
