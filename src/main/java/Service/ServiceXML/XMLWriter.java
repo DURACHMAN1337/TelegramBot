@@ -1,11 +1,7 @@
 package Service.ServiceXML;
 
-import Models.Products.Accessory;
-import Models.Products.Hookah;
-import Models.Products.Tobacco;
-import Service.AccessoriesService;
-import Service.HookahService;
-import Service.TobaccoService;
+import Models.Products.*;
+import Service.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,6 +20,8 @@ public class XMLWriter {
     private static final HookahService HOOKAH_SERVICE = new HookahService();
     private static final TobaccoService TOBACCO_SERVICE = new TobaccoService();
     private static final AccessoriesService ACCESSORIES_SERVICE = new AccessoriesService();
+    private static final CharcoalService CHARCOAL_SERVICE = new CharcoalService();
+    private static final VaporizerService VAPORIZER_SERVICE = new VaporizerService();
 
     public static void main(String[] args) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -49,12 +47,24 @@ public class XMLWriter {
                 accessoryNode.appendChild(addAccessory(doc,a.getId(),a.getBrand(),a.getName(),a.getPrice(),a.getImg(),
                         a.isAvailable(),a.getType(),a.getDescription()));
             }
+            Element charcoalNode = doc.createElement("Charcoals");
+            for (Charcoal a: CHARCOAL_SERVICE.getAllCharcoal()) {
+                charcoalNode.appendChild(addCharcoal(doc,a.getId(),a.getBrand(),a.getName(),a.getPrice(),a.getImg(),
+                        a.isAvailable(),a.getDescription()));
+            }
+            Element vaporizerNode = doc.createElement("Vaporizers");
+            for (Vaporizer a: VAPORIZER_SERVICE.getAllVaporizers()) {
+                charcoalNode.appendChild(addVaporizer(doc,a.getId(),a.getBrand(),a.getName(),a.getPrice(),a.getImg(),
+                        a.isAvailable(),a.getDescription()));
+            }
             // добавляем корневой элемент в объект Document
             doc.appendChild(rootElement);
             // добавляем дочерние элементы в корневой элемент
             rootElement.appendChild(hookahNode);
             rootElement.appendChild(tobaccoNode);
             rootElement.appendChild(accessoryNode);
+            rootElement.appendChild(charcoalNode);
+            rootElement.appendChild(vaporizerNode);
             //создаем объект TransformerFactory для печати в консоль
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
@@ -110,6 +120,32 @@ public class XMLWriter {
         newAccessory.setAttribute("img", img);
         newAccessory.setAttribute("isAvailable", String.valueOf(isAvailable));
         newAccessory.setAttribute("type", type);
+        newAccessory.setAttribute("description", description);
+        return newAccessory;
+    }
+
+    private static Node addCharcoal(Document doc, long id, String brand, String name, long price, String img,
+                                     boolean isAvailable, String description) {
+        Element newAccessory = doc.createElement("Charcoal");
+        newAccessory.setAttribute("id", String.valueOf(id));
+        newAccessory.setAttribute("brand", brand);
+        newAccessory.setAttribute("name", name);
+        newAccessory.setAttribute("price", String.valueOf(price));
+        newAccessory.setAttribute("img", img);
+        newAccessory.setAttribute("isAvailable", String.valueOf(isAvailable));
+        newAccessory.setAttribute("description", description);
+        return newAccessory;
+    }
+
+    private static Node addVaporizer(Document doc, long id, String brand, String name, long price, String img,
+                                    boolean isAvailable, String description) {
+        Element newAccessory = doc.createElement("Vaporizer");
+        newAccessory.setAttribute("id", String.valueOf(id));
+        newAccessory.setAttribute("brand", brand);
+        newAccessory.setAttribute("name", name);
+        newAccessory.setAttribute("price", String.valueOf(price));
+        newAccessory.setAttribute("img", img);
+        newAccessory.setAttribute("isAvailable", String.valueOf(isAvailable));
         newAccessory.setAttribute("description", description);
         return newAccessory;
     }
