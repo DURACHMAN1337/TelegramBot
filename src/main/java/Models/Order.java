@@ -1,5 +1,8 @@
 package Models;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class Order {
     private long chat_id;
     private String customerName;
@@ -71,7 +74,9 @@ public class Order {
 
     @Override
     public String toString() {
-        return "*Заказ* (номер чата " + chat_id + "):\n-\n" +
+        String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
+        return "*Заказ* (номер чата " + chat_id + "):" +
+                "\nДата заказа: " + timeStamp + "\n-\n" +
                 "*Покупатель*" +
                 "\nИмя: " + customerName +
                 "\nФамилия: " + customerSurname +
