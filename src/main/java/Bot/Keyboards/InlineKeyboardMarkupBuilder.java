@@ -1,9 +1,6 @@
 package Bot.Keyboards;
 
-import Models.Products.Accessory;
-import Models.Products.Charcoal;
-import Models.Products.Hookah;
-import Models.Products.Tobacco;
+import Models.Products.*;
 import org.checkerframework.checker.units.qual.A;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -240,6 +237,18 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             row.add(new InlineKeyboardButton()
             .setText(c.getName() + " | " + c.getPrice() + " руб.")
             .setCallbackData("uid" + c.getId()));
+            this.keyboard.add(this.row);
+            this.row = null;
+        }
+        return this;
+    }
+
+    public InlineKeyboardMarkupBuilder vaporizerButtons(ArrayList<Vaporizer> charcoals){
+        for (Vaporizer v : charcoals){
+            this.row = new ArrayList<>();
+            row.add(new InlineKeyboardButton()
+                    .setText(v.getName() + " | " + v.getPrice() + " руб.")
+                    .setCallbackData("vid" + v.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }

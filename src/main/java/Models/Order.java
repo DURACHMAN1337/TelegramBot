@@ -124,7 +124,7 @@ public class Order {
                     "<b>Способ получения:</b> " + deliveryMethod + "</br>" +
                     "<b>Адрес получения:</b> " + address +
                 "</div>" +
-                "<div style=\"margin: 0px 50px; border-left: 3px solid #535353; padding: 0px 100px;\">" +
+                "<div style=\"border-left: 3px solid #535353; padding: 0px 100px;\">" +
                     "<h3>\uD83D\uDED2 Содержимое корзины</h3>" +
                     customerCartHTML +
                 "</div>" +

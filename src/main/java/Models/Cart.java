@@ -67,6 +67,13 @@ public class Cart {
                         .append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
                         .append(" _руб._\n\n");
             }
+            else if (product instanceof Vaporizer) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append(cart.indexOf(product) + 1)
+                        .append(".  *").append(product.getName()).append("* ").append("\n")
+                        .append("     ").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
+                        .append(" _руб._\n\n");
+            }
         }
         sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._").append("\n");
         if (sumPrice == 0)
@@ -105,6 +112,12 @@ public class Cart {
                         .append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.\n\n");
             }
+            else if (product instanceof Vaporizer) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("Эл. Испаритель ").append(product.getName()).append("\n")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.\n\n");
+            }
         }
         sb.append("ИТОГО:  ").append(sumPrice).append(" руб.").append("\n");
         return new String(sb);
@@ -133,6 +146,12 @@ public class Cart {
             } else if (product instanceof Charcoal) {
                 sumPrice += product.getPrice() * product.getCount();
                 sb.append("<li>Уголь <b>").append(product.getName()).append("</b><br>")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.</li>");
+            }
+            else if (product instanceof Vaporizer) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("<li>Эл. Испаритель <b>").append(product.getName()).append("</b><br>")
                         .append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.</li>");
             }

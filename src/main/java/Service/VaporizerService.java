@@ -1,6 +1,7 @@
 package Service;
 
 import Models.Products.Charcoal;
+import Models.Products.Hookah;
 import Models.Products.Vaporizer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -70,37 +71,9 @@ public class VaporizerService {
     }
 
     public Vaporizer getVaporizerById(long id) {
-        ArrayList<Vaporizer> vaporizers = getAllVaporizers();
-        Vaporizer vaporizer = new Vaporizer();
-        for (Vaporizer a : vaporizers) {
-            if (a.getId() == id) {
-                vaporizer.setId(a.getId());
-                vaporizer.setName(a.getName());
-                vaporizer.setPrice(a.getPrice());
-                vaporizer.setImg(a.getImg());
-                vaporizer.setAvailable(a.isAvailable());
-                vaporizer.setDescription(a.getDescription());
-
+        for (Vaporizer vaporizer : vaporizersList) {
+            if (vaporizer.getId() == id)
                 return vaporizer;
-            }
-        }
-        return null;
-    }
-
-    public Vaporizer getVaporizerByName(String name) {
-        ArrayList<Vaporizer> vaporizers = getAllVaporizers();
-        Vaporizer vaporizer = new Vaporizer();
-        for (Vaporizer c : vaporizers) {
-            if (c.getName().equals(name)) {
-                vaporizer.setId(c.getId());
-                vaporizer.setName(c.getName());
-                vaporizer.setPrice(c.getPrice());
-                vaporizer.setImg(c.getImg());
-                vaporizer.setAvailable(c.isAvailable());
-                vaporizer.setDescription(c.getDescription());
-
-                return vaporizer;
-            }
         }
         return null;
     }
@@ -124,15 +97,14 @@ public class VaporizerService {
         NodeList vaporizersNode = document.getDocumentElement().getElementsByTagName("Vaporizer");
         for (int i = 0; i < vaporizersNode.getLength(); i++) {
             Node charcoalNode = vaporizersNode.item(i);
-            Vaporizer charcoal = new Vaporizer();
-            charcoal.setId(Long.parseLong(charcoalNode.getAttributes().getNamedItem("id").getNodeValue()));
-            charcoal.setBrand(charcoalNode.getAttributes().getNamedItem("brand").getNodeValue());
-            charcoal.setName(charcoalNode.getAttributes().getNamedItem("name").getNodeValue());
-            charcoal.setPrice(Long.parseLong(charcoalNode.getAttributes().getNamedItem("price").getNodeValue()));
-            charcoal.setImg(charcoalNode.getAttributes().getNamedItem("img").getNodeValue());
-            charcoal.setAvailable(Boolean.valueOf(charcoalNode.getAttributes().getNamedItem("isAvailable").getNodeValue()));
-            charcoal.setDescription(charcoalNode.getAttributes().getNamedItem("description").getNodeValue());
-            vaporizersList.add(charcoal);
+            Vaporizer vaporizer = new Vaporizer();
+            vaporizer.setId(Long.parseLong(charcoalNode.getAttributes().getNamedItem("id").getNodeValue()));
+            vaporizer.setName(charcoalNode.getAttributes().getNamedItem("name").getNodeValue());
+            vaporizer.setPrice(Long.parseLong(charcoalNode.getAttributes().getNamedItem("price").getNodeValue()));
+            vaporizer.setImg(charcoalNode.getAttributes().getNamedItem("img").getNodeValue());
+            vaporizer.setAvailable(Boolean.parseBoolean(charcoalNode.getAttributes().getNamedItem("isAvailable").getNodeValue()));
+            vaporizer.setDescription(charcoalNode.getAttributes().getNamedItem("description").getNodeValue());
+            vaporizersList.add(vaporizer);
         }
     }
 
@@ -148,22 +120,18 @@ public class VaporizerService {
 
                 for (Element e : elements) {
                     Vaporizer vaporizer = new Vaporizer();
-                    if (e.child(1).text().contains("В корзину")) {
-                        vaporizer.setAvailable(true);
-                    } else {
-                        vaporizer.setAvailable(false);
-                    }
+                    vaporizer.setAvailable(e.child(1).text().contains("В корзину"));
                     String productUrl = e.child(0).attr("href");
 
                     try {
                         document = Jsoup.connect(productUrl).get();
                     } catch (IOException ioException) {
-                        System.err.println("Такой странички с кальяном не существует");
+                        System.err.println("Такой странички с флешкой не существует");
                     }
                     Elements info = document.getElementsByClass("summary entry-summary");
                     Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
                     String name = info.first().child(0).text();
-                    vaporizer.setName(name);
+                    vaporizer.setName(name.replace(" Электронный одноразовый парогенератор", ""));
 
                     vaporizer.setImg(image.child(0).child(0).attr("src"));
 

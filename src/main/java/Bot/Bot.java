@@ -17,13 +17,11 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
 import javax.mail.*;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Properties;
 
 public class Bot extends TelegramLongPollingBot {
 
@@ -34,13 +32,11 @@ public class Bot extends TelegramLongPollingBot {
     private static final CharcoalService CHARCOAL_SERVICE = new CharcoalService();
     private static final VaporizerService VAPORIZER_SERVICE = new VaporizerService();
     private static final OrderService ORDER_SERVICE = new OrderService();
-    private static final ArrayList<String> allCharcoal = CHARCOAL_SERVICE.getAllNamesList();
-    private static final ArrayList<String> availableCharcoal = CHARCOAL_SERVICE.getAvailableCharcoalNamesList();
-    private static final ArrayList<String> allAccessories = ACCESSORIES_SERVICE.getAllNamesList();
-    private static final ArrayList<String> availableAccessories = ACCESSORIES_SERVICE.getAvailableAccessoriesNamesList();
+    private static final ArrayList<Vaporizer> allVaporizers = VAPORIZER_SERVICE.getAllVaporizers();
+    private static final ArrayList<Vaporizer> allAvailableVaporizers = VAPORIZER_SERVICE.getAvailableVaporizers();
     private static final ArrayList<String> allAccessoryTypes = ACCESSORIES_SERVICE.getAllTypes();
     private static final ArrayList<String> allHookahBrands = HOOKAH_SERVICE.getAllBrandsList();
-    private static final ArrayList<String> availableBrands = HOOKAH_SERVICE.getAvailableBrandsList();
+    private static final ArrayList<String> availableHookahBrands = HOOKAH_SERVICE.getAvailableBrandsList();
     private static final ArrayList<Tobacco> allTobaccos = TOBACCO_SERVICE.getAllTobacco();
     private static final ArrayList<Tobacco> allAvailableTobaccos = TOBACCO_SERVICE.getAllAvailableTobacco();
     private static final ArrayList<String> allTobaccoFortresses = TOBACCO_SERVICE.getAllFortresses();
@@ -92,7 +88,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Уголь", "mУголь")
                         .endRow()
                         .row()
-                        .button("Электронные испарители", "mИспарители")
+                        .button("Электронные испарители", "mЭлектронные испарители")
                         .endRow()
                         .row()
                         .button("📌 Помощь", "mПомощьКаталог")
@@ -111,7 +107,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Уголь", "mУголь")
                         .endRow()
                         .row()
-                        .button("Электронные испарители", "mИспарители")
+                        .button("Электронные испарители", "mЭлектронные испарители")
                         .endRow()
                         .rebuild(mes_id);
                 editMessageText.setText("*Каталог GRIZZLY SHOP*\n\nДля совершения заказа необходимо:\n\n☑ Выбрать интересующий товар из каталога" +
@@ -128,7 +124,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("Уголь", "mУголь")
                         .endRow()
                         .row()
-                        .button("Электронные испарители", "mИспарители")
+                        .button("Электронные испарители", "mЭлектронные испарители")
                         .endRow()
                         .row()
                         .button("📌 Помощь", "mПомощьНаличие")
@@ -140,14 +136,14 @@ public class Bot extends TelegramLongPollingBot {
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("Табаки", "tA/Табаки")
-                        .button("Кальяны", "mКальяны")
+                        .button("Кальяны", "hA/Кальяны")
                         .endRow()
                         .row()
-                        .button("Акссесуары", "mАкссесуары")
-                        .button("Уголь", "mУголь")
+                        .button("Акссесуары", "aA/Акссесуары")
+                        .button("Уголь", "uA/Уголь")
                         .endRow()
                         .row()
-                        .button("Электронные испарители", "mИспарители")
+                        .button("Электронные испарители", "vA/Электронные испарители")
                         .endRow()
                         .rebuild(mes_id);
                 editMessageText.setText("*Наличие GRIZZLY SHOP*\n\nДля совершения заказа необходимо:\n\n☑ Выбрать интересующий товар из каталога" +
@@ -163,6 +159,8 @@ public class Bot extends TelegramLongPollingBot {
                 return accessoryHandle(text, chat_id, mes_id);
             case "Уголь":
                 return charcoalHandle(text, chat_id, mes_id);
+            case "Электронные испарители":
+                return vaporizerHandle(text, chat_id, mes_id);
         }
         return InlineKeyboardMarkupBuilder.create(chat_id)
                 .rebuild(mes_id).setText("*Данный функционал находится в разработке*");
@@ -251,7 +249,7 @@ public class Bot extends TelegramLongPollingBot {
                             .button("Уголь", "uA/Уголь")
                             .endRow()
                             .row()
-                            .button("Электронные испарители", "eA/Испарители")
+                            .button("Электронные испарители", "vA/Испарители")
                             .endRow()
                             .row()
                             .button("📌 Помощь", "mПомощьНаличие")
@@ -408,7 +406,7 @@ public class Bot extends TelegramLongPollingBot {
     public synchronized EditMessageText availableHookahHandle(String text, long chat_id, long mes_id) {
         text = text.substring(3);
         EditMessageText editMessage;
-        if (availableBrands.contains(text)) {
+        if (availableHookahBrands.contains(text)) {
             ArrayList<Hookah> hookahs = HOOKAH_SERVICE.getAvailableHookahsByBrand(text);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .hookahButtons(hookahs, "hA/")
@@ -525,7 +523,7 @@ public class Bot extends TelegramLongPollingBot {
         }
         else {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .buttons(availableBrands, "hA/")
+                    .buttons(availableHookahBrands, "hA/")
                     .row()
                     .button("🔙 Назад", "m📔 Наличие")
                     .endRow()
@@ -679,7 +677,7 @@ public class Bot extends TelegramLongPollingBot {
         return editMessage.setParseMode("Markdown");
     }
 
-    public EditMessageText availableCharcoalHandle(String text, long chat_id, long mes_id) {
+    public synchronized EditMessageText availableCharcoalHandle(String text, long chat_id, long mes_id) {
         text = text.substring(3);
         EditMessageText editMessageText;
         if (text.contains("&")) {
@@ -697,7 +695,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uA/id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartCharcoal.getPrice()) + " _руб._" +
                         " = " + (cartCharcoal.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -711,7 +709,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uA/id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartCharcoal.getPrice()) + " _руб._" +
                         " = " + (cartCharcoal.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -721,13 +719,16 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartCharcoal, chat_id);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "uA/" + id + "del")
+                        .button("⛔ Убрать из корзины", "uA/" + id + "del")
+                        .endRow()
+                        .row()
+                        .button("🛒 Перейти в корзину", "cКорзина")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uA/Уголь")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 *" + cartCharcoal.getPrice() + " руб. *" +
                         "\n\n" + cartCharcoal.getDescription().trim() +
                         "\n[_](" + cartCharcoal.getImg() + ")");
@@ -742,7 +743,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uA/id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartCharcoal.getPrice()) + " _руб._" +
                         " = " + (cartCharcoal.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -758,7 +759,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "uA/Уголь")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("🏷 *" + idCharcoal.getName() + "* | " +
+            editMessageText.setText("🏷 *" + idCharcoal.getName() + "*" +
                     "\n💵 *" + idCharcoal.getPrice() + " руб. *" +
                     "\n\n" + idCharcoal.getDescription().trim() +
                     "\n[_](" + idCharcoal.getImg() + ")");
@@ -785,14 +786,14 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "m📔 Наличие")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("*Каталог / Уголь*\nВыберите Уголь:");
+            editMessageText.setText("*Наличие / Уголь*\nВыберите интересующий уголь:");
         }
 
         return editMessageText.setParseMode("Markdown");
 
     }
 
-    public EditMessageText charcoalHandle(String text, long chat_id, long mes_id) {
+    public synchronized EditMessageText charcoalHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
         EditMessageText editMessageText;
         Charcoal currCharcoal;
@@ -811,7 +812,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uid" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartCharcoal.getPrice()) + " _руб._" +
                         " = " + (cartCharcoal.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -826,7 +827,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uid" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartCharcoal.getPrice()) + " _руб._" +
                         " = " + (cartCharcoal.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -836,13 +837,16 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartCharcoal, chat_id);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "u" + id + "del")
+                        .button("⛔ Убрать из корзины", "u" + id + "del")
+                        .endRow()
+                        .row()
+                        .button("🛒 Перейти в корзину", "cКорзина")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "uУголь")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 *" + cartCharcoal.getPrice() + " руб. *" +
                         "\n\n" + cartCharcoal.getDescription().trim() +
                         "\n[_](" + cartCharcoal.getImg() + ")");
@@ -856,7 +860,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uid" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartCharcoal.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartCharcoal.getPrice()) + " _руб._" +
                         " = " + (cartCharcoal.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -873,7 +877,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uУголь")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + currCharcoal.getName() + "* | " +
+                editMessageText.setText("🏷 *" + currCharcoal.getName() + "*" +
                         "\n💵 *" + currCharcoal.getPrice() + " руб.*" +
                         "\n\n" + currCharcoal.getDescription().trim() +
                         "\n[_](" + currCharcoal.getImg() + ")");
@@ -883,7 +887,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "uУголь")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + currCharcoal.getName() + "* | " + " \n_(нет в наличии)_" +
+                editMessageText.setText("🏷 *" + currCharcoal.getName() + "*" + " \n_(нет в наличии)_" +
                         "\n💵 *" + currCharcoal.getPrice() + " руб.*" +
                         "\n\n" + currCharcoal.getDescription().trim() +
                         "\n[_](" + currCharcoal.getImg() + ")");
@@ -910,12 +914,12 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "m📓 Каталог")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("*Каталог / Уголь*\nВыберите Уголь:");
+            editMessageText.setText("*Каталог / Уголь*\nВыберите интересующий уголь:");
         }
         return editMessageText.setParseMode("Markdown");
     }
 
-    public EditMessageText availableAccessoryHandle(String text, long chat_id, long mes_id) {
+    public synchronized EditMessageText availableAccessoryHandle(String text, long chat_id, long mes_id) {
         text = text.substring(3);
         EditMessageText editMessageText;
         if (allAccessoryTypes.contains(text)) {
@@ -942,7 +946,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aA/id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -956,7 +960,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aA/id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -967,13 +971,16 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartAccessory, chat_id);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "aA/" + id + "del")
+                        .button("⛔ Убрать из корзины", "aA/" + id + "del")
+                        .endRow()
+                        .row()
+                        .button("🛒 Перейти в корзину", "cКорзина")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "aA/Акссесуары")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 *" + cartAccessory.getPrice() + " руб. *" +
                         "\n\n" + cartAccessory.getDescription().trim() +
                         "\n[_](" + cartAccessory.getImg() + ")");
@@ -987,7 +994,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aA/id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -1002,7 +1009,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "aA/Акссесуары")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("🏷 *" + idAccessory.getName() + "* | " +
+            editMessageText.setText("🏷 *" + idAccessory.getName() + "*" +
                     "\n💵 *" + idAccessory.getPrice() + " руб. *" +
                     "\n\n" + idAccessory.getDescription().trim() +
                     "\n[_](" + idAccessory.getImg() + ")");
@@ -1037,7 +1044,7 @@ public class Bot extends TelegramLongPollingBot {
         return editMessageText.setParseMode("Markdown");
     }
 
-    public EditMessageText accessoryHandle(String text, long chat_id, long mes_id) {
+    public synchronized EditMessageText accessoryHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
         EditMessageText editMessageText;
         Accessory currAccessory;
@@ -1049,7 +1056,7 @@ public class Bot extends TelegramLongPollingBot {
                     .button("🔙 Назад", "aАкссесуары")
                     .endRow()
                     .rebuild(mes_id);
-            editMessageText.setText("*Каталог / Акссесуары*\nКатегории Акссесуаров: " + text);
+            editMessageText.setText("*Каталог / Акссесуары*\nКатегории акссесуаров: " + text);
         } else if (text.contains("&")) {
             Accessory cartAccessory;
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
@@ -1065,7 +1072,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aid" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -1079,7 +1086,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aid" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -1089,13 +1096,16 @@ public class Bot extends TelegramLongPollingBot {
                 CART_SERVICE.addToCart(cartAccessory, chat_id);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .button("Убрать из корзины", "a" + id + "del")
+                        .button("⛔ Убрать из корзины", "a" + id + "del")
+                        .endRow()
+                        .row()
+                        .button("🛒 Перейти в корзину", "cКорзина")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "aАкссесуары")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 *" + cartAccessory.getPrice() + " руб. *" +
                         "\n\n" + cartAccessory.getDescription().trim() +
                         "\n[_](" + cartAccessory.getImg() + ")");
@@ -1110,7 +1120,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aid" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + cartAccessory.getName() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -1126,7 +1136,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aАкссесуары")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + currAccessory.getName() + "* | " +
+                editMessageText.setText("🏷 *" + currAccessory.getName() + "*" +
                         "\n💵 *" + currAccessory.getPrice() + " руб. *" +
                         "\n\n" + currAccessory.getDescription().trim() +
                         "\n[_](" + currAccessory.getImg() + ")");
@@ -1136,7 +1146,7 @@ public class Bot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aАкссесуары")
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + currAccessory.getName() + "* | " + " \n_(нет в наличии)_" +
+                editMessageText.setText("🏷 *" + currAccessory.getName() + "*" + " \n_(нет в наличии)_" +
                         "\n💵 *" + currAccessory.getPrice() + " руб. *" +
                         "\n\n" + currAccessory.getDescription().trim() +
                         "\n[_](" + currAccessory.getImg() + ")");
@@ -1594,6 +1604,247 @@ public class Bot extends TelegramLongPollingBot {
         return editMessage;
     }
 
+    public synchronized EditMessageText availableVaporizerHandle(String text, long chat_id, long mes_id) {
+        text = text.substring(3);
+        EditMessageText editMessageText;
+        if (text.contains("&")) {
+            Vaporizer vaporizer;
+            long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
+            int count;
+            vaporizer = VAPORIZER_SERVICE.getVaporizerById(id);
+            if (text.contains("up")) {
+                count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .countButtons("vA/&" + id + "?" + ++count, "crt")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vA/id" + id)
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 " + count + " _шт._ `X` " + (vaporizer.getPrice()) + " _руб._" +
+                        " = " + (vaporizer.getPrice() * count) + " _руб._" +
+                        "\n\nВыберите необходимое количество:");
+            } else if (text.contains("down")) {
+                count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .countButtons("vA/&" + id + "?" + --count, "crt")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vA/id" + id)
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 " + count + " _шт._ `X` " + (vaporizer.getPrice()) + " _руб._" +
+                        " = " + (vaporizer.getPrice() * count) + " _руб._" +
+                        "\n\nВыберите необходимое количество:");
+            } else if (text.contains("crt")) {
+                count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                vaporizer.setCount(count);
+                CART_SERVICE.addToCart(vaporizer, chat_id);
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("⛔ Убрать из корзины", "vA/" + id + "del")
+                        .endRow()
+                        .row()
+                        .button("🛒 Перейти в корзину", "cКорзина")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vA/Вейпы")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 *" + vaporizer.getPrice() + " руб. *" +
+                        "\n\n" + vaporizer.getDescription().trim() +
+                        "\n[_](" + vaporizer.getImg() + ")");
+
+            } else {
+                count = 1;
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .countButtons("vA/&" + id + "?" + "1", "crt")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vA/id" + id)
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 " + count + " _шт._ `X` " + (vaporizer.getPrice()) + " _руб._" +
+                        " = " + (vaporizer.getPrice() * count) + " _руб._" +
+                        "\n\nВыберите необходимое количество:");
+            }
+
+        } else if (text.contains("id")) {
+            Vaporizer idVaporizer = VAPORIZER_SERVICE.getVaporizerById(Long.parseLong(text.replace("id", "")));
+            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .row()
+                    .button("🛒 В корзину", "vA/&" + idVaporizer.getId() + "?")
+                    .endRow()
+                    .row()
+                    .button("🔙 Назад", "vA/Вейпы")
+                    .endRow()
+                    .rebuild(mes_id);
+            editMessageText.setText("🏷 *" + idVaporizer.getName() + "*" +
+                    "\n💵 *" + idVaporizer.getPrice() + " руб. *" +
+                    "\n\n" + idVaporizer.getDescription().trim() +
+                    "\n[_](" + idVaporizer.getImg() + ")");
+
+        } else if (text.contains("del")) {
+            Vaporizer delVaporizer = VAPORIZER_SERVICE.getVaporizerById(Long.parseLong(text.replace("del", "")));
+            CART_SERVICE.deleteFromCart(delVaporizer, chat_id);
+            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .row()
+                    .button("🛒 В корзину", "vA/&" + delVaporizer.getId() + "?")
+                    .endRow()
+                    .row()
+                    .button("🔙 Назад", "vA/Вейпы")
+                    .endRow()
+                    .rebuild(mes_id);
+            editMessageText.setText("🏷 *" + delVaporizer.getName() + "*" +
+                    "\n💵 *" + delVaporizer.getPrice() + " руб.*" +
+                    "\n\n" + delVaporizer.getDescription().trim() +
+                    "\n[_](" + delVaporizer.getImg() + ")");
+        } else {
+            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .vaporizerButtons(allAvailableVaporizers)
+                    .row()
+                    .button("🔙 Назад", "m📔 Наличие")
+                    .endRow()
+                    .rebuild(mes_id);
+            editMessageText.setText("*Наличие / Электронные испарители*\nВыберите интересующий испаритель:");
+        }
+
+        return editMessageText.setParseMode("Markdown");
+
+    }
+
+    public synchronized EditMessageText vaporizerHandle(String text, long chat_id, long mes_id) {
+        text = text.substring(1);
+        EditMessageText editMessageText;
+        if (text.contains("&")) {
+            Vaporizer vaporizer;
+            long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
+            int count;
+            vaporizer = VAPORIZER_SERVICE.getVaporizerById(id);
+            if (text.contains("up")) {
+                count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .countButtons("v&" + id + "?" + ++count, "crt")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vid" + id)
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 " + count + " _шт._ `X` " + (vaporizer.getPrice()) + " _руб._" +
+                        " = " + (vaporizer.getPrice() * count) + " _руб._" +
+                        "\n\nВыберите необходимое количество:");
+
+            } else if (text.contains("down")) {
+                count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .countButtons("v&" + id + "?" + --count, "crt")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vid" + id)
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 " + count + " _шт._ `X` " + (vaporizer.getPrice()) + " _руб._" +
+                        " = " + (vaporizer.getPrice() * count) + " _руб._" +
+                        "\n\nВыберите необходимое количество:");
+            } else if (text.contains("crt")) {
+                count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
+                vaporizer.setCount(count);
+                CART_SERVICE.addToCart(vaporizer, chat_id);
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("⛔ Убрать из корзины", "v" + id + "del")
+                        .endRow()
+                        .row()
+                        .button("🛒 Перейти в корзину", "cКорзина")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vВейпы")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 *" + vaporizer.getPrice() + " руб. *" +
+                        "\n\n" + vaporizer.getDescription().trim() +
+                        "\n[_](" + vaporizer.getImg() + ")");
+            } else {
+                count = 1;
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .countButtons("v&" + id + "?" + "1","crt")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vid" + id)
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + vaporizer.getName() + "*" +
+                        "\n💵 " + count + " _шт._ `X` " + (vaporizer.getPrice()) + " _руб._" +
+                        " = " + (vaporizer.getPrice() * count) + " _руб._" +
+                        "\n\nВыберите необходимое количество:");
+            }
+        }
+        else if (text.contains("id")) {
+            Vaporizer idVaporizer = VAPORIZER_SERVICE.getVaporizerById(Long.parseLong(text.replace("id", "")));
+            if (idVaporizer.isAvailable()) {
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("🛒 В корзину", "v&" + idVaporizer.getId() + "?")
+                        .endRow()
+                        .row()
+                        .button("🔙 Назад", "vВейпы")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + idVaporizer.getName() + "*" +
+                        "\n💵 *" + idVaporizer.getPrice() + " руб.*" +
+                        "\n\n" + idVaporizer.getDescription().trim() +
+                        "\n[_](" + idVaporizer.getImg() + ")");
+            } else {
+                editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                        .row()
+                        .button("🔙 Назад", "vВейпы")
+                        .endRow()
+                        .rebuild(mes_id);
+                editMessageText.setText("🏷 *" + idVaporizer.getName() + "*" + " \n_(нет в наличии)_" +
+                        "\n💵 *" + idVaporizer.getPrice() + " руб.*" +
+                        "\n\n" + idVaporizer.getDescription().trim() +
+                        "\n[_](" + idVaporizer.getImg() + ")");
+            }
+        } else if (text.contains("del")) {
+            Vaporizer delVaporizer = VAPORIZER_SERVICE.getVaporizerById(Long.parseLong(text.replace("del", "")));
+            CART_SERVICE.deleteFromCart(delVaporizer, chat_id);
+            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .row()
+                    .button("🛒 В корзину", "v&" + delVaporizer.getId() + "?")
+                    .endRow()
+                    .row()
+                    .button("🔙 Назад", "vВейпы")
+                    .endRow()
+                    .rebuild(mes_id);
+            editMessageText.setText("🏷 *" + delVaporizer.getName() + "*" +
+                    "\n💵 *" + delVaporizer.getPrice() + " руб.*" +
+                    "\n\n" + delVaporizer.getDescription().trim() +
+                    "\n[_](" + delVaporizer.getImg() + ")");
+        } else {
+            editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
+                    .vaporizerButtons(allVaporizers)
+                    .row()
+                    .button("🔙 Назад", "m📓 Каталог")
+                    .endRow()
+                    .rebuild(mes_id);
+            editMessageText.setText("*Каталог / Электронные испарители*\nВыберите интересующий испаритель:");
+        }
+        return editMessageText.setParseMode("Markdown");
+    }
+
     public synchronized EditMessageText cartHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
         EditMessageText editMessage;
@@ -1913,12 +2164,12 @@ public class Bot extends TelegramLongPollingBot {
                 else
                     execute(charcoalHandle(text, chat_id, mes_id).setParseMode("Markdown"));
             }
-/*            else if (text.startsWith("v")) {
+            else if (text.startsWith("v")) {
                 if (text.contains("vA/"))
                     execute(availableVaporizerHandle(text, chat_id, mes_id).setParseMode("Markdown"));
                 else
                     execute(vaporizerHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }*/
+            }
             else if (text.startsWith("m")) {
                 execute(messageHandle(text, chat_id, mes_id).setParseMode("Markdown"));
             }
@@ -1935,6 +2186,7 @@ public class Bot extends TelegramLongPollingBot {
                     order.setCustomerCart(CART_SERVICE.getUserCart(chat_id).toStringOrder());
                     order.setCustomerCartHTML(CART_SERVICE.getUserCart(chat_id).toStringOrderHTML());
                     sendMailToEmployee(order);
+                    CART_SERVICE.clearUserCart(chat_id);
                 }
             else {
                 SendMessage sendMessage = new SendMessage().setChatId(chat_id);

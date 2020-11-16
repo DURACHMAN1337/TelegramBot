@@ -48,14 +48,14 @@ public class XMLWriter {
                         a.isAvailable(),a.getType(),a.getDescription()));
             }
             Element charcoalNode = doc.createElement("Charcoals");
-            for (Charcoal a: CHARCOAL_SERVICE.getAllCharcoal()) {
-                charcoalNode.appendChild(addCharcoal(doc,a.getId(),a.getBrand(),a.getName(),a.getPrice(),a.getImg(),
-                        a.isAvailable(),a.getDescription()));
+            for (Charcoal c: CHARCOAL_SERVICE.getAllCharcoal()) {
+                charcoalNode.appendChild(addCharcoal(doc,c.getId(),c.getBrand(),c.getName(),c.getPrice(),c.getImg(),
+                        c.isAvailable(),c.getDescription()));
             }
             Element vaporizerNode = doc.createElement("Vaporizers");
-            for (Vaporizer a: VAPORIZER_SERVICE.getAllVaporizers()) {
-                charcoalNode.appendChild(addVaporizer(doc,a.getId(),a.getBrand(),a.getName(),a.getPrice(),a.getImg(),
-                        a.isAvailable(),a.getDescription()));
+            for (Vaporizer v: VAPORIZER_SERVICE.getAllVaporizers()) {
+                vaporizerNode.appendChild(addVaporizer(doc,v.getId(),v.getName(),v.getPrice(),v.getImg(),
+                        v.isAvailable(),v.getDescription()));
             }
             // добавляем корневой элемент в объект Document
             doc.appendChild(rootElement);
@@ -137,11 +137,10 @@ public class XMLWriter {
         return newAccessory;
     }
 
-    private static Node addVaporizer(Document doc, long id, String brand, String name, long price, String img,
+    private static Node addVaporizer(Document doc, long id, String name, long price, String img,
                                     boolean isAvailable, String description) {
         Element newAccessory = doc.createElement("Vaporizer");
         newAccessory.setAttribute("id", String.valueOf(id));
-        newAccessory.setAttribute("brand", brand);
         newAccessory.setAttribute("name", name);
         newAccessory.setAttribute("price", String.valueOf(price));
         newAccessory.setAttribute("img", img);
