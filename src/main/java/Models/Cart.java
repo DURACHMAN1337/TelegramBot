@@ -86,27 +86,58 @@ public class Cart {
         for (Product product : cart) {
             if (product instanceof Tobacco) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("_Табак_ *").append(product.getName()).append("*\n(`").append(product.getTaste()).append("`)\n")
-                        .append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
-                        .append(" _руб._\n\n");
+                sb.append("Табак ").append(product.getName()).append("\n(").append(product.getTaste()).append(")\n")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.\n\n");
             } else if (product instanceof Hookah) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("_Кальян_ *").append(product.getBrand()).append(" ").append(product.getName()).append("*\n")
-                        .append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
-                        .append(" _руб._\n\n");
+                sb.append("Кальян ").append(product.getBrand()).append(" ").append(product.getName()).append("\n")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.\n\n");
             } else if (product instanceof Accessory) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("_Аксессуар_ *").append(product.getName())
-                        .append("*\n").append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
-                        .append(" _руб._\n\n");
+                sb.append("Аксессуар ").append(product.getName())
+                        .append("\n").append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.\n\n");
             } else if (product instanceof Charcoal) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("_Уголь_ *").append(product.getName()).append("*\n")
-                        .append(product.getCount()).append(" _шт._ `X` ").append(product.getPrice())
-                        .append(" _руб._\n\n");
+                sb.append("Уголь ").append(product.getName()).append("\n")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.\n\n");
             }
         }
-        sb.append("*ИТОГО:*  ").append(sumPrice).append(" _руб._").append("\n");
+        sb.append("ИТОГО:  ").append(sumPrice).append(" руб.").append("\n");
+        return new String(sb);
+    }
+
+    public String toStringOrderHTML() {
+        StringBuilder sb = new StringBuilder();
+        long sumPrice = 0;
+        sb.append("<ul>");
+        for (Product product : cart) {
+            if (product instanceof Tobacco) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("<li>Табак <b>").append(product.getName()).append("</b><br>(").append(product.getTaste()).append(")<br>")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.</li>");
+            } else if (product instanceof Hookah) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("<li>Кальян <b>").append(product.getBrand()).append(" ").append(product.getName()).append("</b><br>")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.</li>");
+            } else if (product instanceof Accessory) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("<li>Аксессуар <b>").append(product.getName())
+                        .append("</b><br>").append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.</li>\n\n");
+            } else if (product instanceof Charcoal) {
+                sumPrice += product.getPrice() * product.getCount();
+                sb.append("<li>Уголь <b>").append(product.getName()).append("</b><br>")
+                        .append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                        .append(" руб.</li>");
+            }
+        }
+        sb.append("<br><b>ИТОГО:  ").append(sumPrice).append(" руб.").append("</b></ul>");
         return new String(sb);
     }
 }

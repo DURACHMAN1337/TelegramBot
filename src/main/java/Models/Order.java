@@ -1,5 +1,9 @@
 package Models;
 
+import javax.activation.DataHandler;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMultipart;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -11,6 +15,7 @@ public class Order {
     private String deliveryMethod;
     private String address;
     String customerCart;
+    String customerCartHTML;
 
     public Order() {
     }
@@ -24,8 +29,7 @@ public class Order {
     }
 
     public void setCustomerPhone(String customerPhone) {
-        if (this.customerPhone.length() < 12)
-            this.customerPhone = customerPhone;
+        this.customerPhone = customerPhone;
     }
 
     public long getChat_id() {
@@ -72,18 +76,69 @@ public class Order {
         this.customerCart = customerCart;
     }
 
+    public String getCustomerCartHTML() {
+        return customerCartHTML;
+    }
+
+    public void setCustomerCartHTML(String customerCartHTML) {
+        this.customerCartHTML = customerCartHTML;
+    }
+
     @Override
     public String toString() {
         String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
-        return "*Заказ* (номер чата " + chat_id + "):" +
-                "\nДата заказа: " + timeStamp + "\n-\n" +
-                "*Покупатель*" +
+        return "Заказ (номер чата " + chat_id + "):" +
+                "\nДата заказа: " + timeStamp + "\n--------------------------------\n" +
+                "\uD83D\uDC64 Покупатель:" +
                 "\nИмя: " + customerName +
                 "\nФамилия: " + customerSurname +
-                "\nНомер телефона: " + customerPhone + "\n-\n" +
-                "*Получение*" +
+                "\nНомер телефона: " + customerPhone + "\n--------------------------------\n" +
+                "\uD83D\uDCE6 Получение:" +
                 "\nСпособ получения: " + deliveryMethod +
-                "\nАдрес получения: " + address + "\n-\n" +
-                "*Содержимое корзины*\n" + customerCart;
+                "\nАдрес получения: " + address + "\n--------------------------------\n" +
+                "\uD83D\uDED2 Содержимое корзины:\n" + customerCart;
+    }
+
+    public MimeMultipart toStringHTML() {
+        MimeMultipart multipart = new MimeMultipart();
+        MimeBodyPart bodyPart = new MimeBodyPart();
+        try {
+            bodyPart.addHeader("Content-Type", "text/html; charset=UTF-8");
+            String timeStamp = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
+            bodyPart.setDataHandler(
+                    new DataHandler(
+    "<html>" +
+            "<body>" +
+            "<div style=\"display: flex; gap: 10px; justify-content: space-evenly; align-items: center; justify-content: center\">" +
+                "<div style=\"margin: 0px 50px\">" +
+                    "<h3 style=\"margin-top: 0px;\">\uD83D\uDCCB Заказ</h3>" +
+                    "<b>Номер чата:</b> " + chat_id + "</br>" +
+                    "<b>Дата заказа:</b> " + timeStamp +
+                    "<hr size= 2 px; color=\"#535353\"/>" +
+                    "<h3>\uD83D\uDC64 Покупатель</h3>" +
+                    "<b>Имя:</b> " + customerName + "</br>" +
+                    "<b>Фамилия:</b> " + customerSurname + "</br>" +
+                    "<b>Телефон:</b> " + customerPhone +
+                     "<hr size= 2 px; color=\"#535353\"/>" +
+                    "<h3>\uD83D\uDCE6 Получение</h3>" +
+                    "<b>Способ получения:</b> " + deliveryMethod + "</br>" +
+                    "<b>Адрес получения:</b> " + address +
+                "</div>" +
+                "<div style=\"margin: 0px 50px; border-left: 3px solid #535353; padding: 0px 100px;\">" +
+                    "<h3>\uD83D\uDED2 Содержимое корзины</h3>" +
+                    customerCartHTML +
+                "</div>" +
+            "</div>" +
+            "</body>" +
+            "</html>",
+    "text/html; charset=\"utf-8\""
+                    )
+            );
+            multipart.addBodyPart(bodyPart);
+            return multipart;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

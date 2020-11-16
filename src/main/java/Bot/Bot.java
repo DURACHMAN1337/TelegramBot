@@ -1816,8 +1816,8 @@ public class Bot extends TelegramLongPollingBot {
     }
 
     public synchronized void sendMailToEmployee(Order order) {
-/*        Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com");
+        Properties props = new Properties();
+        props.put("mail.smtp.host", "smtp.mail.ru");
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
@@ -1827,24 +1827,20 @@ public class Bot extends TelegramLongPollingBot {
                 new javax.mail.Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("dmytry1burn@gmail.com","lvbnhbq98");
+                        return new PasswordAuthentication("grizzly_shop_bot@mail.ru","oTT*y31poUpT");
                     }
                 });
-
         try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress("dmytry1burn@gmail.com"));
+            javax.mail.Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("grizzly_shop_bot@mail.ru"));
             message.setRecipients(javax.mail.Message.RecipientType.TO,
                     InternetAddress.parse("kozikov.dmitrii@mail.ru"));
-            message.setSubject("Testing Subject");
-            message.setText("Test Mail");
-
+            message.setSubject("Новый заказ");
+            message.setContent(order.toStringHTML());
             Transport.send(message);
-
-            System.out.println("Done");
         } catch (MessagingException e) {
             throw new RuntimeException(e);
-        }*/
+        }
 
         long dmt_chat_id = 757517710;
         long den_chat_id = 416481326;
@@ -1917,6 +1913,12 @@ public class Bot extends TelegramLongPollingBot {
                 else
                     execute(charcoalHandle(text, chat_id, mes_id).setParseMode("Markdown"));
             }
+/*            else if (text.startsWith("v")) {
+                if (text.contains("vA/"))
+                    execute(availableVaporizerHandle(text, chat_id, mes_id).setParseMode("Markdown"));
+                else
+                    execute(vaporizerHandle(text, chat_id, mes_id).setParseMode("Markdown"));
+            }*/
             else if (text.startsWith("m")) {
                 execute(messageHandle(text, chat_id, mes_id).setParseMode("Markdown"));
             }
@@ -1931,6 +1933,7 @@ public class Bot extends TelegramLongPollingBot {
                     execute(messageStarter("Поделились номером телефона", sendMessage));
                     Order order = ORDER_SERVICE.getOrder(chat_id);
                     order.setCustomerCart(CART_SERVICE.getUserCart(chat_id).toStringOrder());
+                    order.setCustomerCartHTML(CART_SERVICE.getUserCart(chat_id).toStringOrderHTML());
                     sendMailToEmployee(order);
                 }
             else {
