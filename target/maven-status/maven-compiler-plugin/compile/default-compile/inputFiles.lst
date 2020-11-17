@@ -2,7 +2,6 @@ C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Keyboards\ReplyKeyboar
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Products\Hookah.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Keyboards\KeyboardMarkupBuilder.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Cart.java
-C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Bot.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Service\HookahService.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Service\ServiceXML\XMLWriter.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Products\Tobacco.java
@@ -17,4 +16,5 @@ C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Order.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Service\AccessoriesService.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Products\Accessory.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Products\Charcoal.java
+C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\GrizzlyShopBot.java
 C:\Users\kozik\IdeaProjects\TelegramBot\src\main\java\Bot\Models\Products\Product.java

@@ -110,7 +110,7 @@ public class Order {
     "<html>" +
             "<body>" +
             "<div style=\"display: flex; gap: 10px; justify-content: space-evenly; align-items: center; justify-content: center\">" +
-                "<div style=\"margin: 0px 50px\">" +
+                "<div style=\"padding-right: 50px; border-right: 3px solid #535353 \">" +
                     "<h3 style=\"margin-top: 0px;\">\uD83D\uDCCB Заказ</h3>" +
                     "<b>Номер чата:</b> " + chat_id + "</br>" +
                     "<b>Дата заказа:</b> " + timeStamp +
@@ -124,7 +124,7 @@ public class Order {
                     "<b>Способ получения:</b> " + deliveryMethod + "</br>" +
                     "<b>Адрес получения:</b> " + address +
                 "</div>" +
-                "<div style=\"border-left: 3px solid #535353; padding: 0px 100px;\">" +
+                "<div style=\"; padding: 0px 100px;\">" +
                     "<h3>\uD83D\uDED2 Содержимое корзины</h3>" +
                     customerCartHTML +
                 "</div>" +

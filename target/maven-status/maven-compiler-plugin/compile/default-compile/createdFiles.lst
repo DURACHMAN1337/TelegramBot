@@ -4,15 +4,15 @@ Bot\Service\HookahService.class
 Bot\Service\OrderService.class
 Bot\Models\Products\Hookah.class
 Bot\Service\TobaccoService.class
-Bot\Bot$1.class
 Bot\Models\Products\Charcoal.class
 Bot\Service\ServiceXML\XMLWriter.class
+Bot\GrizzlyShopBot$1.class
 Bot\Service\AccessoriesService.class
-Bot\Bot.class
 Bot\Models\Products\Tobacco.class
 Bot\Keyboards\ReplyKeyboardMarkupBuilder.class
 Bot\Models\Cart.class
 Bot\Service\VaporizerService.class
+Bot\GrizzlyShopBot.class
 Bot\Service\CartService.class
 Bot\Keyboards\KeyboardMarkupBuilder.class
 Bot\Models\Products\Product.class
