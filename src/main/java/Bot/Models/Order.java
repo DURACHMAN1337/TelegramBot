@@ -1,4 +1,4 @@
-package Models;
+package Bot.Models;
 
 import javax.activation.DataHandler;
 import javax.mail.MessagingException;

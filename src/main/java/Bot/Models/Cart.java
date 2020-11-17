@@ -1,6 +1,6 @@
-package Models;
+package Bot.Models;
 
-import Models.Products.*;
+import Bot.Models.Products.*;
 
 import java.util.ArrayList;
 

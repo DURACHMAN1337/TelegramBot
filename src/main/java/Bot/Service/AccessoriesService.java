@@ -1,6 +1,6 @@
-package Service;
+package Bot.Service;
 
-import Models.Products.Accessory;
+import Bot.Models.Products.Accessory;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -147,7 +147,7 @@ public class AccessoriesService {
         org.w3c.dom.Document document = null;
         try {
             assert builder != null;
-            document = builder.parse(new File("src/main/java/Service/ServiceXML/products.xml"));
+            document = builder.parse(new File("src/main/java/Bot/Service/ServiceXML/products.xml"));
         } catch (SAXException | IOException e) {
             e.printStackTrace();
         }

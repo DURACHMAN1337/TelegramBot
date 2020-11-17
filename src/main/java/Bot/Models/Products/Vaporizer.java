@@ -1,4 +1,4 @@
-package Models.Products;
+package Bot.Models.Products;
 
 public class Vaporizer extends Product {
     private long id;

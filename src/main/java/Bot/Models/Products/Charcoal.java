@@ -1,4 +1,4 @@
-package Models.Products;
+package Bot.Models.Products;
 
 public class Charcoal extends Product {
     private long id;

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.google.guava</groupId>
+  <artifactId>listenablefuture</artifactId>
+  <versioning>
+    <release>9999.0-empty-to-avoid-conflict-with-guava</release>
+    <versions>
+      <version>9999.0-empty-to-avoid-conflict-with-guava</version>
+    </versions>
+    <lastUpdated>20201117091425</lastUpdated>
+  </versioning>
+</metadata>

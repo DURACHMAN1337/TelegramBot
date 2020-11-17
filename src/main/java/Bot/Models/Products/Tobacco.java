@@ -1,4 +1,4 @@
-package Models.Products;
+package Bot.Models.Products;
 
 import java.util.ArrayList;
 

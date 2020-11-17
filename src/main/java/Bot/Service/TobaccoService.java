@@ -1,10 +1,9 @@
-package Service;
+package Bot.Service;
 
-import Models.Products.Tobacco;
+import Bot.Models.Products.Tobacco;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -112,7 +111,7 @@ public class TobaccoService {
         org.w3c.dom.Document document = null;
         try {
             assert builder != null;
-            document = builder.parse(new File("src/main/java/Service/ServiceXML/products.xml"));
+            document = builder.parse(new File("src/main/java/Bot/Service/ServiceXML/products.xml"));
         } catch (SAXException | IOException e) {
             e.printStackTrace();
         }

@@ -1,1 +1,1 @@
-worker: sh target/bin/workerBot
+worker: sh target/bin/grizzly-shop-bot

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>com.fasterxml.jackson.jaxrs</groupId>
+  <artifactId>jackson-jaxrs-base</artifactId>
+  <versioning>
+    <release>2.10.1</release>
+    <versions>
+      <version>2.10.1</version>
+    </versions>
+    <lastUpdated>20201117091425</lastUpdated>
+  </versioning>
+</metadata>

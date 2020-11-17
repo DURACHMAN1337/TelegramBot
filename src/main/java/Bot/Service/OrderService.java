@@ -1,6 +1,6 @@
-package Service;
+package Bot.Service;
 
-import Models.Order;
+import Bot.Models.Order;
 
 import java.util.HashMap;
 

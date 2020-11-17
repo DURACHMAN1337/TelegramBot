@@ -1,8 +1,8 @@
-package Service;
+package Bot.Service;
 
-import Models.Cart;
-import Models.Products.Product;
-import Models.Products.Tobacco;
+import Bot.Models.Cart;
+import Bot.Models.Products.Product;
+import Bot.Models.Products.Tobacco;
 
 import java.util.ArrayList;
 import java.util.HashMap;

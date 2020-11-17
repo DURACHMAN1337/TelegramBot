@@ -1,8 +1,6 @@
-package Service;
+package Bot.Service;
 
-import Models.Products.Charcoal;
-import Models.Products.Hookah;
-import Models.Products.Vaporizer;
+import Bot.Models.Products.Vaporizer;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -89,7 +87,7 @@ public class VaporizerService {
         org.w3c.dom.Document document = null;
         try {
             assert builder != null;
-            document = builder.parse(new File("src/main/java/Service/ServiceXML/products.xml"));
+            document = builder.parse(new File("src/main/java/Bot/Service/ServiceXML/products.xml"));
         } catch (SAXException | IOException e) {
             e.printStackTrace();
         }

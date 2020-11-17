@@ -1,7 +1,7 @@
-package Service.ServiceXML;
+package Bot.Service.ServiceXML;
 
-import Models.Products.*;
-import Service.*;
+import Bot.Models.Products.*;
+import Bot.Service.*;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -71,7 +71,7 @@ public class XMLWriter {
             // для красивого вывода в консоль
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult file = new StreamResult(new File("src/main/java/Service/ServiceXML/products.xml"));
+            StreamResult file = new StreamResult(new File("src/main/java/Bot.Service/ServiceXML/products.xml"));
             //записываем данные
             transformer.transform(source, file);
 
