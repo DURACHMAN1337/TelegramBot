@@ -2115,6 +2115,9 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             long chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
+            System.out.println(new Date() + ": " + inMessage.getFrom().getFirstName() + " " +
+                    inMessage.getFrom().getLastName() + " (" + inMessage.getFrom().getUserName() +
+                    "): " + text);
             execute(messageStarter(text, outMessage).setParseMode("Markdown"));
         }
         else if (update.hasCallbackQuery()) {
@@ -2122,6 +2125,9 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             long chat_id = inMessage.getChatId();
             long mes_id = inMessage.getMessageId();
             String text = update.getCallbackQuery().getData();
+            System.out.println(new Date() + ": " + update.getCallbackQuery().getFrom().getFirstName() + " " +
+                    update.getCallbackQuery().getFrom().getLastName() + " (" + update.getCallbackQuery().getFrom().getUserName() +
+                    "): " + text);
             if (text.contains("crt"))
                 execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
             if (text.contains("del"))
