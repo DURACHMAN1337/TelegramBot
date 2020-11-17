@@ -2115,9 +2115,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             long chat_id = inMessage.getChatId();
             SendMessage outMessage = new SendMessage().setChatId(chat_id);
             String text = update.getMessage().getText();
-            System.out.println(new Date() + ": " + inMessage.getFrom().getFirstName() + " " +
-                    inMessage.getFrom().getLastName() + " (" + inMessage.getFrom().getUserName() +
-                    "): " + text);
             execute(messageStarter(text, outMessage).setParseMode("Markdown"));
         }
         else if (update.hasCallbackQuery()) {
@@ -2125,9 +2122,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             long chat_id = inMessage.getChatId();
             long mes_id = inMessage.getMessageId();
             String text = update.getCallbackQuery().getData();
-            System.out.println(new Date() + ": " + update.getCallbackQuery().getFrom().getFirstName() + " " +
-                    update.getCallbackQuery().getFrom().getLastName() + " (" + update.getCallbackQuery().getFrom().getUserName() +
-                    "): " + text);
             if (text.contains("crt"))
                 execute(answerCallbackQuery(update.getCallbackQuery().getId(), "Товар успешно добавлен в корзину!"));
             if (text.contains("del"))
@@ -2177,6 +2171,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         else {
             long chat_id = update.getMessage().getChatId();
             if (update.getMessage().hasContact()) {
+                if (CART_SERVICE.getUserCart(chat_id).getCart().size() != 0) {
                     ORDER_SERVICE.getOrder(chat_id).setCustomerPhone(update.getMessage().getContact().getPhoneNumber());
                     ORDER_SERVICE.getOrder(chat_id).setCustomerName(update.getMessage().getContact().getFirstName());
                     ORDER_SERVICE.getOrder(chat_id).setCustomerSurname(update.getMessage().getContact().getLastName());
@@ -2188,9 +2183,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     sendMailToEmployee(order);
                     CART_SERVICE.clearUserCart(chat_id);
                 }
-            else {
-                SendMessage sendMessage = new SendMessage().setChatId(chat_id);
-                execute(messageStarter("Не поделились номером телефона", sendMessage));
             }
         }
     }
