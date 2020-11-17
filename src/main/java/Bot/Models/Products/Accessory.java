@@ -93,13 +93,14 @@ public class Accessory extends Product {
     @Override
     public String toString() {
         return "Accessory{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", brand='" + brand + '\'' +
+                ", name='" + name + '\'' +
                 ", price=" + price +
                 ", img='" + img + '\'' +
+                ", isAvailable=" + isAvailable +
                 ", type='" + type + '\'' +
                 ", description='" + description + '\'' +
-                ", isAvailable='" + isAvailable + '\'' +
-                ", id='" + id + '\'' +
                 '}' + "\n";
     }
 }

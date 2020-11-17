@@ -64,13 +64,15 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         ArrayList<List<InlineKeyboardButton>> rows = new ArrayList<>();
         ArrayList<InlineKeyboardButton> row = new ArrayList<>();
         for (String s : text) {
-            if (row.size() >= 2) {
-                rows.add(row);
-                row = new ArrayList<>();
+            if (s != null && !s.equals("")) {
+                if (row.size() >= 2) {
+                    rows.add(row);
+                    row = new ArrayList<>();
+                }
+                row.add(new InlineKeyboardButton()
+                        .setText(s.trim())
+                        .setCallbackData(handle + s));
             }
-            row.add(new InlineKeyboardButton()
-                    .setText(s.trim())
-                    .setCallbackData(handle + s));
         }
         if (!row.isEmpty())
             rows.add(row);
@@ -150,54 +152,12 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
         return this;
     }
 
-    public InlineKeyboardMarkupBuilder phoneNumberButtons() {
-        ArrayList<InlineKeyboardButton> row = new ArrayList<>();
-        row.add(new InlineKeyboardButton()
-                .setText("1")
-                .setCallbackData("onumber&1"));
-        row.add(new InlineKeyboardButton()
-                .setText("2")
-                .setCallbackData("onumber&2"));
-        row.add(new InlineKeyboardButton()
-                .setText("3")
-                .setCallbackData("onumber&3"));
-        this.keyboard.add(row);
-        row = new ArrayList<>();
-        row.add(new InlineKeyboardButton()
-                .setText("4")
-                .setCallbackData("onumber&4"));
-        row.add(new InlineKeyboardButton()
-                .setText("5")
-                .setCallbackData("onumber&5"));
-        row.add(new InlineKeyboardButton()
-                .setText("6")
-                .setCallbackData("onumber&6"));
-        this.keyboard.add(row);
-        row = new ArrayList<>();
-        row.add(new InlineKeyboardButton()
-                .setText("7")
-                .setCallbackData("onumber&7"));
-        row.add(new InlineKeyboardButton()
-                .setText("8")
-                .setCallbackData("onumber&8"));
-        row.add(new InlineKeyboardButton()
-                .setText("9")
-                .setCallbackData("onumber&9"));
-        this.keyboard.add(row);
-        row = new ArrayList<>();
-        row.add(new InlineKeyboardButton()
-                .setText("0")
-                .setCallbackData("onumber&0"));
-        this.keyboard.add(row);
-        return this;
-    }
-
     public InlineKeyboardMarkupBuilder hookahButtons(ArrayList<Hookah> hookahs, String handler) {
         for (Hookah hookah : hookahs) {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(hookah.getName() + " | " + hookah.getPrice() + " руб.")
-                    .setCallbackData(handler + "id" + hookah.getId()));
+                    .setCallbackData(handler + "?id" + hookah.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
@@ -209,7 +169,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(t.getName() + " | " + t.getPrice() + " руб.")
-                    .setCallbackData(handler + "id" + t.getId() + callBackData));
+                    .setCallbackData(handler + "?id" + t.getId() + callBackData));
             this.keyboard.add(this.row);
             this.row = null;
         }
@@ -221,7 +181,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(a.getName() + " | " + a.getPrice() + " руб.")
-                    .setCallbackData(handler + "id" + a.getId()));
+                    .setCallbackData(handler + "?id" + a.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
@@ -233,7 +193,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
             .setText(c.getName() + " | " + c.getPrice() + " руб.")
-            .setCallbackData("uid" + c.getId()));
+            .setCallbackData("u?id" + c.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }
@@ -245,7 +205,7 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
             this.row = new ArrayList<>();
             row.add(new InlineKeyboardButton()
                     .setText(v.getName() + " | " + v.getPrice() + " руб.")
-                    .setCallbackData("vid" + v.getId()));
+                    .setCallbackData("v?id" + v.getId()));
             this.keyboard.add(this.row);
             this.row = null;
         }

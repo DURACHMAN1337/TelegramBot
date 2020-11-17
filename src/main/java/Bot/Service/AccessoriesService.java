@@ -14,10 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class AccessoriesService {
     private ArrayList<Accessory> accessoriesList = new ArrayList<>();
@@ -25,8 +22,6 @@ public class AccessoriesService {
 
     public static void main(String[] args) {
         AccessoriesService accessoriesService = new AccessoriesService();
-        System.out.println(accessoriesService.getAllTypes());
-        System.out.println(accessoriesService.getAccessoryById(125));
         System.out.println(accessoriesService.getAllAccessories());
 
     }
@@ -43,24 +38,13 @@ public class AccessoriesService {
         return accessoriesList;
     }
 
-    public ArrayList<Accessory> getAvailableAccessories(){
+    public ArrayList<Accessory> getAvailableAccessories() {
         ArrayList<Accessory> list = getAllAccessories();
         ArrayList<Accessory> result = new ArrayList<>();
-
         for (Accessory accessory : list) {
             if (accessory.isAvailable()){
                 result.add(accessory);
             }
-        }
-        return result;
-    }
-
-    public ArrayList<String> getAvailableAccessoriesNamesList(){
-        ArrayList<Accessory> list = getAvailableAccessories();
-        ArrayList<String> result = new ArrayList<>();
-
-        for (Accessory accessory : list) {
-            result.add(accessory.getName());
         }
         return result;
     }
@@ -81,6 +65,27 @@ public class AccessoriesService {
         }
         return resAccessories;
     }
+
+    public ArrayList<Accessory> getAccessoriesBowlsByBrand(String brand) {
+        ArrayList<Accessory> resAccessories = new ArrayList<>();
+        for (Accessory accessory : accessoriesList) {
+            if (accessory.getBrand().contains(brand)) {
+                resAccessories.add(accessory);
+            }
+        }
+        return resAccessories;
+    }
+
+    public ArrayList<Accessory> getAvailableAccessoriesBowlsByBrand(String brand) {
+        ArrayList<Accessory> resAccessories = new ArrayList<>();
+        for (Accessory accessory : getAvailableAccessoriesByType("Чаша")) {
+            if (accessory.getBrand().contains(brand)) {
+                resAccessories.add(accessory);
+            }
+        }
+        return resAccessories;
+    }
+
     public ArrayList<Accessory> getAvailableAccessoriesByType(String type){
         ArrayList<Accessory> result = new ArrayList<>();
         ArrayList<Accessory> list = getAvailableAccessories();
@@ -92,48 +97,28 @@ public class AccessoriesService {
         return result;
     }
 
-    public ArrayList<String> getAllNamesList() {
-        ArrayList<String> names = new ArrayList<>();
-        for (Accessory a : getAllAccessories()) {
-            names.add(a.getName());
-        }
-        return names;
-    }
-
     public Accessory getAccessoryById(long id) {
         ArrayList<Accessory> accessories = getAllAccessories();
-        Accessory accessory = new Accessory();
         for (Accessory a : accessories) {
             if (a.getId() == id) {
-                accessory.setId(a.getId());
-                accessory.setName(a.getName());
-                accessory.setPrice(a.getPrice());
-                accessory.setImg(a.getImg());
-                accessory.setAvailable(a.getAvailable());
-                accessory.setDescription(a.getDescription());
-                accessory.setType(a.getType());
-                return accessory;
+                return a;
             }
         }
         return null;
     }
 
-    public Accessory getAccessoryByName(String name) {
-        ArrayList<Accessory> accessories = getAllAccessories();
-        Accessory accessory = new Accessory();
-        for (Accessory a : accessories) {
-            if (a.getName().equals(name)) {
-                accessory.setId(a.getId());
-                accessory.setName(a.getName());
-                accessory.setPrice(a.getPrice());
-                accessory.setImg(a.getImg());
-                accessory.setAvailable(a.getAvailable());
-                accessory.setDescription(a.getDescription());
-                accessory.setType(a.getType());
-                return accessory;
-            }
-        }
-        return null;
+    public ArrayList<String> getBowlsBrandList() {
+        HashSet<String> brands = new HashSet<>();
+        for (Accessory a : getAccessoriesByType("Чаша"))
+            brands.add(a.getBrand());
+        return new ArrayList<>(brands);
+    }
+
+    public ArrayList<String> getAvailableBowlsBrandList() {
+        HashSet<String> brands = new HashSet<>();
+        for (Accessory a : getAvailableAccessoriesByType("Чаша"))
+            brands.add(a.getBrand());
+        return new ArrayList<>(brands);
     }
 
     public void parseAccessoriesFromXML() {
@@ -186,12 +171,7 @@ public class AccessoriesService {
                 Accessory accessory;
                 for (Element e : elements) {
                     accessory = new Accessory();
-                    if (e.child(1).text().contains("В корзину")) {
-                        accessory.setAvailable(true);
-                    } else {
-                        accessory.setAvailable(false);
-                    }
-
+                    accessory.setAvailable(e.child(1).text().contains("В корзину"));
                     String productUrl = e.child(0).attr("href");
                     try {
                         document = Jsoup.connect(productUrl).get();
@@ -202,10 +182,25 @@ public class AccessoriesService {
                     Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
                     String name = info.first().child(0).text();
                     accessory.setName(name);
+                    if (name.contains("Чаша")) {
+                        accessory.setType("Чаша");
+                        accessory.setName(accessory.getName().replace("Чаша", "").trim());
+                        accessory.setBrand(accessory.getName().split(" \\| ")[0].trim());
+                        accessory.setName(accessory.getName().split("\\|")[1].trim());
+                    } else if (name.contains("Колба")) {
+                        accessory.setType("Колба");
+                        accessory.setName(accessory.getName().replace("Колба для кальяна", "").trim());
+                    } else if (name.contains("Щипцы")) {
+                        accessory.setType("Щипцы");
+                        accessory.setName(accessory.getName().replace("Щипцы для кальяна", "").trim());
+                    } else if (name.contains("Мундштук")) {
+                        accessory.setType("Мундштук");
+                        accessory.setName(accessory.getName().replace("Мундштук для кальяна", "").trim());
+                    } else {
+                        accessory.setType("Прочее");
+                    }
                     accessory.setImg(image.child(0).child(0).attr("src"));
                     String price = info.first().child(1).text().replaceAll(".00 руб.", "");
-
-
                     if (price.length() > 5) {
                         String[] priceArr = price.split(" ");
                         accessory.setPrice(Long.parseLong(priceArr[1]));
@@ -219,31 +214,12 @@ public class AccessoriesService {
                     } else {
                         accessory.setDescription("Описание данного товара не доступно.");
                     }
-
-
                     tempAccessories.add(accessory);
                 }
-
                 accessoriesList.addAll(tempAccessories);
-
             }
-            for (Accessory accessory : accessoriesList) {
-                if (accessory.getName().contains("Чаша")) {
-                    accessory.setType("Чаша");
-                } else if (accessory.getName().contains("Колба")) {
-                    accessory.setType("Колба");
-                } else if (accessory.getName().contains("Щипцы")) {
-                    accessory.setType("Щипцы");
-                } else if (accessory.getName().contains("Мундштук")) {
-                    accessory.setType("Мундштук");
-                } else {
-                    accessory.setType("Прочее");
-                }
-            }
-            for (int i = 0; i < accessoriesList.size(); i++) {
-                accessoriesList.get(i).setId(i);
-            }
-
+            for (Accessory a :accessoriesList)
+                a.setId(accessoriesList.indexOf(a));
         }
     }
 }

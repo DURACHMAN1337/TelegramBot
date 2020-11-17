@@ -71,17 +71,9 @@ public class CharcoalService {
 
     public Charcoal getCharcoalById(long id) {
         ArrayList<Charcoal> charcoals = getAllCharcoal();
-        Charcoal charcoal = new Charcoal();
         for (Charcoal a : charcoals) {
             if (a.getId() == id) {
-                charcoal.setId(a.getId());
-                charcoal.setName(a.getName());
-                charcoal.setPrice(a.getPrice());
-                charcoal.setImg(a.getImg());
-                charcoal.setAvailable(a.isAvailable());
-                charcoal.setDescription(a.getDescription());
-
-                return charcoal;
+                return a;
             }
         }
         return null;

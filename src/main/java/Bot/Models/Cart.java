@@ -130,28 +130,31 @@ public class Cart {
         for (Product product : cart) {
             if (product instanceof Tobacco) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("<li>Табак <b>").append(product.getName()).append("</b><br>(").append(product.getTaste()).append(")<br>")
+                sb.append("<li>Табак <a href=\"").append(product.getImg()).append("\"><b>").append(product.getName())
+                        .append("</b></a><br>(").append(product.getTaste()).append(")<br>")
                         .append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.</li>");
             } else if (product instanceof Hookah) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("<li>Кальян <b>").append(product.getBrand()).append(" ").append(product.getName()).append("</b><br>")
+                sb.append("<li>Кальян <a href=\"").append(product.getImg()).append("\"><b>").append(product.getBrand())
+                        .append(" ").append(product.getName()).append("</b></a><br>")
                         .append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.</li>");
             } else if (product instanceof Accessory) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("<li>Аксессуар <b>").append(product.getName())
-                        .append("</b><br>").append(product.getCount()).append(" шт. X ").append(product.getPrice())
+                sb.append("<li>Аксессуар <a href=\"").append(product.getImg()).append("\"><b>").append(product.getName())
+                        .append("</b></a><br>").append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.</li>\n\n");
             } else if (product instanceof Charcoal) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("<li>Уголь <b>").append(product.getName()).append("</b><br>")
+                sb.append("<li>Уголь <a href=\"").append(product.getImg()).append("\"><b>").append(product.getName())
+                        .append("</b></a><br>")
                         .append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.</li>");
-            }
-            else if (product instanceof Vaporizer) {
+            } else if (product instanceof Vaporizer) {
                 sumPrice += product.getPrice() * product.getCount();
-                sb.append("<li>Эл. Испаритель <b>").append(product.getName()).append("</b><br>")
+                sb.append("<li>Эл. Испаритель <a href=\"").append(product.getImg()).append("\"><b>").append(product.getName())
+                        .append("</b></a><br>")
                         .append(product.getCount()).append(" шт. X ").append(product.getPrice())
                         .append(" руб.</li>");
             }

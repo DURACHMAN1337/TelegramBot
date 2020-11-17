@@ -68,24 +68,6 @@ public class TobaccoService {
         return new ArrayList<>(resFortresses);
     }
 
-    public ArrayList<String> getAvailableFortressesByStreet(String street) {
-        HashSet<String> resFortressesRad = new HashSet<>();
-        HashSet<String> resFortressesKar = new HashSet<>();
-        for (Tobacco t : tobaccoList) {
-            if (t.isAvailable()) {
-                String fortress = t.getFortress();
-                if (t.getRadonejskayaTastes() != null)
-                    resFortressesRad.add(fortress);
-                else if (t.getKarlaMarksaTastes() != null)
-                    resFortressesKar.add(fortress);
-            }
-        }
-        if (street.equals("Rad"))
-            return new ArrayList<>(resFortressesRad);
-        else
-            return new ArrayList<>(resFortressesKar);
-    }
-
     public Tobacco getTobaccoById(long id) {
         ArrayList<Tobacco> tobacco = getAllTobacco();
         for (Tobacco t : tobacco) {
