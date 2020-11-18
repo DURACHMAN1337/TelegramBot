@@ -19,16 +19,9 @@ import java.util.*;
 public class AccessoriesService {
     private ArrayList<Accessory> accessoriesList = new ArrayList<>();
 
-
-    public static void main(String[] args) {
-        AccessoriesService accessoriesService = new AccessoriesService();
-        System.out.println(accessoriesService.getAllAccessories());
-
-    }
-
     public AccessoriesService() {
         Date date = new Date();
-        parseAllAccessories("xml");
+        parseAllAccessories("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг акссесуаров занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");

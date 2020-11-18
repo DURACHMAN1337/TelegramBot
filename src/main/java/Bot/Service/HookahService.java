@@ -20,13 +20,9 @@ import java.util.HashSet;
 public class HookahService {
     private ArrayList<Hookah> hookahsList = new ArrayList<>();
 
-    public static void main(String[] args) {
-        HookahService hookahService = new HookahService();
-    }
-
     public HookahService() {
         Date date = new Date();
-        parseAllHookahs("xml");
+        parseAllHookahs("xm");
         Date date2 = new Date();
         long dateRes1 = date2.getTime() - date.getTime();
         System.out.println("Парсинг кальянов занял " + dateRes1 / 1000 + " с " + dateRes1 % 1000 + " мс");

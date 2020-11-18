@@ -20,17 +20,9 @@ import java.util.Date;
 public class VaporizerService {
     private ArrayList<Vaporizer> vaporizersList = new ArrayList<>();
 
-    public static void main(String[] args) {
-        VaporizerService vaporizerService = new VaporizerService();
-        System.out.println(vaporizerService.getAllNamesList());
-        System.out.println(vaporizerService.getVaporizerById(5));
-        System.out.println(vaporizerService.getAvailableVaporizers());
-
-    }
-
     public VaporizerService() {
         Date date = new Date();
-        parseAllVaporizers("xml");
+        parseAllVaporizers("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг испарителей занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");

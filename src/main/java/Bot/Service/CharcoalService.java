@@ -31,7 +31,7 @@ public class CharcoalService {
 
     public CharcoalService() {
         Date date = new Date();
-        parseAllCharcoal("xml");
+        parseAllCharcoal("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг углей занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");

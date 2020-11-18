@@ -191,7 +191,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             switch (text) {
                 case "/start":
                     sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
-                            .setText("*Добро пожаловать в - GRIZZLY SHOP -!*\n" +
+                            .setText("*Добро пожаловать в GRIZZLY SHOP!*\n" +
                                     "У нас вы найдёте большой ассортимент кальянной продукции, " +
                                     "включая всевозможные аксесуары и огромный выбор табака!" +
                                     "\n\n\uD83D\uDD1E *Данный магазин предназначен для лиц " +
@@ -1633,7 +1633,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .endRow()
                         .rebuild(mes_id);
                 editMessage.setText("*Наличие вкусов по адресу: Радонежская 1*\n\nВыберите вкус табака:");
-            } 
+            }
             else {
                 addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?KarTastes","")));
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)

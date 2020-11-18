@@ -19,13 +19,9 @@ import java.util.*;
 public class TobaccoService {
     private ArrayList<Tobacco> tobaccoList = new ArrayList<>();
 
-    public static void main(String[] args) throws IOException, CloneNotSupportedException {
-        TobaccoService tobaccoService = new TobaccoService();
-    }
-
     public TobaccoService() {
         Date date = new Date();
-        parseAllTobacco("xml");
+        parseAllTobacco("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг табаков занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
