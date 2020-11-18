@@ -79,7 +79,6 @@ public class XMLWriter {
             e.printStackTrace();
         }
     }
-
     private static Node addHookah(Document doc, long id, String brand, String name, long price,
                                   String img, boolean isAvailable, String description) {
         Element newHookah = doc.createElement("Hookah");
