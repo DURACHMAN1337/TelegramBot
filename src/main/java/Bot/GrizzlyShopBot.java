@@ -2152,7 +2152,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             javax.mail.Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress("grizzly_shop_bot@mail.ru"));
             message.setRecipients(javax.mail.Message.RecipientType.TO,
-                    InternetAddress.parse("kozikov.dmitrii@mail.ru"));
+                    InternetAddress.parse("hot-dj@mail.ru"));
             message.setSubject("Новый заказ");
             message.setContent(order.toStringHTML());
             Transport.send(message);
