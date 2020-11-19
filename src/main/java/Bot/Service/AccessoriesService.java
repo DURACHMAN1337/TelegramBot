@@ -48,7 +48,6 @@ public class AccessoriesService {
         return new ArrayList<>(list);
     }
 
-
     public ArrayList<Accessory> getAccessoriesByType(String type) {
         ArrayList<Accessory> accessories = getAllAccessories();
         ArrayList<Accessory> resAccessories = new ArrayList<>();
@@ -62,9 +61,11 @@ public class AccessoriesService {
 
     public ArrayList<Accessory> getAccessoriesBowlsByBrand(String brand) {
         ArrayList<Accessory> resAccessories = new ArrayList<>();
-        for (Accessory accessory : accessoriesList) {
-            if (accessory.getBrand().contains(brand)) {
-                resAccessories.add(accessory);
+        for (Accessory accessory : getAccessoriesByType("Чаша")) {
+            if (accessory.getBrand() != null) {
+                if (accessory.getBrand().contains(brand)) {
+                    resAccessories.add(accessory);
+                }
             }
         }
         return resAccessories;
