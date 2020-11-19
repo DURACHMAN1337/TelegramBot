@@ -20,15 +20,6 @@ import java.util.Date;
 public class CharcoalService {
     private ArrayList<Charcoal> charcoalList = new ArrayList<>();
 
-    public static void main(String[] args) {
-        CharcoalService charcoalService = new CharcoalService();
-        System.out.println(charcoalService.getAllNamesList());
-        System.out.println(charcoalService.getAvailableCharcoal());
-        System.out.println(charcoalService.getCharcoalById(1));
-        System.out.println(charcoalService.getAvailableCharcoalNamesList());
-
-    }
-
     public CharcoalService() {
         Date date = new Date();
         parseAllCharcoal("xm");
@@ -51,47 +42,11 @@ public class CharcoalService {
         return result;
     }
 
-    public ArrayList<String> getAvailableCharcoalNamesList(){
-        ArrayList<Charcoal> list = getAvailableCharcoal();
-        ArrayList<String> result = new ArrayList<>();
-
-        for (Charcoal charcoal : list) {
-            result.add(charcoal.getName());
-        }
-        return result;
-    }
-
-    public ArrayList<String> getAllNamesList() {
-        ArrayList<String> names = new ArrayList<>();
-        for (Charcoal charcoal : getAllCharcoal()) {
-            names.add(charcoal.getName());
-        }
-        return names;
-    }
-
     public Charcoal getCharcoalById(long id) {
         ArrayList<Charcoal> charcoals = getAllCharcoal();
         for (Charcoal a : charcoals) {
             if (a.getId() == id) {
                 return a;
-            }
-        }
-        return null;
-    }
-
-    public Charcoal getCharcoalByName(String name) {
-        ArrayList<Charcoal> charcoals = getAllCharcoal();
-        Charcoal charcoal = new Charcoal();
-        for (Charcoal c : charcoals) {
-            if (c.getName().equals(name)) {
-                charcoal.setId(c.getId());
-                charcoal.setName(c.getName());
-                charcoal.setPrice(c.getPrice());
-                charcoal.setImg(c.getImg());
-                charcoal.setAvailable(c.isAvailable());
-                charcoal.setDescription(c.getDescription());
-
-                return charcoal;
             }
         }
         return null;
@@ -122,7 +77,7 @@ public class CharcoalService {
             charcoal.setName(charcoalNode.getAttributes().getNamedItem("name").getNodeValue());
             charcoal.setPrice(Long.parseLong(charcoalNode.getAttributes().getNamedItem("price").getNodeValue()));
             charcoal.setImg(charcoalNode.getAttributes().getNamedItem("img").getNodeValue());
-            charcoal.setAvailable(Boolean.valueOf(charcoalNode.getAttributes().getNamedItem("isAvailable").getNodeValue()));
+            charcoal.setAvailable(Boolean.parseBoolean(charcoalNode.getAttributes().getNamedItem("isAvailable").getNodeValue()));
             charcoal.setDescription(charcoalNode.getAttributes().getNamedItem("description").getNodeValue());
             charcoalList.add(charcoal);
         }

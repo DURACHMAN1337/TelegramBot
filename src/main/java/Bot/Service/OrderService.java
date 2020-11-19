@@ -23,8 +23,4 @@ public class OrderService {
             return order;
         }
     }
-
-    public long cartsSize() {
-        return orders.size();
-    }
 }

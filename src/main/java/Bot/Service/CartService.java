@@ -29,10 +29,6 @@ public class CartService {
         carts.get(chat_id).getCart().clear();
     }
 
-    public long cartsSize() {
-        return carts.size();
-    }
-
     public void deleteFromCart(Product product, long chat_id) {
         ArrayList<Product> cart = getUserCart(chat_id).getCart();
         for (Product p : cart) {

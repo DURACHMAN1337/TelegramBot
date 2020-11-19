@@ -150,7 +150,8 @@ public class AccessoriesService {
     public void parseAllAccessories(String type) {
         if (type.equals("xml")) {
             parseAccessoriesFromXML();
-        } else {
+        }
+        else {
             accessoriesList = new ArrayList<>();
             for (int i = 1; i < 12; i++) {
                 Document document;

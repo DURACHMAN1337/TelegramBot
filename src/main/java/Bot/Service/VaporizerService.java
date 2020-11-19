@@ -42,24 +42,6 @@ public class VaporizerService {
         return result;
     }
 
-    public ArrayList<String> getAvailableVaporizersNamesList(){
-        ArrayList<Vaporizer> list = getAvailableVaporizers();
-        ArrayList<String> result = new ArrayList<>();
-
-        for (Vaporizer vaporizer : list) {
-            result.add(vaporizer.getName());
-        }
-        return result;
-    }
-
-    public ArrayList<String> getAllNamesList() {
-        ArrayList<String> names = new ArrayList<>();
-        for (Vaporizer vaporizer : getAllVaporizers()) {
-            names.add(vaporizer.getName());
-        }
-        return names;
-    }
-
     public Vaporizer getVaporizerById(long id) {
         for (Vaporizer vaporizer : vaporizersList) {
             if (vaporizer.getId() == id)
