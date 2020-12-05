@@ -22,7 +22,7 @@ public class AccessoriesService {
 
     public AccessoriesService() {
         Date date = new Date();
-        parseAllAccessories("xm");
+        parseAllAccessories("xml");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг акссесуаров занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
@@ -197,13 +197,12 @@ public class AccessoriesService {
                     }
                     accessory.setImg(image.child(0).child(0).attr("src"));
                     String price = info.first().child(1).text().replaceAll(".00 руб.", "");
-                    if (price.length() > 5) {
+                    if (price.trim().contains(" ")) {
                         String[] priceArr = price.split(" ");
                         accessory.setPrice(Long.parseLong(priceArr[1]));
                     } else {
                         accessory.setPrice(Long.parseLong(price));
                     }
-                    accessory.setPrice(Long.parseLong(price));
                     Element description = document.getElementsByClass("woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab").first();
                     if (description != null) {
                         accessory.setDescription(description.child(1).text());
