@@ -84,9 +84,14 @@ public class VaporizerService {
         if (type.equals("xml")) {
             parseVaporizersFromXML();
         } else {
-            Document document;
-            try {
-                document = Jsoup.connect("https://hookahinrussia.ru/product-category/elecrtonic_vaporizers/").get();
+            for (int j = 1; j < 5; j++) {
+                Document document;
+                try {
+                    document = Jsoup.connect("https://hookahinrussia.ru/product-category/elecrtonic_vaporizers/page/" + j + "/").get();
+                } catch (IOException e) {
+                    System.err.println("Указанной страницы '" + j + "' не существует!");
+                    break;
+                }
                 ArrayList<Vaporizer> tempVaporizers = new ArrayList<>();
                 Elements elements = document.getElementsByClass("products columns-4").select("li");
 
@@ -126,10 +131,6 @@ public class VaporizerService {
                 for (int i = 0; i < vaporizersList.size(); i++) {
                     vaporizersList.get(i).setId(i);
                 }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }

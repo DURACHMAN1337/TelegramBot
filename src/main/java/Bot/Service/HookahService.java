@@ -22,7 +22,7 @@ public class HookahService {
 
     public HookahService() {
         Date date = new Date();
-        parseAllHookahs("xml");
+        parseAllHookahs("xm");
         Date date2 = new Date();
         long dateRes1 = date2.getTime() - date.getTime();
         System.out.println("Парсинг кальянов занял " + dateRes1 / 1000 + " с " + dateRes1 % 1000 + " мс");
@@ -119,7 +119,7 @@ public class HookahService {
         if (type.equals("xml")) {
             parseHookahsFromXML();
         } else {
-            for (int i = 1; i < 7; i++) {
+            for (int i = 1; i < 12; i++) {
                 Document document;
                 try {
                     document = Jsoup.connect("https://hookahinrussia.ru/product-category/%d0%ba%d0%b0%d0%bb%d1%8c%d1%8f%d0%bd%d1%8b/page/" + i + "/").get();

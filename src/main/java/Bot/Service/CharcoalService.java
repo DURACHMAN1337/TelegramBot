@@ -120,7 +120,6 @@ public class CharcoalService {
                     Element description = document.getElementsByClass("woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content wc-tab").first();
 
                     if (description != null) {
-                        System.out.println(charcoal);
                         charcoal.setDescription(description.child(2).text());
                     } else {
                         charcoal.setDescription("Описание данного товара не доступно.");

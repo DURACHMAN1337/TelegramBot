@@ -22,7 +22,7 @@ public class AccessoriesService {
 
     public AccessoriesService() {
         Date date = new Date();
-        parseAllAccessories("xml");
+        parseAllAccessories("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг акссесуаров занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
@@ -154,7 +154,7 @@ public class AccessoriesService {
         }
         else {
             accessoriesList = new ArrayList<>();
-            for (int i = 1; i < 12; i++) {
+            for (int i = 1; i < 16; i++) {
                 Document document;
                 try {
                     document = Jsoup.connect("https://hookahinrussia.ru/product-category/%D0%B0%D0%BA%D1%81%D0%B5%D1%81%D1%81%D1%83%D0%B0%D1%80%D1%8B/page/" + i + "/").get();

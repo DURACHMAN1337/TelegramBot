@@ -21,7 +21,7 @@ public class TobaccoService {
 
     public TobaccoService() {
         Date date = new Date();
-        parseAllTobacco("xml");
+        parseAllTobacco("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг табаков занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
@@ -41,7 +41,7 @@ public class TobaccoService {
     }
 
     public ArrayList<String> getAllFortresses() {
-        List<String> fortresses = Arrays.asList("Легкая", "Средняя", "Выше средней", "Высокая", "Очень высокая");
+        List<String> fortresses = Arrays.asList("Легкая", "Средняя", "Высокая", "Очень высокая");
         return new ArrayList<>(fortresses);
     }
 
@@ -127,7 +127,7 @@ public class TobaccoService {
         }
         else {
             tobaccoList = new ArrayList<>();
-            for (int i = 1; i < 5; i++) {
+            for (int i = 1; i < 12; i++) {
                 Document document;
                 try {
                     document = Jsoup.connect("https://hookahinrussia.ru/product-category/%D0%B1%D1%80%D0%B5%D0%BD%D0%B4%D1%8B/page/" + i + "/").get();
@@ -164,8 +164,6 @@ public class TobaccoService {
                         String fortress = description.text().split("Крепость: ")[1].split(" ")[0];
                         if (fortress.equals("Очень"))
                             tobacco.setFortress("Очень высокая");
-                        else if (fortress.equals("Выше"))
-                            tobacco.setFortress("Выше средней");
                         else
                             tobacco.setFortress(fortress);
                     }
