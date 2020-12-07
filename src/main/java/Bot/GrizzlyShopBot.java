@@ -2164,15 +2164,20 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
 
         long dmt_chat_id = 757517710;
         long den_chat_id = 416481326;
+        long leha_chat_id = 474218137;
         SendMessage sendMessage1 = new SendMessage().setChatId(dmt_chat_id);
         SendMessage sendMessage2 = new SendMessage().setChatId(den_chat_id);
+        SendMessage sendMessage3 = new SendMessage().setChatId(leha_chat_id);
         sendMessage1.setText(order.toString());
         sendMessage1.setParseMode("Markdown");
         sendMessage2.setText(order.toString());
         sendMessage2.setParseMode("Markdown");
+        sendMessage3.setText(order.toString());
+        sendMessage3.setParseMode("Markdown");
         try {
             execute(sendMessage1);
             execute(sendMessage2);
+            execute(sendMessage3);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
