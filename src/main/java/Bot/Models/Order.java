@@ -109,8 +109,8 @@ public class Order {
                     new DataHandler(
     "<html>" +
             "<body>" +
-            "<div style=\"display: flex; gap: 10px; justify-content: space-evenly; align-items: center; justify-content: center\">" +
-                "<div style=\"padding-right: 15px; border-right: 3px solid #535353 \">" +
+            "<div style=\"gap: 10px; justify-content: space-evenly; align-items: center; justify-content: center\">" +
+                "<div>" +
                     "<h3 style=\"margin-top: 0px;\">\uD83D\uDCCB Заказ</h3>" +
                     "<b>Номер чата:</b> " + chat_id + "</br>" +
                     "<b>Дата заказа:</b> " + timeStamp +
@@ -125,6 +125,7 @@ public class Order {
                     "<b>Адрес получения:</b> " + address +
                 "</div>" +
                 "<div>" +
+                    "<hr size= 2 px; color=\"#535353\"/>" +
                     "<h3>\uD83D\uDED2 Содержимое корзины</h3>" +
                     customerCartHTML +
                 "</div>" +
