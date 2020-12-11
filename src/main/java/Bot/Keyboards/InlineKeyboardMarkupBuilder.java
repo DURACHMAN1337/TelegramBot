@@ -69,9 +69,18 @@ public class InlineKeyboardMarkupBuilder implements KeyboardMarkupBuilder {
                     rows.add(row);
                     row = new ArrayList<>();
                 }
+                String callbackText = handle + s;
+                if (callbackText.length() > 30) {
+                    if (s.contains("("))
+                        s = s.split("\\(")[1].replace(")","").trim();
+                    String lowerCallbackText = handle + s;
+                    if (lowerCallbackText.length() > 30)
+                        lowerCallbackText = lowerCallbackText.substring(0, 30) + "...";
+                    callbackText = lowerCallbackText.trim();
+                }
                 row.add(new InlineKeyboardButton()
                         .setText(s.trim())
-                        .setCallbackData(handle + s));
+                        .setCallbackData(callbackText));
             }
         }
         if (!row.isEmpty())

@@ -180,12 +180,14 @@ public class TobaccoService {
                         List<org.jsoup.nodes.Node> kTastes = addresses.get(1).childNodes();
                         for (org.jsoup.nodes.Node tasteNode : rTastes) {
                             String taste = tasteNode.toString().replace("<p>","").replace("</p>","")
+                                    .replace("<strong>","").replace("</strong>", "")
                                     .replaceAll("<br>","");
                             if (!taste.isEmpty() && !taste.equals("–") && !taste.equals("-") && !taste.equals(" "))
                                 radonejskaya.add(taste.toLowerCase().trim());
                         }
                         for (org.jsoup.nodes.Node tasteNode : kTastes) {
                             String taste = tasteNode.toString().replace("<p>","").replace("</p>","")
+                                    .replace("<strong>","").replace("</strong>", "")
                                     .replaceAll("<br>","");
                             if (!taste.isEmpty() && !taste.equals("–") && !taste.equals("-") && !taste.equals(" "))
                                 karlaMarksa.add(taste.toLowerCase().trim());
