@@ -22,7 +22,7 @@ public class AccessoriesService {
 
     public AccessoriesService() {
         Date date = new Date();
-        parseAllAccessories("xm");
+        parseAllAccessories("xml");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг акссесуаров занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");

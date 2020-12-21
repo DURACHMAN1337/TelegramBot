@@ -22,7 +22,7 @@ public class VaporizerService {
 
     public VaporizerService() {
         Date date = new Date();
-        parseAllVaporizers("xm");
+        parseAllVaporizers("xml");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг испарителей занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");

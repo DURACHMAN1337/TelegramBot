@@ -22,7 +22,7 @@ public class HookahService {
 
     public HookahService() {
         Date date = new Date();
-        parseAllHookahs("xm");
+        parseAllHookahs("xml");
         Date date2 = new Date();
         long dateRes1 = date2.getTime() - date.getTime();
         System.out.println("Парсинг кальянов занял " + dateRes1 / 1000 + " с " + dateRes1 % 1000 + " мс");
@@ -141,12 +141,16 @@ public class HookahService {
                     Elements info = document.getElementsByClass("summary entry-summary");
                     Element image = document.getElementsByClass("attachment-shop_thumbnail woocommerce-product-gallery__image").first();
                     String name = info.first().child(0).text().replace("Кальян", "");
-                    for (String brand : brandList) {
-                        if (name.toLowerCase().contains(brand.toLowerCase().replace("hookah", "").trim())) {
-                            hookah.setBrand(brand.toUpperCase());
-                            hookah.setName(name.toUpperCase().replace(brand.toUpperCase(), "").replace("X ", "")
+                    for (String brandName : brandList) {
+                        if (name.toLowerCase().contains(brandName.toLowerCase().replace("hookah", "").trim())) {
+                            hookah.setBrand(brandName.toUpperCase());
+                            hookah.setName(name.toUpperCase().replace(brandName.toUpperCase(), "").replace("X ", "")
                                     .replace("DSH", "").trim());
                             break;
+                        }
+                        else {
+                            hookah.setName("website error");
+                            hookah.setBrand("website error");
                         }
                     }
                     hookah.setImg(image.child(0).attr("href"));

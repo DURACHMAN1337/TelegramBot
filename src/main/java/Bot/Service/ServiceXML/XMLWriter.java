@@ -33,29 +33,29 @@ public class XMLWriter {
             Element rootElement =
                     doc.createElement("Products");
             Element hookahNode = doc.createElement("Hookahs");
-            for (Hookah h: HOOKAH_SERVICE.getAllHookahs()) {
-                hookahNode.appendChild(addHookah(doc,h.getId(),h.getBrand(),h.getName(),
-                        h.getPrice(),h.getImg(),h.isAvailable(),h.getDescription()));
+            for (Hookah h : HOOKAH_SERVICE.getAllHookahs()) {
+                hookahNode.appendChild(addHookah(doc, h.getId(), h.getBrand(), h.getName(),
+                        h.getPrice(), h.getImg(), h.isAvailable(), h.getDescription()));
             }
             Element tobaccoNode = doc.createElement("Tobaccos");
-            for (Tobacco t: TOBACCO_SERVICE.getAllTobacco()) {
-                tobaccoNode.appendChild(addTobacco(doc,t.getId(),t.getName(),t.getPrice(),t.getImg(),t.isAvailable(),
-                        t.getTaste(),t.getRadonejskayaTastes(),t.getKarlaMarksaTastes(),t.getDescription(),t.getFortress()));
+            for (Tobacco t : TOBACCO_SERVICE.getAllTobacco()) {
+                tobaccoNode.appendChild(addTobacco(doc, t.getId(), t.getName(), t.getPrice(), t.getImg(), t.isAvailable(),
+                        t.getTaste(), t.getRadonejskayaTastes(), t.getKarlaMarksaTastes(), t.getDescription(), t.getFortress()));
             }
             Element accessoryNode = doc.createElement("Accessories");
-            for (Accessory a: ACCESSORIES_SERVICE.getAllAccessories()) {
-                accessoryNode.appendChild(addAccessory(doc,a.getId(),a.getBrand(),a.getName(),a.getPrice(),a.getImg(),
-                        a.isAvailable(),a.getType(),a.getDescription()));
+            for (Accessory a : ACCESSORIES_SERVICE.getAllAccessories()) {
+                accessoryNode.appendChild(addAccessory(doc, a.getId(), a.getBrand(), a.getName(), a.getPrice(), a.getImg(),
+                        a.isAvailable(), a.getType(), a.getDescription()));
             }
             Element charcoalNode = doc.createElement("Charcoals");
-            for (Charcoal c: CHARCOAL_SERVICE.getAllCharcoal()) {
-                charcoalNode.appendChild(addCharcoal(doc,c.getId(),c.getBrand(),c.getName(),c.getPrice(),c.getImg(),
-                        c.isAvailable(),c.getDescription()));
+            for (Charcoal c : CHARCOAL_SERVICE.getAllCharcoal()) {
+                charcoalNode.appendChild(addCharcoal(doc, c.getId(), c.getBrand(), c.getName(), c.getPrice(), c.getImg(),
+                        c.isAvailable(), c.getDescription()));
             }
             Element vaporizerNode = doc.createElement("Vaporizers");
-            for (Vaporizer v: VAPORIZER_SERVICE.getAllVaporizers()) {
-                vaporizerNode.appendChild(addVaporizer(doc,v.getId(),v.getName(),v.getPrice(),v.getImg(),
-                        v.isAvailable(),v.getDescription()));
+            for (Vaporizer v : VAPORIZER_SERVICE.getAllVaporizers()) {
+                vaporizerNode.appendChild(addVaporizer(doc, v.getId(), v.getName(), v.getPrice(), v.getImg(),
+                        v.isAvailable(), v.getDescription()));
             }
             // добавляем корневой элемент в объект Document
             doc.appendChild(rootElement);
@@ -79,6 +79,7 @@ public class XMLWriter {
             e.printStackTrace();
         }
     }
+
     private static Node addHookah(Document doc, long id, String brand, String name, long price,
                                   String img, boolean isAvailable, String description) {
         Element newHookah = doc.createElement("Hookah");
@@ -110,7 +111,7 @@ public class XMLWriter {
     }
 
     private static Node addAccessory(Document doc, long id, String brand, String name, long price, String img,
-                                   boolean isAvailable, String type, String description) {
+                                     boolean isAvailable, String type, String description) {
         Element newAccessory = doc.createElement("Accessory");
         newAccessory.setAttribute("id", String.valueOf(id));
         newAccessory.setAttribute("brand", brand);
@@ -124,7 +125,7 @@ public class XMLWriter {
     }
 
     private static Node addCharcoal(Document doc, long id, String brand, String name, long price, String img,
-                                     boolean isAvailable, String description) {
+                                    boolean isAvailable, String description) {
         Element newAccessory = doc.createElement("Charcoal");
         newAccessory.setAttribute("id", String.valueOf(id));
         newAccessory.setAttribute("brand", brand);
@@ -137,7 +138,7 @@ public class XMLWriter {
     }
 
     private static Node addVaporizer(Document doc, long id, String name, long price, String img,
-                                    boolean isAvailable, String description) {
+                                     boolean isAvailable, String description) {
         Element newAccessory = doc.createElement("Vaporizer");
         newAccessory.setAttribute("id", String.valueOf(id));
         newAccessory.setAttribute("name", name);

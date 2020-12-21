@@ -16,12 +16,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiRequestException;
 
-import javax.mail.*;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import java.util.Properties;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
 public class GrizzlyShopBot extends TelegramLongPollingBot {
 
@@ -43,6 +46,18 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
     private static final ArrayList<Tobacco> allAvailableTobaccos = TOBACCO_SERVICE.getAllAvailableTobacco();
     private static final ArrayList<String> allTobaccoFortresses = TOBACCO_SERVICE.getAllFortresses();
     private static final ArrayList<String> allAvailableTobaccoFortresses = TOBACCO_SERVICE.getAllAvailableFortresses();
+    public String gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwagxgdxbcewibcvubwwevdowieibhoeasdaasgdqwes = "EdDNMvak";
+    public String gbpihquowbgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgdxbcewibcvubwwevdowieibhoeasdaasgdqwee = "xx0kVgm1";
+    public String gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjhgfdsaqwertyuiokjhgfdsazxcvbnmjhgfdtnufoivunrngtruntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvyergfvuyvwgxgedixbgcewibcvubewiwevdowieibhoe = "1238275";
+    public String gbpihquoibgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbcewibcvubewiwevdowieibhoeasdaasgdu = "DKQpxjx";
+    public String gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasdaasgdqwes = "097:AAGnn";
+    public String gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjgfdsaqwertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtrntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbgcewibcvubewiwevdowieibhoeasdas = "Cfjey6z";
+    public String gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihasdasbgnyygcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasqwehqwehhh = gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjhgfdsaqwertyuiokjhgfdsazxcvbnmjhgfdtnufoivunrngtruntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvyergfvuyvwgxgedixbgcewibcvubewiwevdowieibhoe +
+            gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasdaasgdqwes +
+            gbpihquoibgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbcewibcvubewiwevdowieibhoeasdaasgdu +
+            gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjgfdsaqwertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtrntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbgcewibcvubewiwevdowieibhoeasdas +
+            gbpihquowbgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgdxbcewibcvubwwevdowieibhoeasdaasgdqwee +
+            gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwagxgdxbcewibcvubwwevdowieibhoeasdaasgdqwes;
 
     public static void main(String[] args) {
         ApiContextInitializer.init();
@@ -53,7 +68,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
             e.printStackTrace();
         }
     }
-
 
     public synchronized void onUpdateReceived(Update update) {
         try {
@@ -186,8 +200,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     .button("❎ Изменить адрес доставки")
                     .endRow()
                     .build();
-        }
-        else {
+        } else {
             switch (text) {
                 case "/start":
                     sendMessage = ReplyKeyboardMarkupBuilder.create(chat_id)
@@ -407,8 +420,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         return sendMessage.setParseMode("Markdown");
     }
 
-    public String gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwagxgdxbcewibcvubwwevdowieibhoeasdaasgdqwes = "EdDNMvak";
-
     public synchronized EditMessageText availableHookahHandle(String text, long chat_id, long mes_id) {
         text = text.substring(3);
         EditMessageText editMessage;
@@ -421,8 +432,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Наличие / Кальяны*\n\nКальяны бренда *" + text + "*: ");
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             Hookah cartHookah;
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
             int count;
@@ -431,7 +441,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("hA/&" + id + "?" + ++count,"crt")
+                        .countButtons("hA/&" + id + "?" + ++count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/?id" + id)
@@ -439,15 +449,14 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + cartHookah.getBrand() + "* | " + cartHookah.getName() +
                         "\n💵 " + count + " _шт._ `X` " + (cartHookah.getPrice()) + " _руб._" +
-                        " = " + (cartHookah.getPrice()*count) + " _руб._" +
+                        " = " + (cartHookah.getPrice() * count) + " _руб._" +
                         "\n*(цена указана за полный комлект)*" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?down")) {
+            } else if (text.contains("?down")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("hA/&" + id + "?" + --count,"crt")
+                        .countButtons("hA/&" + id + "?" + --count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/?id" + id)
@@ -455,11 +464,10 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + cartHookah.getBrand() + "* | " + cartHookah.getName() +
                         "\n💵 " + count + " _шт._ `X` " + (cartHookah.getPrice()) + " _руб._" +
-                        " = " + (cartHookah.getPrice()*count) + " _руб._" +
+                        " = " + (cartHookah.getPrice() * count) + " _руб._" +
                         "\n*(цена указана за полный комлект)*" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?crt")) {
+            } else if (text.contains("?crt")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 cartHookah.setCount(count);
                 CART_SERVICE.addToCart(cartHookah, chat_id);
@@ -478,12 +486,11 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + cartHookah.getPrice() + " руб. *\n*(цена указана за полный комлект)*" +
                         "\n\n" + cartHookah.getDescription().trim() +
                         "\n[_](" + cartHookah.getImg() + ")");
-            }
-            else {
+            } else {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("hA/&" + id + "?" + "1","crt")
+                        .countButtons("hA/&" + id + "?" + "1", "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "hA/?id" + id)
@@ -491,12 +498,11 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + cartHookah.getBrand() + "* | " + cartHookah.getName() +
                         "\n💵 " + count + " _шт._ `X` " + (cartHookah.getPrice()) + " _руб._" +
-                        " = " + (cartHookah.getPrice()*count) + " _руб._" +
+                        " = " + (cartHookah.getPrice() * count) + " _руб._" +
                         "\n*(цена указана за полный комлект)*" +
                         "\n\nВыберите необходимое количество:");
             }
-        }
-        else if (text.contains("?id")) {
+        } else if (text.contains("?id")) {
             Hookah idHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("?id", "")));
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .row()
@@ -510,8 +516,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n💵 *" + idHookah.getPrice() + " руб. *\n*(цена указана за полный комлект)*" +
                     "\n\n" + idHookah.getDescription().trim() +
                     "\n[_](" + idHookah.getImg() + ")");
-        }
-        else if (text.contains("?del")) {
+        } else if (text.contains("?del")) {
             Hookah delHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("?del", "")));
             CART_SERVICE.deleteFromCart(delHookah, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -526,8 +531,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n💵 *" + delHookah.getPrice() + " руб.*" +
                     "\n\n" + delHookah.getDescription().trim() +
                     "\n[_](" + delHookah.getImg() + ")");
-        }
-        else {
+        } else {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(availableHookahBrands, "hA/")
                     .row()
@@ -552,8 +556,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Каталог / Кальяны*\n\nКальяны бренда *" + text + "*: ");
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             Hookah cartHookah;
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
             int count;
@@ -562,7 +565,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("h&" + id + "?" + ++count,"crt")
+                        .countButtons("h&" + id + "?" + ++count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "h?id" + id)
@@ -570,15 +573,14 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + cartHookah.getBrand() + "* | " + cartHookah.getName() +
                         "\n💵 " + count + " _шт._ `X` " + (cartHookah.getPrice()) + " _руб._" +
-                        " = " + (cartHookah.getPrice()*count) + " _руб._" +
+                        " = " + (cartHookah.getPrice() * count) + " _руб._" +
                         "\n*(цена указана за полный комлект)*" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?down")) {
+            } else if (text.contains("?down")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("h&" + id + "?" + --count,"crt")
+                        .countButtons("h&" + id + "?" + --count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "h?id" + id)
@@ -586,11 +588,10 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + cartHookah.getBrand() + "* | " + cartHookah.getName() +
                         "\n💵 " + count + " _шт._ `X` " + (cartHookah.getPrice()) + " _руб._" +
-                        " = " + (cartHookah.getPrice()*count) + " _руб._" +
+                        " = " + (cartHookah.getPrice() * count) + " _руб._" +
                         "\n*(цена указана за полный комлект)*" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?crt")) {
+            } else if (text.contains("?crt")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 cartHookah.setCount(count);
                 CART_SERVICE.addToCart(cartHookah, chat_id);
@@ -609,12 +610,11 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + cartHookah.getPrice() + " руб. *\n*(цена указана за полный комлект)*" +
                         "\n\n" + cartHookah.getDescription().trim() +
                         "\n[_](" + cartHookah.getImg() + ")");
-            }
-            else {
+            } else {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("h&" + id + "?" + "1","crt")
+                        .countButtons("h&" + id + "?" + "1", "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "h?id" + id)
@@ -622,12 +622,11 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + cartHookah.getBrand() + "* | " + cartHookah.getName() +
                         "\n💵 " + count + " _шт._ `X` " + (cartHookah.getPrice()) + " _руб._" +
-                        " = " + (cartHookah.getPrice()*count) + " _руб._" +
+                        " = " + (cartHookah.getPrice() * count) + " _руб._" +
                         "\n*(цена указана за полный комлект)*" +
                         "\n\nВыберите необходимое количество:");
             }
-        }
-        else if (text.contains("?id")) {
+        } else if (text.contains("?id")) {
             currHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("?id", "")));
             if (currHookah.isAvailable()) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -642,8 +641,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + currHookah.getPrice() + " руб. *\n*(цена указана за полный комлект)*" +
                         "\n\n" + currHookah.getDescription().trim() +
                         "\n[_](" + currHookah.getImg() + ")");
-            }
-            else {
+            } else {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("🔙 Назад", "hКальяны")
@@ -654,8 +652,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n\n" + currHookah.getDescription().trim() +
                         "\n[_](" + currHookah.getImg() + ")");
             }
-        }
-        else if (text.contains("?del")) {
+        } else if (text.contains("?del")) {
             Hookah delHookah = HOOKAH_SERVICE.getHookahById(Long.parseLong(text.replace("?del", "")));
             CART_SERVICE.deleteFromCart(delHookah, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -670,8 +667,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n💵 *" + delHookah.getPrice() + " руб.*" +
                     "\n\n" + delHookah.getDescription().trim() +
                     "\n[_](" + delHookah.getImg() + ")");
-        }
-        else {
+        } else {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allHookahBrands, "h")
                     .row()
@@ -860,7 +856,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 count = 1;
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("u&" + id + "?" + "1","crt")
+                        .countButtons("u&" + id + "?" + "1", "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "u?id" + id)
@@ -925,8 +921,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         return editMessageText.setParseMode("Markdown");
     }
 
-    public String gbpihquowbgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgdxbcewibcvubwwevdowieibhoeasdaasgdqwee = "xx0kVgm1";
-
     public synchronized EditMessageText availableAccessoryHandle(String text, long chat_id, long mes_id) {
         text = text.substring(3);
         EditMessageText editMessageText;
@@ -939,8 +933,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .endRow()
                         .rebuild(mes_id);
                 editMessageText.setText("*Наличие / Акссесуары / Чаши*\n\nВыберите необходимый бренд:");
-            }
-            else {
+            } else {
                 ArrayList<Accessory> accessories = ACCESSORIES_SERVICE.getAccessoriesByType(text);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .accessoryButtons(accessories, "aA/")
@@ -950,8 +943,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessageText.setText("*Наличие / Аксесуары*\n\nВыберите необходимый товар:");
             }
-        }
-        else if (text.contains("bBrand?")) {
+        } else if (text.contains("bBrand?")) {
             ArrayList<Accessory> accessories = ACCESSORIES_SERVICE.getAvailableAccessoriesBowlsByBrand(text.split("\\?")[1]);
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .accessoryButtons(accessories, "aA/")
@@ -960,8 +952,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     .endRow()
                     .rebuild(mes_id);
             editMessageText.setText("*Наличие / Акссесуары / Чаши*\n\nТовары бренда: *" + text + "*");
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
             int count;
             Accessory cartAccessory = ACCESSORIES_SERVICE.getAccessoryById(id);
@@ -976,7 +967,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aA/?id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getType() + " | " +  fullName.replace("null ", "").trim() + "*" +
+                editMessageText.setText("🏷 *" + cartAccessory.getType() + " | " + fullName.replace("null ", "").trim() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -990,7 +981,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .button("🔙 Назад", "aA/?id" + id)
                         .endRow()
                         .rebuild(mes_id);
-                editMessageText.setText("🏷 *" + cartAccessory.getType() + " | " +  fullName.replace("null ", "").trim() + "*" +
+                editMessageText.setText("🏷 *" + cartAccessory.getType() + " | " + fullName.replace("null ", "").trim() + "*" +
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
@@ -1045,8 +1036,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n\n" + idAccessory.getDescription().trim() +
                     "\n[_](" + idAccessory.getImg() + ")");
 
-        }
-        else if (text.contains("?del")){
+        } else if (text.contains("?del")) {
             Accessory delAccessory = ACCESSORIES_SERVICE.getAccessoryById(Long.parseLong(text.replace("?del", "")));
             String fullName = delAccessory.getBrand() + " " + delAccessory.getName();
             CART_SERVICE.deleteFromCart(delAccessory, chat_id);
@@ -1062,8 +1052,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n💵 *" + delAccessory.getPrice() + " руб.*" +
                     "\n\n" + delAccessory.getDescription().trim() +
                     "\n[_](" + delAccessory.getImg() + ")");
-        }
-        else {
+        } else {
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allAccessoryTypes, "aA/aType?")
                     .row()
@@ -1088,8 +1077,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .endRow()
                         .rebuild(mes_id);
                 editMessageText.setText("*Каталог / Акссесуары / Чаши*\n\nВыберите необходимый бренд:");
-            }
-            else {
+            } else {
                 ArrayList<Accessory> accessories = ACCESSORIES_SERVICE.getAccessoriesByType(text.split("\\?")[1]);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .accessoryButtons(accessories, "a")
@@ -1099,8 +1087,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessageText.setText("*Каталог / Аксесуары*\n\nВыберите необходимый товар:");
             }
-        }
-        else if (text.contains("bBrand?")) {
+        } else if (text.contains("bBrand?")) {
             ArrayList<Accessory> accessories = ACCESSORIES_SERVICE.getAccessoriesBowlsByBrand(text.split("\\?")[1]);
             editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                     .accessoryButtons(accessories, "a")
@@ -1109,8 +1096,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     .endRow()
                     .rebuild(mes_id);
             editMessageText.setText("*Каталог / Акссесуары / Чаши*\n\nТовары бренда: *" + text + "*");
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             Accessory cartAccessory;
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
             int count;
@@ -1130,8 +1116,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 " + count + " _шт._ `X` " + (cartAccessory.getPrice()) + " _руб._" +
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?down")) {
+            } else if (text.contains("?down")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
@@ -1180,8 +1165,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         " = " + (cartAccessory.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
             }
-        }
-        else if (text.contains("?id")) {
+        } else if (text.contains("?id")) {
             currAccessory = ACCESSORIES_SERVICE.getAccessoryById(Long.parseLong(text.replace("?id", "")));
             String fullName = currAccessory.getBrand() + " " + currAccessory.getName();
             if (currAccessory.isAvailable()) {
@@ -1209,8 +1193,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n\n" + currAccessory.getDescription().trim() +
                         "\n[_](" + currAccessory.getImg() + ")");
             }
-        }
-        else if (text.contains("?del")) {
+        } else if (text.contains("?del")) {
             Accessory delAccessory = ACCESSORIES_SERVICE.getAccessoryById(Long.parseLong(text.replace("?del", "")));
             CART_SERVICE.deleteFromCart(delAccessory, chat_id);
             String fullName = delAccessory.getBrand() + " " + delAccessory.getName();
@@ -1239,22 +1222,19 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         return editMessageText.setParseMode("Markdown");
     }
 
-    public String gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjhgfdsaqwertyuiokjhgfdsazxcvbnmjhgfdtnufoivunrngtruntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvyergfvuyvwgxgedixbgcewibcvubewiwevdowieibhoe = "1238275";
-
     public synchronized EditMessageText availableTobaccoHandle(String text, long chat_id, long mes_id) {
         text = text.substring(3);
         EditMessageText editMessage;
         if (allAvailableTobaccoFortresses.contains(text)) {
             ArrayList<Tobacco> tobaccos = TOBACCO_SERVICE.getTobaccoByFortress(text, allAvailableTobaccos);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .tobaccoButtons(tobaccos,"tA/", "")
+                    .tobaccoButtons(tobaccos, "tA/", "")
                     .row()
                     .button("🔙 Назад", "tA/Табаки")
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Наличие / Табаки*\n\nТабаки крепости: *" + text + "*");
-        }
-        else if (text.contains("cart")) {
+        } else if (text.contains("cart")) {
             Tobacco crtTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("cart", "")));
             if (crtTobacco.getRadonejskayaTastes() != null && !crtTobacco.getRadonejskayaTastes().isEmpty()
                     && !crtTobacco.getRadonejskayaTastes().get(0).equals("null") && crtTobacco.getKarlaMarksaTastes() != null
@@ -1275,8 +1255,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .replace("}", "") + "`\n\n*Проспект Карла Маркса 196* | `"
                         + crtTobacco.getKarlaMarksaTastes().toString().replace("{", "")
                         .replace("}", "") + "`\n\nВыберите магазин:");
-            }
-            else if (crtTobacco.getKarlaMarksaTastes() == null || crtTobacco.getKarlaMarksaTastes().isEmpty()
+            } else if (crtTobacco.getKarlaMarksaTastes() == null || crtTobacco.getKarlaMarksaTastes().isEmpty()
                     || crtTobacco.getKarlaMarksaTastes().get(0).equals("null")) {
                 ArrayList<String> allTastes = crtTobacco.getRadonejskayaTastes();
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1287,8 +1266,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("Данный табак доступен по адресу *Ул. Радонежская 1*.\n\n" +
                         "Выберите интересующий вкус:");
-            }
-            else {
+            } else {
                 ArrayList<String> allTastes = crtTobacco.getKarlaMarksaTastes();
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(allTastes, "tA/&" + crtTobacco.getId() + "?")
@@ -1299,8 +1277,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 editMessage.setText("Данный табак доступен по адресу *Проспект Карла Маркса 196*.\n\n" +
                         "Выберите интересующий вкус:");
             }
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             Tobacco tasteTobacco;
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
             int count;
@@ -1311,7 +1288,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("tA/&" + id + "?" + taste + "?" + ++count,"crt")
+                        .countButtons("tA/&" + id + "?" + taste + "?" + ++count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "t?id" + id)
@@ -1319,14 +1296,13 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + tasteTobacco.getName() + "*  (`" + taste + "`)" +
                         "\n💵 " + count + " _шт._ `X` " + (tasteTobacco.getPrice()) + " _руб._" +
-                        " = " + (tasteTobacco.getPrice()*count) + " _руб._" +
+                        " = " + (tasteTobacco.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?down")) {
+            } else if (text.contains("?down")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("tA/&" + id + "?" + taste + "?" + --count,"crt")
+                        .countButtons("tA/&" + id + "?" + taste + "?" + --count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "t?id" + id)
@@ -1334,10 +1310,9 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + tasteTobacco.getName() + "*  (`" + taste + "`)" +
                         "\n💵 " + count + " _шт._ `X` " + (tasteTobacco.getPrice()) + " _руб._" +
-                        " = " + (tasteTobacco.getPrice()*count) + " _руб._" +
+                        " = " + (tasteTobacco.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?crt")) {
+            } else if (text.contains("?crt")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 tasteTobacco.setCount(count);
                 CART_SERVICE.addToCart(tasteTobacco, chat_id);
@@ -1356,12 +1331,11 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + tasteTobacco.getPrice() + " руб.*" +
                         "\n\n" + tasteTobacco.getDescription().trim() +
                         "\n[_](" + tasteTobacco.getImg() + ")");
-            }
-            else {
+            } else {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("tA/&" + id + "?" + taste + "?" + count,"crt")
+                        .countButtons("tA/&" + id + "?" + taste + "?" + count, "crt")
                         .endRow()
                         .row()
                         .button("Добавить в корзину", "")
@@ -1371,11 +1345,10 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + tasteTobacco.getName() + "*  (`" + taste + "`)" +
                         "\n💵 " + count + " _шт._ `X` " + (tasteTobacco.getPrice()) + " _руб._" +
-                        " = " + (tasteTobacco.getPrice()*count) + " _руб._" +
+                        " = " + (tasteTobacco.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
             }
-        }
-        else if (text.contains("?del")) {
+        } else if (text.contains("?del")) {
             Tobacco delTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?del", "")));
             CART_SERVICE.deleteFromCart(delTobacco, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1390,8 +1363,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n💵 *" + delTobacco.getPrice() + " руб.*" +
                     "\n\n" + delTobacco.getDescription().trim() +
                     "\n[_](" + delTobacco.getImg() + ")");
-        }
-        else if (text.contains("?id")) {
+        } else if (text.contains("?id")) {
             Tobacco idTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?id", "")));
             if (idTobacco.isAvailable()) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1406,8 +1378,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + idTobacco.getPrice() + " руб.*" +
                         "\n\n" + idTobacco.getDescription().trim() +
                         "\n[_](" + idTobacco.getImg() + ")");
-            }
-            else {
+            } else {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("🔙 Назад", "tA/Табаки")
@@ -1418,11 +1389,10 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n\n" + idTobacco.getDescription().trim() +
                         "\n[_](" + idTobacco.getImg() + ")");
             }
-        }
-        else if (text.contains("?RadTastes") || text.contains("?KarTastes")) {
+        } else if (text.contains("?RadTastes") || text.contains("?KarTastes")) {
             Tobacco addressTobacco;
             if (text.contains("?RadTastes")) {
-                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?RadTastes","")));
+                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?RadTastes", "")));
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(addressTobacco.getRadonejskayaTastes(), "tA/&" + addressTobacco.getId() + "?")
                         .row()
@@ -1430,9 +1400,8 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .endRow()
                         .rebuild(mes_id);
                 editMessage.setText("*Наличие вкусов по адресу: Радонежская 1*\n\nВыберите вкус табака:");
-            }
-            else {
-                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?KarTastes","")));
+            } else {
+                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?KarTastes", "")));
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(addressTobacco.getKarlaMarksaTastes(), "tA/&" + addressTobacco.getId() + "?")
                         .row()
@@ -1441,8 +1410,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("*Наличие вкусов по адресу: Проспект Карла Маркса 196*\n\nВыберите вкус табака:");
             }
-        }
-        else {
+        } else {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allAvailableTobaccoFortresses, "tA/")
                     .row()
@@ -1454,22 +1422,19 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         return editMessage;
     }
 
-    public String gbpihquoibgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbcewibcvubewiwevdowieibhoeasdaasgdu = "DKQpxjx";
-
     public synchronized EditMessageText tobaccoHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
         EditMessageText editMessage;
         if (allTobaccoFortresses.contains(text)) {
             ArrayList<Tobacco> tobaccos = TOBACCO_SERVICE.getTobaccoByFortress(text, allTobaccos);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
-                    .tobaccoButtons(tobaccos,"t","")
+                    .tobaccoButtons(tobaccos, "t", "")
                     .row()
                     .button("🔙 Назад", "tТабаки")
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("*Каталог / Табаки*\n\nТабаки крепости: *" + text + "*");
-        }
-        else if (text.contains("cart")) {
+        } else if (text.contains("cart")) {
             Tobacco crtTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("cart", "")));
             if (crtTobacco.getRadonejskayaTastes() != null && !crtTobacco.getRadonejskayaTastes().isEmpty()
                     && !crtTobacco.getRadonejskayaTastes().get(0).equals("null") && crtTobacco.getKarlaMarksaTastes() != null
@@ -1490,8 +1455,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .replace("]", "") + "`\n\n*Проспект Карла Маркса 196* | `"
                         + crtTobacco.getKarlaMarksaTastes().toString().replace("[", "")
                         .replace("]", "") + "`\n\nВыберите магазин:");
-            }
-            else if (crtTobacco.getKarlaMarksaTastes() == null || crtTobacco.getKarlaMarksaTastes().isEmpty()
+            } else if (crtTobacco.getKarlaMarksaTastes() == null || crtTobacco.getKarlaMarksaTastes().isEmpty()
                     || crtTobacco.getKarlaMarksaTastes().get(0).equals("null")) {
                 ArrayList<String> allTastes = crtTobacco.getRadonejskayaTastes();
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1502,8 +1466,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("Данный табак доступен по адресу *Ул. Радонежская 1*.\n\n" +
                         "Выберите интересующий вкус:");
-            }
-            else {
+            } else {
                 ArrayList<String> allTastes = crtTobacco.getKarlaMarksaTastes();
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(allTastes, "t&" + crtTobacco.getId() + "?")
@@ -1514,8 +1477,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 editMessage.setText("Данный табак доступен по адресу *Проспект Карла Маркса 196*.\n\n" +
                         "Выберите интересующий вкус:");
             }
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             Tobacco tasteTobacco;
             long id = Long.parseLong(text.split("&")[1].split("\\?")[0]);
             int count;
@@ -1526,7 +1488,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("t&" + id + "?" + taste + "?" + ++count,"crt")
+                        .countButtons("t&" + id + "?" + taste + "?" + ++count, "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "t?id" + id)
@@ -1534,10 +1496,9 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + tasteTobacco.getName() + "*  (`" + taste + "`)" +
                         "\n💵 " + count + " _шт._ `X` " + (tasteTobacco.getPrice()) + " _руб._" +
-                        " = " + (tasteTobacco.getPrice()*count) + " _руб._" +
+                        " = " + (tasteTobacco.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?down")) {
+            } else if (text.contains("?down")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
@@ -1549,10 +1510,9 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + tasteTobacco.getName() + "*  (`" + taste + "`)" +
                         "\n💵 " + count + " _шт._ `X` " + (tasteTobacco.getPrice()) + " _руб._" +
-                        " = " + (tasteTobacco.getPrice()*count) + " _руб._" +
+                        " = " + (tasteTobacco.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
-            }
-            else if (text.contains("?crt")) {
+            } else if (text.contains("?crt")) {
                 count = Integer.parseInt(text.split("&")[1].split("\\?")[2]);
                 tasteTobacco.setCount(count);
                 CART_SERVICE.addToCart(tasteTobacco, chat_id);
@@ -1571,8 +1531,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + tasteTobacco.getPrice() + " руб.*" +
                         "\n\n" + tasteTobacco.getDescription().trim() +
                         "\n[_](" + tasteTobacco.getImg() + ")");
-            }
-            else {
+            } else {
                 count = 1;
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
@@ -1584,11 +1543,10 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("🏷 *" + tasteTobacco.getName() + "*  (`" + taste + "`)" +
                         "\n💵 " + count + " _шт._ `X` " + (tasteTobacco.getPrice()) + " _руб._" +
-                        " = " + (tasteTobacco.getPrice()*count) + " _руб._" +
+                        " = " + (tasteTobacco.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
             }
-        }
-        else if (text.contains("?del")) {
+        } else if (text.contains("?del")) {
             Tobacco delTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?del", "")));
             CART_SERVICE.deleteFromCart(delTobacco, chat_id);
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1603,8 +1561,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     "\n💵 *" + delTobacco.getPrice() + " руб.*" +
                     "\n\n" + delTobacco.getDescription().trim() +
                     "\n[_](" + delTobacco.getImg() + ")");
-        }
-        else if (text.contains("?id")) {
+        } else if (text.contains("?id")) {
             Tobacco idTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?id", "")));
             if (idTobacco.isAvailable()) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1619,8 +1576,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n💵 *" + idTobacco.getPrice() + " руб.*" +
                         "\n\n" + idTobacco.getDescription().trim() +
                         "\n[_](" + idTobacco.getImg() + ")");
-            }
-            else {
+            } else {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("🔙 Назад", "tТабаки")
@@ -1631,11 +1587,10 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         "\n\n" + idTobacco.getDescription().trim() +
                         "\n[_](" + idTobacco.getImg() + ")");
             }
-        }
-        else if (text.contains("?RadTastes") || text.contains("?KarTastes")) {
+        } else if (text.contains("?RadTastes") || text.contains("?KarTastes")) {
             Tobacco addressTobacco;
             if (text.contains("?RadTastes")) {
-                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?RadTastes","")));
+                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?RadTastes", "")));
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(addressTobacco.getRadonejskayaTastes(), "t&" + addressTobacco.getId() + "?")
                         .row()
@@ -1643,9 +1598,8 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .endRow()
                         .rebuild(mes_id);
                 editMessage.setText("*Наличие вкусов по адресу: Радонежская 1*\n\nВыберите вкус табака:");
-            }
-            else {
-                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?KarTastes","")));
+            } else {
+                addressTobacco = TOBACCO_SERVICE.getTobaccoById(Long.parseLong(text.replace("?KarTastes", "")));
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .buttons(addressTobacco.getKarlaMarksaTastes(), "t&" + addressTobacco.getId() + "?")
                         .row()
@@ -1654,8 +1608,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .rebuild(mes_id);
                 editMessage.setText("*Наличие вкусов по адресу: Проспект Карла Маркса 196*\n\nВыберите вкус табака:");
             }
-        }
-        else {
+        } else {
             editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                     .buttons(allTobaccoFortresses, "t")
                     .row()
@@ -1784,8 +1737,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
 
     }
 
-    public String gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasdaasgdqwes = "097:AAGnn";
-
     public synchronized EditMessageText vaporizerHandle(String text, long chat_id, long mes_id) {
         text = text.substring(1);
         EditMessageText editMessageText;
@@ -1847,7 +1798,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 count = 1;
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
-                        .countButtons("v&" + id + "?" + "1","crt")
+                        .countButtons("v&" + id + "?" + "1", "crt")
                         .endRow()
                         .row()
                         .button("🔙 Назад", "v?id" + id)
@@ -1858,8 +1809,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         " = " + (vaporizer.getPrice() * count) + " _руб._" +
                         "\n\nВыберите необходимое количество:");
             }
-        }
-        else if (text.contains("?id")) {
+        } else if (text.contains("?id")) {
             Vaporizer idVaporizer = VAPORIZER_SERVICE.getVaporizerById(Long.parseLong(text.replace("?id", "")));
             if (idVaporizer.isAvailable()) {
                 editMessageText = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -1926,39 +1876,36 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     .endRow()
                     .rebuild(mes_id);
             editMessage.setText("Ваша корзина успешно очищена!\nВоспользуйтесь каталогом чтобы найти всё что нужно");
-        }
-        else if (text.contains("&")) {
+        } else if (text.contains("&")) {
             ArrayList<Product> cart = CART_SERVICE.getUserCart(chat_id).getCart();
             int position;
             if (text.contains("count")) {
                 position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
-                Product product = cart.get(position-1);
+                Product product = cart.get(position - 1);
                 int count;
                 if (text.contains("?up")) {
                     count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
-                    cart.get(position-1).setCount(count+1);
+                    cart.get(position - 1).setCount(count + 1);
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
-                            .countButtons("ccount&" + position + "?" + ++count,"accept")
+                            .countButtons("ccount&" + position + "?" + ++count, "accept")
                             .endRow()
                             .rebuild(mes_id);
                     editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
                             "\nВыберите необходимое количество:");
-                }
-                else if (text.contains("?down")) {
+                } else if (text.contains("?down")) {
                     count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
-                    cart.get(position-1).setCount(count-1);
+                    cart.get(position - 1).setCount(count - 1);
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
-                            .countButtons("ccount&" + position + "?" + --count,"accept")
+                            .countButtons("ccount&" + position + "?" + --count, "accept")
                             .endRow()
                             .rebuild(mes_id);
                     editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
                             "\nВыберите необходимое количество:");
-                }
-                else if (text.contains("accept")) {
+                } else if (text.contains("accept")) {
                     count = Integer.parseInt(text.split("&")[1].split("\\?")[1]);
-                    cart.get(position-1).setCount(count);
+                    cart.get(position - 1).setCount(count);
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
                             .positionButtons("c&" + position, cart.size())
@@ -1975,19 +1922,17 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                             .rebuild(mes_id);
                     editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
                             "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
-                }
-                else {
+                } else {
                     count = product.getCount();
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .row()
-                            .countButtons("ccount&" + position + "?" + count,"accept")
+                            .countButtons("ccount&" + position + "?" + count, "accept")
                             .endRow()
                             .rebuild(mes_id);
                     editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
                             "\nВыберите необходимое количество:");
                 }
-            }
-            else {
+            } else {
                 if (text.contains("?up")) {
                     position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -2006,8 +1951,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                             .rebuild(mes_id);
                     editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
                             "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
-                }
-                else if (text.contains("?down")) {
+                } else if (text.contains("?down")) {
                     position = Integer.parseInt(text.split("&")[1].split("\\?")[0]);
                     if (position == 1) {
                         editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
@@ -2021,8 +1965,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                                 .rebuild(mes_id);
                         editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
                                 "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
-                    }
-                    else {
+                    } else {
                         editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                                 .row()
                                 .positionButtons("c&" + --position, cart.size())
@@ -2040,8 +1983,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         editMessage.setText(CART_SERVICE.getUserCart(chat_id).toStringEdit(position) +
                                 "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
                     }
-                }
-                else if (text.contains("alert")) {
+                } else if (text.contains("alert")) {
                     position = Integer.parseInt(text.split("&")[1]);
                     Product product = CART_SERVICE.getUserCart(chat_id).getCart().get(position - 1);
                     if (text.contains("?del")) {
@@ -2067,8 +2009,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                             editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString() +
                                     "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
                         }
-                    }
-                    else {
+                    } else {
                         String brand = product.getBrand();
                         if (brand == null)
                             brand = "";
@@ -2083,8 +2024,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         editMessage.setText("Вы действительно хотите удалить *" + brand + " "
                                 + product.getName() + "* из корзины?");
                     }
-                }
-                else {
+                } else {
                     position = 0;
                     editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                             .positionButtons("c&" + position, cart.size())
@@ -2099,8 +2039,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                             "\nПожалуйста, выберите номер позиции, которую бы Вы хотели изменить:");
                 }
             }
-        }
-        else {
+        } else {
             if (CART_SERVICE.getUserCart(chat_id).getCart().size() == 0) {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
@@ -2108,8 +2047,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                         .endRow()
                         .rebuild(mes_id);
                 editMessage.setText(CART_SERVICE.getUserCart(chat_id).toString());
-            }
-            else {
+            } else {
                 editMessage = InlineKeyboardMarkupBuilder.create(chat_id)
                         .row()
                         .button("\uD83D\uDCE6 Оформить заказ", "cmakeOrd")
@@ -2123,8 +2061,6 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         }
         return editMessage;
     }
-
-    public String gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjgfdsaqwertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtrntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbgcewibcvubewiwevdowieibhoeasdas = "Cfjey6z";
 
     public synchronized AnswerCallbackQuery answerCallbackQuery(String callbackId, String message) {
         AnswerCallbackQuery answer = new AnswerCallbackQuery();
@@ -2147,7 +2083,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 new javax.mail.Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication("grizzly_shop_bot@mail.ru","oTT*y31poUpT");
+                        return new PasswordAuthentication("grizzly_shop_bot@mail.ru", "oTT*y31poUpT");
                     }
                 });
         try {
@@ -2188,8 +2124,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                     inMessage.getFrom().getLastName() + " (" + inMessage.getFrom().getUserName() +
                     "): " + text);
             execute(messageStarter(text, outMessage).setParseMode("Markdown"));
-        }
-        else if (update.hasCallbackQuery()) {
+        } else if (update.hasCallbackQuery()) {
             Message inMessage = update.getCallbackQuery().getMessage();
             long chat_id = inMessage.getChatId();
             long mes_id = inMessage.getMessageId();
@@ -2205,45 +2140,37 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
                 if (text.contains("makeOrd")) {
                     SendMessage outMessage = new SendMessage().setChatId(chat_id);
                     execute(messageStarter("\uD83D\uDCE6 Оформить заказ", outMessage));
-                }
-                else
+                } else
                     execute(cartHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }
-            else if (text.startsWith("h")) {
+            } else if (text.startsWith("h")) {
                 if (text.contains("hA/"))
                     execute(availableHookahHandle(text, chat_id, mes_id).setParseMode("Markdown"));
                 else
                     execute(hookahHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }
-            else if (text.startsWith("t")) {
+            } else if (text.startsWith("t")) {
                 if (text.contains("tA/"))
                     execute(availableTobaccoHandle(text, chat_id, mes_id).setParseMode("Markdown"));
                 else
                     execute(tobaccoHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }
-            else if (text.startsWith("a")) {
+            } else if (text.startsWith("a")) {
                 if (text.contains("aA/"))
                     execute(availableAccessoryHandle(text, chat_id, mes_id).setParseMode("Markdown"));
                 else
                     execute(accessoryHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }
-            else if (text.startsWith("u")) {
+            } else if (text.startsWith("u")) {
                 if (text.contains("uA/"))
                     execute(availableCharcoalHandle(text, chat_id, mes_id).setParseMode("Markdown"));
                 else
                     execute(charcoalHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }
-            else if (text.startsWith("v")) {
+            } else if (text.startsWith("v")) {
                 if (text.contains("vA/"))
                     execute(availableVaporizerHandle(text, chat_id, mes_id).setParseMode("Markdown"));
                 else
                     execute(vaporizerHandle(text, chat_id, mes_id).setParseMode("Markdown"));
-            }
-            else if (text.startsWith("m")) {
+            } else if (text.startsWith("m")) {
                 execute(messageHandle(text, chat_id, mes_id).setParseMode("Markdown"));
             }
-        }
-        else {
+        } else {
             long chat_id = update.getMessage().getChatId();
             if (update.getMessage().hasContact()) {
                 if (CART_SERVICE.getUserCart(chat_id).getCart().size() != 0) {
@@ -2266,14 +2193,7 @@ public class GrizzlyShopBot extends TelegramLongPollingBot {
         return "Grizzly_Shop_Bot";
     }
 
-    public String gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihasdasbgnyygcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasqwehqwehhh = gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjhgfdsaqwertyuiokjhgfdsazxcvbnmjhgfdtnufoivunrngtruntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvyergfvuyvwgxgedixbgcewibcvubewiwevdowieibhoe +
-            gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasdaasgdqwes +
-            gbpihquoibgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbcewibcvubewiwevdowieibhoeasdaasgdu +
-            gbpihquoibgwgbcqwertyuiokjhgfdsazxcvbnmjgfdsaqwertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtrntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgedxbgcewibcvubewiwevdowieibhoeasdas +
-            gbpihquowbgwgbcwertyuiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwgxgdxbcewibcvubwwevdowieibhoeasdaasgdqwee +
-            gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihnoqewvhrqfgcbcgfuqiwebhfuvbhqbdgbvfhubvfebtfvgeryfbgvergfvuyvwagxgdxbcewibcvubwwevdowieibhoeasdaasgdqwes;
-
     public String getBotToken() {
-    return gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihasdasbgnyygcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasqwehqwehhh;
+        return gbpihquowbgwgbcwssssiokjhgfdsazxcvbnmjgfdsawertyuiokjhgfdsazxcbnmjhgfdtnufoivunrngtntghtrhegbhrtgbuihasdasbgnyygcbcgfuqiwebhfuvbhqbdgbvfvvbvfebtvgerayfbsvergsvuyvasxssdxbcewibcvubwwevdowieibhoeasqwehqwehhh;
     }
 }
