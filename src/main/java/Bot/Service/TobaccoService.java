@@ -21,7 +21,7 @@ public class TobaccoService {
 
     public TobaccoService() {
         Date date = new Date();
-        parseAllTobacco("xml");
+        parseAllTobacco("xm");
         Date date2 = new Date();
         long dateRes = date2.getTime() - date.getTime();
         System.out.println("Парсинг табаков занял " + dateRes / 1000 + " с " + dateRes % 1000 + " мс");
